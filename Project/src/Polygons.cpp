@@ -93,18 +93,25 @@ void esportazione(Traces& traccia, Fractures& frattura)
             }
         }
     }
-    ofs << "# FractureId; NumTraces" << endl;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        ofs << i << ";" << frattura_traccia[i] << endl;
+        if(frattura_traccia[i]!=0)
+        {
+            ofs << "# FractureId; NumTraces" << endl;
+            ofs << i << ";" << frattura_traccia[i] << endl;
+            ofs << "# TraceId; Tips; Length" << endl;
+            for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
+            {
+                // se il primo o il secondo id è i stampo le relative informazioni
+                if(i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1])
+                {
+                    ofs << i << ";" << traccia.Tips << sqrt(distanza_al_quadrato(traccia.Vertices[i][0],traccia.Vertices[i][1])) << endl<<endl;
+                }
+            }
+        }
     }
-
-    ofs << "# TraceId; Tips; Length" << endl;
-    for(unsigned int i = 0; i < traccia.FracturesId.size();i++)
-    {
-        ofs << i << ";" << traccia.Tips << sqrt(distanza_al_quadrato(traccia.Vertices[i][0],traccia.Vertices[i][1])) << endl;
-        // NECESSARIO FARE L'ORDINAMENTO SUCCESSIVAMENTE E CAPIRE COME GESTIRE TIPS
-    }
+    // CAPIRE COME ORDINARE IN MODO DECRESCENTE E GESTIRE TIPS
 }
+
 
 }
