@@ -148,9 +148,9 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
     double raggio1 = *max_element(raggi_candidati1.begin(), raggi_candidati1.end());
     double raggio2 = *max_element(raggi_candidati2.begin(), raggi_candidati2.end());
     if (distanza_al_quadrato(coord_bar_1,coord_bar_2) <=(raggio1+raggio2)*(raggio1+raggio2))
-        return 0; // le fratture potrebbero intersecarsi
+        return true; // le fratture potrebbero intersecarsi
     else
-        return 1; // le fratture sicuramente non si intersecano
+        return false; // le fratture sicuramente non si intersecano
 }
 
 
