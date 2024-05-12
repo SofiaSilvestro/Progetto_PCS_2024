@@ -114,4 +114,43 @@ void esportazione(Traces& traccia, Fractures& frattura)
 }
 
 
+bool intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2){
+    // Definisco due vettori che contengono le coordinate del mio baricentro
+    Vector3d coord_bar_1;
+    unsigned int n1 = frattura.Vertices[Id1].cols(); //numero di colonne della prima frattura
+    Vector3d coord_bar_2;
+    unsigned int n2 = frattura.Vertices[Id2].cols(); //numero di colonne della seconda frattura
+    for(unsigned int i=0; i<3; i++){
+        for (unsigned int j=0; j<n1; j++){
+            coord_bar_1[i] += frattura.Vertices[Id1](j,i);
+        }
+        coord_bar_1[i] =coord_bar_1[i]/n1;
+        for (unsigned int j=0; j<n2; j++){
+            coord_bar_2[i] += frattura.Vertices[Id2](j,i);
+        }
+        coord_bar_2[i] = coord_bar_2[i]/n2;
+    }
+    // Calcolo i possibili raggi delle due palle avente centro nei baricentri precedentemente calcolati
+    VectorXd raggi_candidati1;
+    raggi_candidati1.resize(n1);
+    for(unsigned int i=0; i<n1; i++){
+        Vector3d point = frattura.Vertices[Id1].col(i);
+        raggi_candidati1(i) = distanza_al_quadrato(coord_bar_1,point);
+    }
+    VectorXd raggi_candidati2;
+    raggi_candidati2.resize(n2);
+    for(unsigned int i=0; i<n2; i++){
+        Vector3d point = frattura.Vertices[Id2].col(i);
+        raggi_candidati2(i) = distanza_al_quadrato(coord_bar_2,point);
+    }
+    // Calcolo il raggio delle due palle avente centro nei baricentri precedentemente calcolati
+    double raggio1 = *max_element(raggi_candidati1.begin(), raggi_candidati1.end());
+    double raggio2 = *max_element(raggi_candidati2.begin(), raggi_candidati2.end());
+    if (distanza_al_quadrato(coord_bar_1,coord_bar_2) <=(raggio1+raggio2)*(raggio1+raggio2))
+        return 0; // le fratture potrebbero intersecarsi
+    else
+        return 1; // le fratture sicuramente non si intersecano
+}
+
+
 }

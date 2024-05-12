@@ -23,6 +23,7 @@ struct Traces{
 };
 
 bool importazione(const string& filename, Fractures& fracture);
+bool intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2);
 void esportazione(Traces& traccia, Fractures& frattura);
 double distanza_al_quadrato(Vector3d& v1, Vector3d& v2);
 }
