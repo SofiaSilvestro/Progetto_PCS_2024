@@ -114,7 +114,7 @@ void esportazione(Traces& traccia, Fractures& frattura)
 }
 
 
-bool intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2){
+bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2){
     // Definisco due vettori che contengono le coordinate del mio baricentro
     Vector3d coord_bar_1;
     unsigned int n1 = frattura.Vertices[Id1].cols(); //numero di colonne della prima frattura
