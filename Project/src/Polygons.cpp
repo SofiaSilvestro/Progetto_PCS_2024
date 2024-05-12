@@ -84,9 +84,9 @@ void esportazione(Traces& traccia, Fractures& frattura)
     map<unsigned int, unsigned int> frattura_traccia;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
+        frattura_traccia[i]=0;
         for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
         {
-            frattura_traccia[i]=0;
             // se il primo o il secondo id è i allora incremento di 1 il numero delle tracce
             if(i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1])
             {
