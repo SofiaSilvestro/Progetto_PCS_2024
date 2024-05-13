@@ -50,6 +50,27 @@ bool importazione(const string& filename, Fractures& frattura) {
     for (const auto& coppia : frattura.Vertices) {
         cout << "Chiave: " << coppia.first <<endl<<"Valore: " <<endl<<setprecision(16)<<scientific<< coppia.second <<endl<<endl;
     }
+    // Calcolo i coefficienti del piano per ciascuna frattura
+    for(unsigned int i = 0; i < frattura.NumberFractures; i++)
+    {
+        Vector3d point1 = frattura.Vertices[i].col(1);
+        Vector3d point2 = frattura.Vertices[i].col(2);
+        Vector3d point3 = frattura.Vertices[i].col(3);
+        // Calcolo indiretto dei coefficienti mediante il determinante uguale a zero e relativo inserimento nella mappa
+        //(x-x1  x-y1  x-z1
+        // x2-x1 y2-y1 z2-z1
+        // x3-x1 y3-y1 z3-z1)
+        frattura.Piano[i][0] = (point2[1]-point1[1])*(point3[2]-point1[2]) - (point2[2]-point1[2])*(point3[1]-point1[1]);
+        frattura.Piano[i][1] = -((point2[0]-point1[0])*(point3[2]-point1[2])-(point3[0]-point1[0])*(point2[2]-point1[2]));
+        frattura.Piano[i][2] = (point2[0]-point1[0])*(point3[1]-point1[1])-(point3[0]-point1[0])*(point2[1]-point1[1]);
+        frattura.Piano[i][3] = -frattura.Piano[i][0]*point1[0]-frattura.Piano[i][1]*point1[1]-frattura.Piano[i][2]*point1[2];
+    }
+    //Da commentare :stampiamo i coefficienti del piano
+    cout<<"ID, coeff1,coeff2,coeff3,coeff4"<<endl;
+    for(unsigned int i = 0; i < frattura.NumberFractures; i++)
+    {
+        cout<<i<<" "<<frattura.Piano[i][0]<<" "<<frattura.Piano[i][1]<<" "<<frattura.Piano[i][2]<<" "<<frattura.Piano[i][3]<<endl;
+    }
     file.close();
     return true;
 }
@@ -104,14 +125,18 @@ void esportazione(Traces& traccia, Fractures& frattura)
             for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
             {
                 // se il primo o il secondo id è i stampo le relative informazioni
-                if(i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1])
+                if(i == traccia.FracturesId[j][0])
                 {
-                    ofs << i << ";" << traccia.Tips << sqrt(distanza_al_quadrato(traccia.Vertices[i][0],traccia.Vertices[i][1])) << endl<<endl;
+                    ofs << i << ";" << traccia.Tips[i][0] << sqrt(distanza_al_quadrato(traccia.Vertices[i][0],traccia.Vertices[i][1])) << endl<<endl;
+                }
+                if(i == traccia.FracturesId[j][1])
+                {
+                    ofs << i << ";" << traccia.Tips[i][1] << sqrt(distanza_al_quadrato(traccia.Vertices[i][0],traccia.Vertices[i][1])) << endl<<endl;
                 }
             }
         }
     }
-    // CAPIRE COME ORDINARE IN MODO DECRESCENTE E GESTIRE TIPS
+    // CAPIRE COME ORDINARE IN MODO DECRESCENTE RAGGRUPPANDO PER TIPS
 }
 
 
@@ -123,11 +148,11 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
     unsigned int n2 = frattura.Vertices[Id2].cols(); //numero di colonne della seconda frattura
     for(unsigned int i=0; i<3; i++){
         for (unsigned int j=0; j<n1; j++){
-            coord_bar_1[i] += frattura.Vertices[Id1](j,i);
+            coord_bar_1[i]=coord_bar_1[i]+frattura.Vertices[Id1](j,i);
         }
         coord_bar_1[i] =coord_bar_1[i]/n1;
         for (unsigned int j=0; j<n2; j++){
-            coord_bar_2[i] += frattura.Vertices[Id2](j,i);
+            coord_bar_2[i] =coord_bar_2[i]+ frattura.Vertices[Id2](j,i);
         }
         coord_bar_2[i] = coord_bar_2[i]/n2;
     }
@@ -152,6 +177,7 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
     else
         return false; // le fratture sicuramente non si intersecano
 }
+
 
 
 }
