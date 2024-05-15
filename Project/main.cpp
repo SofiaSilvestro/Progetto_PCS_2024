@@ -12,6 +12,12 @@ int main()
     {
         return 1;
     }
-    return 0;
+        return 0;
 }
 
+
+/*    for(unsigned int i=0;i<frattura.NumberFractures;i++){
+        unsigned int j=i+1;
+        if(valuta_intersezione(frattura,i,j)&&j<frattura.NumberFractures){
+            cout<<i<<" "<<j<<" si potrebbero intersecare";
+        }}*/
