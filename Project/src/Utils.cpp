@@ -212,12 +212,6 @@ array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsign
     // P:(x2,y2,z2)
     // salviamo i relativi valori in un array
     array<double,6> coord_retta_vertici;
-    /*coord_retta_vertici[0]=frattura.Vertices[id](0,j)-frattura.Vertices[id](0,i);
-    coord_retta_vertici[1]=frattura.Vertices[id](1,j)-frattura.Vertices[id](1,i);
-    coord_retta_vertici[2]=frattura.Vertices[id](2,j)-frattura.Vertices[id](2,i);
-    coord_retta_vertici[3]=frattura.Vertices[id](0,i);
-    coord_retta_vertici[4]=frattura.Vertices[id](1,i);
-    coord_retta_vertici[5]=frattura.Vertices[id](2,i);*/
     coord_retta_vertici[0]=frattura.Vertices[id](0,i)-frattura.Vertices[id](0,j);
     coord_retta_vertici[1]=frattura.Vertices[id](1,i)-frattura.Vertices[id](1,j);
     coord_retta_vertici[2]=frattura.Vertices[id](2,i)-frattura.Vertices[id](2,j);
