@@ -23,7 +23,7 @@ int main()
                     array<double,6> r_piano=Retta_tra_piani(frattura,i,j);
                     //sulla carta sappiamo che se il prodotto vettoriale delle due normali ai piani è zero allora sono paralleli
                     // le coordinate del risultato sono memorizzate nei primi tre spazi dell'array r_piano
-                    if(abs(r_piano[0])<pow(10,-10)&& abs(r_piano[1])<pow(10,-10) && abs(r_piano[2])<pow(10,-10)){
+                    if(abs(r_piano[0])<pow(10,-7)&& abs(r_piano[1])<pow(10,-7) && abs(r_piano[2])<pow(10,-7)){
                         //piani paralleli
                     }
                     else{
@@ -39,27 +39,30 @@ int main()
                                 k=0;
                             }
                             array<double,6> r_tra_punti=Retta_per_due_vertici_della_frattura(frattura,i,h,k);
-                            // Inserisco una condizione per scartare i lati che non intersecano fissando una tolleranza: sulla carta i determinanti da scartare dovrebbero essere tutti zero
+                            // Inserisco una condizione per scartare il caso in cui la matrice abbia rango 1
+                            //sulla carta i determinanti da scartare dovrebbero essere tutti zero
                             double det_1=r_piano[0]*r_tra_punti[2]-r_piano[2]*r_tra_punti[0];
                             double det_2=r_piano[1]*r_tra_punti[2]-r_piano[2]*r_tra_punti[1];
                             double det_3=r_piano[0]*r_tra_punti[1]-r_piano[1]*r_tra_punti[0];
-                            if (abs(det_1)>pow(10,-10) || abs(det_2)>pow(10,-10) || abs(det_3)>pow(10,-10)){
+                            if ((abs(det_1)<pow(10,-5) && abs(det_2)<pow(10,-5)&& abs(det_3)<pow(10,-5))){
+                                // non fare niente
+                                }
+                            else{
                                 Vector2d x=alpha_di_intersezione(r_piano,r_tra_punti);
-                                cout<<x[0]<<" "<<x[1]<<endl;
                                 //Calcolo il punto di intersezione
                                 Vector3d punto_intersezione;
-                                /*punto_intersezione[0]=r_piano[0]*x[0]+r_piano[3];
-                                punto_intersezione[1]=r_piano[1]*x[0]+r_piano[4];
+                                /*punto_intersezione[0]=r_piano[0]*x[0]+r_piano[3];                                punto_intersezione[1]=r_piano[1]*x[0]+r_piano[4];
                                 punto_intersezione[2]=r_piano[2]*x[0]+r_piano[5];*/
                                 punto_intersezione[0]=r_tra_punti[0]*x[1]+r_tra_punti[3];
                                 punto_intersezione[1]=r_tra_punti[1]*x[1]+r_tra_punti[4];
                                 punto_intersezione[2]=r_tra_punti[2]*x[1]+r_tra_punti[5];
                                 // CONDIZIONI : verifichiamo che appartenga al segmento
-                                double tol=pow(10,-15);
-                                if(x[1]>=-tol && x[1]<=1-tol){
+                                //double tol=pow(10,-15);
+                                //if(x[1]>=-tol && x[1]<=1-tol){
+                                    //cout<<x[0]<<" "<<x[1]<<endl;
                                     cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
                                     conta_p1++;
-                                }
+                                //}
                             }
                             h++;
                             k++;
@@ -81,13 +84,16 @@ int main()
                                 k=0;
                             }
                             array<double,6> r_tra_punti=Retta_per_due_vertici_della_frattura(frattura,j,h,k);
-                            // Inserisco una condizione per scartare i lati che non intersecano fissando una tolleranza:sulla carta i determinanti da scartare dovrebbero essere tutti zero
+                            // Inserisco una condizione per scartare il caso in cui la matrice abbia rango 1
+                            //sulla carta i determinanti da scartare dovrebbero essere tutti zero
                             double det_1=r_piano[0]*r_tra_punti[2]-r_piano[2]*r_tra_punti[0];
                             double det_2=r_piano[1]*r_tra_punti[2]-r_piano[2]*r_tra_punti[1];
                             double det_3=r_piano[0]*r_tra_punti[1]-r_piano[1]*r_tra_punti[0];
-                            if (abs(det_1)>pow(10,-10) || abs(det_2)>pow(10,-10) || abs(det_3)>pow(10,-10)){
+                            if ((abs(det_1)<pow(10,-5) && abs(det_2)<pow(10,-5)&& abs(det_3)<pow(10,-5))){
+                                // non fare niente
+                            }
+                            else{
                                 Vector2d x=alpha_di_intersezione(r_piano,r_tra_punti);
-                                cout<<x[0]<<" "<<x[1]<<endl;
                                 //Calcolo il punto di intersezione
                                 Vector3d punto_intersezione;
                                 /*punto_intersezione[0]=r_piano[0]*x[0]+r_piano[3];
@@ -97,11 +103,12 @@ int main()
                                 punto_intersezione[1]=r_tra_punti[1]*x[1]+r_tra_punti[4];
                                 punto_intersezione[2]=r_tra_punti[2]*x[1]+r_tra_punti[5];
                                 // CONDIZIONI: verifichiamo che appartenga al segmento
-                                double tol=pow(10,-15);
-                                if(x[1]>=-tol && x[1]<=1+tol){
+                                //double tol=pow(10,-15);
+                                //if(x[1]>=-tol && x[1]<=1+tol){
+                                    //cout<<x[0]<<" "<<x[1]<<endl;
                                     cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
                                     conta_p2++;
-                                }
+                                //}
                             }
                             h++;
                             k++;
