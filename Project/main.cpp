@@ -39,20 +39,15 @@ int main()
                                 k=0;
                             }
                             array<double,6> r_tra_punti=Retta_per_due_vertici_della_frattura(frattura,i,h,k);
-                            // Inserisco una condizione per scartare il caso in cui la matrice abbia rango 1
-                            //sulla carta i determinanti da scartare dovrebbero essere tutti zero
-                            double det_1=r_piano[0]*r_tra_punti[2]-r_piano[2]*r_tra_punti[0];
-                            double det_2=r_piano[1]*r_tra_punti[2]-r_piano[2]*r_tra_punti[1];
-                            double det_3=r_piano[0]*r_tra_punti[1]-r_piano[1]*r_tra_punti[0];
-                            if ((abs(det_1)<pow(10,-5) && abs(det_2)<pow(10,-5)&& abs(det_3)<pow(10,-5))){
+                            // Escludo il parallelismo: calcolo prodotto vettoriale
+                            double parallelo=(r_piano[1]*r_tra_punti[2])-(r_piano[2]*r_tra_punti[1])-((r_piano[0]*r_tra_punti[2])-(r_piano[2]*r_tra_punti[0]))+(r_piano[0]*r_tra_punti[1])-(r_piano[1]*r_tra_punti[0]);
+                            if (abs(parallelo)<pow(10,-5)){
                                 // non fare niente
                                 }
                             else{
                                 Vector2d x=alpha_di_intersezione(r_piano,r_tra_punti);
                                 //Calcolo il punto di intersezione
                                 Vector3d punto_intersezione;
-                                /*punto_intersezione[0]=r_piano[0]*x[0]+r_piano[3];                                punto_intersezione[1]=r_piano[1]*x[0]+r_piano[4];
-                                punto_intersezione[2]=r_piano[2]*x[0]+r_piano[5];*/
                                 punto_intersezione[0]=r_tra_punti[0]*x[1]+r_tra_punti[3];
                                 punto_intersezione[1]=r_tra_punti[1]*x[1]+r_tra_punti[4];
                                 punto_intersezione[2]=r_tra_punti[2]*x[1]+r_tra_punti[5];
@@ -84,21 +79,15 @@ int main()
                                 k=0;
                             }
                             array<double,6> r_tra_punti=Retta_per_due_vertici_della_frattura(frattura,j,h,k);
-                            // Inserisco una condizione per scartare il caso in cui la matrice abbia rango 1
-                            //sulla carta i determinanti da scartare dovrebbero essere tutti zero
-                            double det_1=r_piano[0]*r_tra_punti[2]-r_piano[2]*r_tra_punti[0];
-                            double det_2=r_piano[1]*r_tra_punti[2]-r_piano[2]*r_tra_punti[1];
-                            double det_3=r_piano[0]*r_tra_punti[1]-r_piano[1]*r_tra_punti[0];
-                            if ((abs(det_1)<pow(10,-5) && abs(det_2)<pow(10,-5)&& abs(det_3)<pow(10,-5))){
+                            // Escludo il parallelismo: calcolo il prodotto vettoriale
+                            double parallelo=(r_piano[1]*r_tra_punti[2])-(r_piano[2]*r_tra_punti[1])-((r_piano[0]*r_tra_punti[2])-(r_piano[2]*r_tra_punti[0]))+(r_piano[0]*r_tra_punti[1])-(r_piano[1]*r_tra_punti[0]);
+                            if (abs(parallelo)<pow(10,-5)){
                                 // non fare niente
                             }
                             else{
                                 Vector2d x=alpha_di_intersezione(r_piano,r_tra_punti);
                                 //Calcolo il punto di intersezione
                                 Vector3d punto_intersezione;
-                                /*punto_intersezione[0]=r_piano[0]*x[0]+r_piano[3];
-                                punto_intersezione[1]=r_piano[1]*x[0]+r_piano[4];
-                                punto_intersezione[2]=r_piano[2]*x[0]+r_piano[5];*/
                                 punto_intersezione[0]=r_tra_punti[0]*x[1]+r_tra_punti[3];
                                 punto_intersezione[1]=r_tra_punti[1]*x[1]+r_tra_punti[4];
                                 punto_intersezione[2]=r_tra_punti[2]*x[1]+r_tra_punti[5];
