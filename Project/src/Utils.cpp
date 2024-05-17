@@ -46,11 +46,11 @@ bool importazione(const string& filename, Fractures& frattura) {
         frattura.Vertices.insert(make_pair(frattura.Id, Tab_coord_vertici));
     }
 
-    //Righe di stampa da commentare
+    /*//Righe di stampa da commentare
     cout << frattura.NumberFractures << endl;
     for (const auto& coppia : frattura.Vertices) {
         cout << "Chiave: " << coppia.first <<endl<<"Valore: " <<endl<<setprecision(16)<<scientific<< coppia.second <<endl<<endl;
-    }
+    }*/
     // Calcolo i coefficienti del piano per ciascuna frattura
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
@@ -66,12 +66,12 @@ bool importazione(const string& filename, Fractures& frattura) {
         frattura.Piano[i][2] = (point2[0]-point1[0])*(point3[1]-point1[1])-(point3[0]-point1[0])*(point2[1]-point1[1]);
         frattura.Piano[i][3] = -frattura.Piano[i][0]*point1[0]-frattura.Piano[i][1]*point1[1]-frattura.Piano[i][2]*point1[2];
     }
-    //Da commentare :stampiamo i coefficienti del piano
+    /*//Da commentare :stampiamo i coefficienti del piano
     cout<<"ID, coeff1,coeff2,coeff3,coeff4"<<endl;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         cout<<i<<" "<<frattura.Piano[i][0]<<" "<<frattura.Piano[i][1]<<" "<<frattura.Piano[i][2]<<" "<<frattura.Piano[i][3]<<endl;
-    }
+    }*/
     file.close();
     return true;
 }
@@ -149,11 +149,11 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
     unsigned int n2 = frattura.Vertices[Id2].cols(); //numero di colonne della seconda frattura
     for(unsigned int i=0; i<3; i++){
         for (unsigned int j=0; j<n1; j++){
-            coord_bar_1[i]=coord_bar_1[i]+frattura.Vertices[Id1](j,i);
+            coord_bar_1[i]=coord_bar_1[i]+frattura.Vertices[Id1](i,j);
         }
         coord_bar_1[i] =coord_bar_1[i]/n1;
         for (unsigned int j=0; j<n2; j++){
-            coord_bar_2[i] =coord_bar_2[i]+ frattura.Vertices[Id2](j,i);
+            coord_bar_2[i] =coord_bar_2[i]+frattura.Vertices[Id2](i,j);
         }
         coord_bar_2[i] = coord_bar_2[i]/n2;
     }
@@ -173,21 +173,22 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
     // Calcolo il raggio delle due palle avente centro nei baricentri precedentemente calcolati
     double raggio1 = *max_element(raggi_candidati1.begin(), raggi_candidati1.end());
     double raggio2 = *max_element(raggi_candidati2.begin(), raggi_candidati2.end());
-    if (distanza_al_quadrato(coord_bar_1,coord_bar_2) <=(raggio1+raggio2)*(raggio1+raggio2))
+    double tol=pow(10,-10);
+    if (distanza_al_quadrato(coord_bar_1,coord_bar_2) <=(pow(raggio1+raggio2,2)-tol))
         return true; // le fratture potrebbero intersecarsi
     else
         return false; // le fratture sicuramente non si intersecano
 }
 
 
-array<double,6> Retta(Fractures& frattura, unsigned int& id1, unsigned int& id2)
+array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
 {
     // Data l'equazione della retta:
     // x= coord_retta[0]*t+coord_retta[3]
     // y= coord_retta[1]*t+coord_retta[4]
     // z= coord_retta[2]*t+coord_retta[5]
     array<double,6> coord_retta;
-    // Calcolo la direzione della retta intersecante
+    // Calcolo la direzione della retta intersecante mediante prodotto vettoriale
     coord_retta[0] = frattura.Piano[id1][1]*frattura.Piano[id2][2] - frattura.Piano[id1][2]*frattura.Piano[id2][1];
     coord_retta[1] = frattura.Piano[id1][2]*frattura.Piano[id2][0] - frattura.Piano[id1][0]*frattura.Piano[id2][2];
     coord_retta[2] = frattura.Piano[id1][0]*frattura.Piano[id2][1] - frattura.Piano[id1][1]*frattura.Piano[id2][0];
@@ -204,6 +205,49 @@ array<double,6> Retta(Fractures& frattura, unsigned int& id1, unsigned int& id2)
     return coord_retta;
 }
 
+array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
+{
+    //data l'equazione parametrica è X = at+P trovo direttrice e punto di partenza della retta
+    // t:(x2-x1,y2-y1,z2-z1)
+    // P:(x1,y1,z1)
+    // salviamo i relativi valori in un array
+    array<double,6> coord_retta_vertici;
+    coord_retta_vertici[0]=frattura.Vertices[id](0,j)-frattura.Vertices[id](0,i);
+    coord_retta_vertici[1]=frattura.Vertices[id](1,j)-frattura.Vertices[id](1,i);
+    coord_retta_vertici[2]=frattura.Vertices[id](2,j)-frattura.Vertices[id](2,i);
+    coord_retta_vertici[3]=frattura.Vertices[id](0,i);
+    coord_retta_vertici[4]=frattura.Vertices[id](1,i);
+    coord_retta_vertici[5]=frattura.Vertices[id](2,i);
+    return coord_retta_vertici;
+}
 
+Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_fratt)
+{
+    //imposto un sistema lineare per la ricerca dei parametri alpha e beta
+    //imposto i coefficienti della matrice
+    MatrixXd A = MatrixXd::Zero(3,2);
+    //retta di intersezione tra i piani
+    Vector3d t1 ;
+    t1[0]=r_fratt[0];
+    t1[1]=r_fratt[1];
+    t1[2]=r_fratt[2];
+    A.col(0)=t1;
+    //retta di intersezione tra i vertici del poligono della stessa frattura
+    Vector3d t2 ;
+    t2[0]=r_intersez[0];
+    t2[1]=r_intersez[1];
+    t2[2]=r_intersez[2];
+    A.col(1) =-t2;
+    //imposto i coefficienti del termine noto
+    Vector3d b = Vector3d::Zero();
+    b[0] = r_intersez[3]-r_fratt[3];
+    b[1] = r_intersez[4]-r_fratt[4];
+    b[2] = r_intersez[5]-r_fratt[5];
+    Vector2d x = A.householderQr().solve(b); //x =[alpha;beta]
+    //dove beta è il valore del parametro nell'equazione del piano e
+    //alpha è il valore del parametro nell'equazione della retta passante per due punti
+    // tale parametro deve essere controllato tra zero e uno per il segmento
+    return x;
+}
 
 }
