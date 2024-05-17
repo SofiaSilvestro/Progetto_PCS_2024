@@ -48,16 +48,16 @@ int main()
                                 Vector2d x=alpha_di_intersezione(r_piano,r_tra_punti);
                                 //Calcolo il punto di intersezione
                                 Vector3d punto_intersezione;
-                                punto_intersezione[0]=r_tra_punti[0]*x[1]+r_tra_punti[3];
-                                punto_intersezione[1]=r_tra_punti[1]*x[1]+r_tra_punti[4];
-                                punto_intersezione[2]=r_tra_punti[2]*x[1]+r_tra_punti[5];
+                                punto_intersezione[0]=r_tra_punti[0]*x[0]+r_tra_punti[3];
+                                punto_intersezione[1]=r_tra_punti[1]*x[0]+r_tra_punti[4];
+                                punto_intersezione[2]=r_tra_punti[2]*x[0]+r_tra_punti[5];
                                 // CONDIZIONI : verifichiamo che appartenga al segmento
-                                //double tol=pow(10,-15);
-                                //if(x[1]>=-tol && x[1]<=1-tol){
-                                    //cout<<x[0]<<" "<<x[1]<<endl;
+                                double tol=pow(10,-15);
+                                if(x[0]>=-tol && x[0]<=1+tol){
+                                    cout<<x[0]<<" "<<x[1]<<endl;
                                     cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
                                     conta_p1++;
-                                //}
+                                }
                             }
                             h++;
                             k++;
@@ -88,16 +88,16 @@ int main()
                                 Vector2d x=alpha_di_intersezione(r_piano,r_tra_punti);
                                 //Calcolo il punto di intersezione
                                 Vector3d punto_intersezione;
-                                punto_intersezione[0]=r_tra_punti[0]*x[1]+r_tra_punti[3];
-                                punto_intersezione[1]=r_tra_punti[1]*x[1]+r_tra_punti[4];
-                                punto_intersezione[2]=r_tra_punti[2]*x[1]+r_tra_punti[5];
+                                punto_intersezione[0]=r_tra_punti[0]*x[0]+r_tra_punti[3];
+                                punto_intersezione[1]=r_tra_punti[1]*x[0]+r_tra_punti[4];
+                                punto_intersezione[2]=r_tra_punti[2]*x[0]+r_tra_punti[5];
                                 // CONDIZIONI: verifichiamo che appartenga al segmento
-                                //double tol=pow(10,-15);
-                                //if(x[1]>=-tol && x[1]<=1+tol){
-                                    //cout<<x[0]<<" "<<x[1]<<endl;
+                                double tol=pow(10,-15);
+                                if(x[0]>=-tol && x[0]<=1+tol){
+                                    cout<<x[0]<<" "<<x[1]<<endl;
                                     cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
                                     conta_p2++;
-                                //}
+                                }
                             }
                             h++;
                             k++;

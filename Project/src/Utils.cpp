@@ -188,7 +188,7 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned
     // y= coord_retta[1]*t+coord_retta[4]
     // z= coord_retta[2]*t+coord_retta[5]
     array<double,6> coord_retta;
-    // Calcolo la direzione della retta intersecante
+    // Calcolo la direzione della retta intersecante mediante prodotto vettoriale
     coord_retta[0] = frattura.Piano[id1][1]*frattura.Piano[id2][2] - frattura.Piano[id1][2]*frattura.Piano[id2][1];
     coord_retta[1] = frattura.Piano[id1][2]*frattura.Piano[id2][0] - frattura.Piano[id1][0]*frattura.Piano[id2][2];
     coord_retta[2] = frattura.Piano[id1][0]*frattura.Piano[id2][1] - frattura.Piano[id1][1]*frattura.Piano[id2][0];
@@ -208,16 +208,16 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned
 array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
 {
     //data l'equazione parametrica è X = at+P trovo direttrice e punto di partenza della retta
-    // t:(x1-x2,y1-y2,z1-z2)
-    // P:(x2,y2,z2)
+    // t:(x2-x1,y2-y1,z2-z1)
+    // P:(x1,y1,z1)
     // salviamo i relativi valori in un array
     array<double,6> coord_retta_vertici;
-    coord_retta_vertici[0]=frattura.Vertices[id](0,i)-frattura.Vertices[id](0,j);
-    coord_retta_vertici[1]=frattura.Vertices[id](1,i)-frattura.Vertices[id](1,j);
-    coord_retta_vertici[2]=frattura.Vertices[id](2,i)-frattura.Vertices[id](2,j);
-    coord_retta_vertici[3]=frattura.Vertices[id](0,j);
-    coord_retta_vertici[4]=frattura.Vertices[id](1,j);
-    coord_retta_vertici[5]=frattura.Vertices[id](2,j);
+    coord_retta_vertici[0]=frattura.Vertices[id](0,j)-frattura.Vertices[id](0,i);
+    coord_retta_vertici[1]=frattura.Vertices[id](1,j)-frattura.Vertices[id](1,i);
+    coord_retta_vertici[2]=frattura.Vertices[id](2,j)-frattura.Vertices[id](2,i);
+    coord_retta_vertici[3]=frattura.Vertices[id](0,i);
+    coord_retta_vertici[4]=frattura.Vertices[id](1,i);
+    coord_retta_vertici[5]=frattura.Vertices[id](2,i);
     return coord_retta_vertici;
 }
 
@@ -228,22 +228,22 @@ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_frat
     MatrixXd A = MatrixXd::Zero(3,2);
     //retta di intersezione tra i piani
     Vector3d t1 ;
-    t1[0]=r_intersez[0];
-    t1[1]=r_intersez[1];
-    t1[2]=r_intersez[2];
+    t1[0]=r_fratt[0];
+    t1[1]=r_fratt[1];
+    t1[2]=r_fratt[2];
     A.col(0)=t1;
     //retta di intersezione tra i vertici del poligono della stessa frattura
     Vector3d t2 ;
-    t2[0]=r_fratt[0];
-    t2[1]=r_fratt[1];
-    t2[2]=r_fratt[2];
+    t2[0]=r_intersez[0];
+    t2[1]=r_intersez[1];
+    t2[2]=r_intersez[2];
     A.col(1) =-t2;
     //imposto i coefficienti del termine noto
     Vector3d b = Vector3d::Zero();
-    b[0] = r_fratt[3]-r_intersez[3];
-    b[1] = r_fratt[4]-r_intersez[4];
-    b[2] = r_fratt[5]-r_intersez[5];
-    Vector2d x = A.householderQr().solve(b); //x =[beta;alpha]
+    b[0] = r_intersez[3]-r_fratt[3];
+    b[1] = r_intersez[4]-r_fratt[4];
+    b[2] = r_intersez[5]-r_fratt[5];
+    Vector2d x = A.householderQr().solve(b); //x =[alpha;beta]
     //dove beta è il valore del parametro nell'equazione del piano e
     //alpha è il valore del parametro nell'equazione della retta passante per due punti
     // tale parametro deve essere controllato tra zero e uno per il segmento
