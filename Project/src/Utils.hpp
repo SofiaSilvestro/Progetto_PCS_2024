@@ -48,4 +48,19 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned
 array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j);
 
 Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_fratt);
+
+///La funzione Punto_intersezione_rette_piano_frattura trova il punto di intersezione (se esiste) fra la retta generata dal piano e la retta generata dal segmento
+//Restituirà il punto di intersezione se trovato con successo, altrimenti restituirà un vettore con valori NaN
+//Viene risolto il sistema lineare usando la decomposizione QR per trovare i valori dei parametri t
+//Con il valore di t, viene calcolato il punto di intersezione sulla retta
+//Viene calcolato il residuo r come differenza tra il termine noto originale e il risultato ottenuto moltiplicando A per t
+//Si verifica se il residuo è sufficientemente piccolo rispetto a una soglia di tolleranza. Se il residuo supera questa soglia, significa che il punto calcolato non è un'intersezione accurata, quindi viene restituito un vettore con valori NaN
+Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, array<double,6> r_fratt);
+
+///La funzione Controllo_puntoIntersezione_segmentoFrattura controlla se il punto pt appartiene al segmento definito dai vertici della frattura identificata dall'id, utilizzando l'indice dei due vertici i e j
+//Calcola i parametri t1,t2,t3 che rappresentano le coordinate parametriche del punto pt rispetto al segmento formato dai due vertici della frattura
+//Verifica se ciascun parametro t è compreso tra 0 e 1 (con una tolleranza di 10^-15)
+//Se tutti e tre i parametri sono all'interno di questo intervallo, allora il punto pt è considerato all'interno del segmento e la funzione restituirà true, altrimenti restituirà false
+bool Controllo_puntoIntersezione_segmentoFrattura (Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j, Vector3d pt);
+
 }
