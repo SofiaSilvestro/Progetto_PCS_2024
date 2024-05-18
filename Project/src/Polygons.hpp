@@ -40,8 +40,8 @@ struct Traces{
     // il primo bool per il poligono FracturesId[i][0] e il secondo per FracturesId[i][1]
     map<unsigned int, array<bool,2>> Tips;
 
-    // Array che indica la lunghezza delle tracce
-    array<double> Lenght;
+    // Vettore che indica la lunghezza delle tracce
+    vector<double> Lenght;
 };
 
 }
