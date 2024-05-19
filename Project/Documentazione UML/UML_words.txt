@@ -1,0 +1,58 @@
+@startuml
+
+package DFNLibrary <<Node>>
+{
+
+class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
+{
+
++ NumberFractures : unsigned int 
++ IdF : unsigned int
++ Vertices : map<unsigned int, Matrix<double, 3, Dynamic>>
++ Plane : map<unsigned int, array<double, 4>>
+
+..NonMemberFunctions..
+
++ void importazione(const string &filename, Fractures1 &frattura)
++ double distanza_al_quadrato(Vector3d& v1, Vector3d& v2);
++ void esportazione(Traces& traccia, Fractures& frattura);
++ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2);
+
+'+ array<double, 3> PolyCentroid(vector<array<double, 3>> &Vertices)
+'+ DistB_Vert()
+'+ PlanPolyEq()
+'+ LineVertEq()
+
+__TESTFRAC__
+
+
+
+' fine classe Fractures
+}
+
+class Traces << (T, violet) >> #line:Navy;line.bold;back:aliceblue
+{
+
++ IdT : unsigned int
++ FracturesId : map<unsigned int, array<unsigned int, 2>> 
++ Vertices : map<unsigned int, array<Vector3d,2>> 
++ Tips : map<unsigned int, array<bool,2>> 
+
+__TESTTRAC__
+
+
+
+' fine classe Traces
+} 
+
+Fractures --|> Traces
+
+
+' fine namespace DFNLibrary
+} 
+
+
+
+
+
+@enduml
