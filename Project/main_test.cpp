@@ -1,5 +1,10 @@
-int main()
+#include "example_unit_test.hpp"
+#include "TestPolygons.hpp"
+#include "UCD_test.hpp"
+
+int main(int argc, char **argv)
 {
-    //prova caricamento
-  return 0;
+    testing::InitGoogleTest(&argc, argv);
+
+    return RUN_ALL_TESTS();
 }
