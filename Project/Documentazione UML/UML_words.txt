@@ -26,6 +26,7 @@ class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
 
 __TESTFRAC__
 
+TestSquareDistance
 
 
 ' fine classe Fractures
@@ -52,7 +53,14 @@ Fractures --|> Traces
 ' fine namespace DFNLibrary
 } 
 
+package Gedim <<Node>>  #line:DarkSlateGrey;line.bold;back:LightGreen
+{
 
+}
+
+DFNLibrary --right--> Gedim
+note "External package" as GedimNote
+GedimNote .. Gedim
 
 
 

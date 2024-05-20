@@ -26,13 +26,16 @@
 #include <list>
 #include <string>
 
+using namespace std;
+using namespace Eigen;
+
 namespace Gedim
 {
   template <typename T>
   struct UCDProperty final
   {
-      std::string Label;
-      std::string UnitLabel;
+      string Label;
+      string UnitLabel;
 
       unsigned int Size;
       unsigned int NumComponents;
@@ -57,11 +60,11 @@ namespace Gedim
       };
 
       const Types Type;
-      const std::vector<unsigned int> PointIds;
+      const vector<unsigned int> PointIds;
       const unsigned int MaterialId;
 
       UCDCell(const Types type,
-              const std::vector<unsigned int> pointIds,
+              const vector<unsigned int> pointIds,
               const unsigned int materialId) :
         Type(type),
         PointIds(pointIds),
@@ -80,50 +83,50 @@ namespace Gedim
       };
 
     private:
-      std::vector<UCDCell> CreatePointCells(const Eigen::MatrixXd& points,
-                                            const Eigen::VectorXi& materials) const;
-      std::vector<UCDCell> CreateLineCells(const Eigen::MatrixXi& lines,
-                                           const Eigen::VectorXi& materials) const;
-      std::vector<UCDCell> CreatePolygonCells(const std::vector<std::vector<unsigned int>>& polygons_vertices,
-                                              const Eigen::VectorXi& materials) const;
-      std::vector<UCDCell> CreatePolyhedraCells(const std::vector<std::vector<unsigned int>>& polyhedra_vertices,
-                                                const Eigen::VectorXi& materials) const;
+      vector<UCDCell> CreatePointCells(const MatrixXd& points,
+                                            const VectorXi& materials) const;
+      vector<UCDCell> CreateLineCells(const MatrixXi& lines,
+                                           const VectorXi& materials) const;
+      vector<UCDCell> CreatePolygonCells(const vector<vector<unsigned int>>& polygons_vertices,
+                                              const VectorXi& materials) const;
+      vector<UCDCell> CreatePolyhedraCells(const vector<vector<unsigned int>>& polyhedra_vertices,
+                                                const VectorXi& materials) const;
 
-      void ExportUCDAscii(const Eigen::MatrixXd& points,
-                          const std::vector<UCDProperty<double>>& point_properties,
-                          const std::vector<UCDCell>& cells,
-                          const std::vector<UCDProperty<double>>& cell_properties,
-                          const std::string& filePath) const;
+      void ExportUCDAscii(const MatrixXd& points,
+                          const vector<UCDProperty<double>>& point_properties,
+                          const vector<UCDCell>& cells,
+                          const vector<UCDProperty<double>>& cell_properties,
+                          const string& filePath) const;
 
     public:
       UCDUtilities() { }
       virtual ~UCDUtilities() { }
 
-      void ExportPoints(const std::string& filePath,
-                        const Eigen::MatrixXd& points,
-                        const std::vector<UCDProperty<double>>& points_properties = {},
-                        const Eigen::VectorXi& materials = {}) const;
+      void ExportPoints(const string& filePath,
+                        const MatrixXd& points,
+                        const vector<UCDProperty<double>>& points_properties = {},
+                        const VectorXi& materials = {}) const;
 
-      void ExportSegments(const std::string& filePath,
-                          const Eigen::MatrixXd& points,
-                          const Eigen::MatrixXi& segments,
-                          const std::vector<UCDProperty<double>>& points_properties = {},
-                          const std::vector<UCDProperty<double>>& segmnents_properties = {},
-                          const Eigen::VectorXi& materials = {}) const;
+      void ExportSegments(const string& filePath,
+                          const MatrixXd& points,
+                          const MatrixXi& segments,
+                          const vector<UCDProperty<double>>& points_properties = {},
+                          const vector<UCDProperty<double>>& segmnents_properties = {},
+                          const VectorXi& materials = {}) const;
 
-      void ExportPolygons(const std::string& filePath,
-                          const Eigen::MatrixXd& points,
-                          const std::vector<std::vector<unsigned int>>& polygons_vertices,
-                          const std::vector<UCDProperty<double>>& points_properties = {},
-                          const std::vector<UCDProperty<double>>& polygons_properties = {},
-                          const Eigen::VectorXi& materials = {}) const;
+      void ExportPolygons(const string& filePath,
+                          const MatrixXd& points,
+                          const vector<vector<unsigned int>>& polygons_vertices,
+                          const vector<UCDProperty<double>>& points_properties = {},
+                          const vector<UCDProperty<double>>& polygons_properties = {},
+                          const VectorXi& materials = {}) const;
 
-      void ExportPolyhedra(const std::string& filePath,
-                           const Eigen::MatrixXd& points,
-                           const std::vector<std::vector<unsigned int>>& polyhedra_vertices,
-                           const std::vector<UCDProperty<double>>& points_properties = {},
-                           const std::vector<UCDProperty<double>>& polyhedra_properties = {},
-                           const Eigen::VectorXi& materials = {}) const;
+      void ExportPolyhedra(const string& filePath,
+                           const MatrixXd& points,
+                           const vector<vector<unsigned int>>& polyhedra_vertices,
+                           const vector<UCDProperty<double>>& points_properties = {},
+                           const vector<UCDProperty<double>>& polyhedra_properties = {},
+                           const VectorXi& materials = {}) const;
   };
 }
 
