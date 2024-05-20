@@ -1,6 +1,6 @@
 @startuml
 
-package DFNLibrary <<Node>>
+package DFNLibrary <<Node>> #line:DarkSlateGrey;line.bold;back:LightYellow
 {
 
 class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
@@ -10,18 +10,19 @@ class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
 + IdF : unsigned int
 + Vertices : map<unsigned int, Matrix<double, 3, Dynamic>>
 + Plane : map<unsigned int, array<double, 4>>
++ vector<double> Lenght
 
 ..NonMemberFunctions..
 
-+ void importazione(const string &filename, Fractures1 &frattura)
-+ double distanza_al_quadrato(Vector3d& v1, Vector3d& v2);
-+ void esportazione(Traces& traccia, Fractures& frattura);
-+ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2);
-
-'+ array<double, 3> PolyCentroid(vector<array<double, 3>> &Vertices)
-'+ DistB_Vert()
-'+ PlanPolyEq()
-'+ LineVertEq()
++ bool importazione(const string &filename, Fractures1 &frattura)
++ double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
++ void esportazione(Traces& traccia, Fractures& frattura)
++ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2)
++ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
++ array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
++ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_fratt)
++ Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, array<double,6> r_fratt)
++ bool Controllo_puntoIntersezione_segmentoFrattura (Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j, Vector3d pt)
 
 __TESTFRAC__
 
