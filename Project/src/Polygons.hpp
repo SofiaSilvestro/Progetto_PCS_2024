@@ -25,6 +25,9 @@ struct Fractures{
     map<unsigned int, array<double,4>> Piano;
 };
 
+
+
+
 struct Traces{
 
     // Identificatore univoco per ogni traccia

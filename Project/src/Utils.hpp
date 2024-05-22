@@ -48,6 +48,8 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned
 array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j);
 
 Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_fratt);
+Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
+double raggio(Fractures& frattura, unsigned int& Id1, Vector3d& coord_bar_1);
 
 ///La funzione Punto_intersezione_rette_piano_frattura trova il punto di intersezione (se esiste) fra la retta generata dal piano e la retta generata dal segmento
 //Restituirà il punto di intersezione se trovato con successo, altrimenti restituirà un vettore con valori NaN
