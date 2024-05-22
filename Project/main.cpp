@@ -27,6 +27,7 @@ int main()
                         //piani paralleli
                     }
                     else{
+                        array<double, 4> coefficienti;
                         //piani non paralleli
                         //calcolo la retta tra i lati adiacenti del poligono 1
                         cout<<"PRIMO POLIGONO "<<endl;
@@ -34,6 +35,7 @@ int main()
                         unsigned int h=0;
                         unsigned int k=1;
                         while(h<frattura.Vertices[i].cols()){
+
                             //con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                             if(k==frattura.Vertices[i].cols()){
                                 k=0;
@@ -53,15 +55,29 @@ int main()
                                 punto_intersezione[2]=r_tra_punti[2]*x[0]+r_tra_punti[5];
                                 // CONDIZIONI : verifichiamo che appartenga al segmento
                                 double tol=pow(10,-15);
-                                if(x[0]>=-tol && x[0]<=1+tol){
-                                    cout<<x[0]<<" "<<x[1]<<endl;
-                                    cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
-                                    conta_p1++;
+
+                                int count = 0;
+                                for(unsigned int s = 0; s<4; s++){
+                                    if(x[0]>=-tol && x[0]<=1+tol){
+                                        coefficienti[count] = x[1];
+                                        count++;
+                                    }
                                 }
+                                // if(x[0]>=-tol && x[0]<=1+tol){
+                                //     cout<<x[0]<<" "<<x[1]<<endl;
+                                //     cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
+                                //     conta_p1++;
+                                // }
                             }
                             h++;
                             k++;
+
                         }
+
+
+
+
+
                         if(conta_p1==2){
                             cout<<"Traccia passante"<<endl;
                         }
@@ -74,6 +90,7 @@ int main()
                         h=0;
                         k=1;
                         while(h<frattura.Vertices[j].cols()){
+
                             //con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                             if(k==frattura.Vertices[j].cols()){
                                 k=0;
@@ -93,42 +110,38 @@ int main()
                                 punto_intersezione[2]=r_tra_punti[2]*x[0]+r_tra_punti[5];
                                 // CONDIZIONI: verifichiamo che appartenga al segmento
                                 double tol=pow(10,-15);
-                                if(x[0]>=-tol && x[0]<=1+tol){
-                                    cout<<x[0]<<" "<<x[1]<<endl;
-                                    cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
-                                    conta_p2++;
+
+                                int count = 2;
+                                for(unsigned int s = 0; s<4; s++){
+                                    if(x[0]>=-tol && x[0]<=1+tol){
+                                        coefficienti[count] = x[1];
+                                        count++;
+                                    }
                                 }
+
+                                // if(x[0]>=-tol && x[0]<=1+tol){
+                                //     cout<<x[0]<<" "<<x[1]<<endl;
+                                //     cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
+                                //     conta_p2++;
+                                // }
                             }
                             h++;
                             k++;
+
                         }
+
                         if(conta_p2==2){
                             cout<<"Traccia passante"<<endl;
                         }
                         else{
                             cout<<"Traccia non passante"<<endl;
                         }
+                        cout << coefficienti[0] << coefficienti[1] << coefficienti[2] << coefficienti[3];
                     }
                 }
                 j++;
             }
         }
-
-
-        ///TEST FUNZIONE PER TROVARE PUNTO DI INTERSEZIONE TRA LA RETTA FORMATA DALLE 2 FRATTURE E LA RETTA GENERATA DAL SEGMENTO DI UNA FRATTURA
-            //poi da togliere
-        cout << endl;
-        cout << "TEST INTERSEZIONE" <<endl;
-        array<double, 6> r_intersez = {1, 0, 0, 0, 0, 0}; // x = t, y = 0, z = 0
-        array<double, 6> r_fratt = {0, 1, 0, 1, 1, 0}; // x = 1, y = s + 1, z = 0
-        Vector3d intersezione = Punto_intersezione_rette_piano_frattura(r_intersez, r_fratt);
-        if (isnan(intersezione[0])) {
-            cout << "Le rette non si intersecano" << endl;
-        } else {
-            cout << "Il punto di intersezione e': " << intersezione.transpose() << endl;
-        }
-
-        return 0;
     }
 
 }

@@ -250,64 +250,64 @@ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_frat
     return x;
 }
 
-Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, array<double,6> r_fratt){
-    MatrixXd A = MatrixXd::Zero(3,2);
-    A << r_intersez[0], -r_fratt[0],
-        r_intersez[1], -r_fratt[1],
-        r_intersez[2], -r_fratt[2];
+// Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, array<double,6> r_fratt){
+//     MatrixXd A = MatrixXd::Zero(3,2);
+//     A << r_intersez[0], -r_fratt[0],
+//         r_intersez[1], -r_fratt[1],
+//         r_intersez[2], -r_fratt[2];
 
-    Vector3d b = Vector3d::Zero();
-    b << r_intersez[3] -r_fratt[3],
-        r_intersez[4] -r_fratt[4],
-        r_intersez[5] -r_fratt[5];
+//     Vector3d b = Vector3d::Zero();
+//     b << r_intersez[3] -r_fratt[3],
+//         r_intersez[4] -r_fratt[4],
+//         r_intersez[5] -r_fratt[5];
 
-    Vector2d ts = Vector2d::Zero();
+//     Vector2d ts = Vector2d::Zero();
 
-    ts = A.householderQr().solve(b);
-    double t = ts[0];
+//     ts = A.householderQr().solve(b);
+//     double t = ts[0];
 
-    Vector3d punto_intersezione;
-    punto_intersezione << r_intersez[0] * t + r_intersez[3],
-        r_intersez[1] * t + r_intersez[4],
-        r_intersez[2] * t + r_intersez[5];
+//     Vector3d punto_intersezione;
+//     punto_intersezione << r_intersez[0] * t + r_intersez[3],
+//         r_intersez[1] * t + r_intersez[4],
+//         r_intersez[2] * t + r_intersez[5];
 
-    VectorXd r = b - A * ts;
+//     VectorXd r = b - A * ts;
 
-    // Soglia di tolleranza per il residuo
-    double tol = 1e-15;
+//     // Soglia di tolleranza per il residuo
+//     double tol = 1e-15;
 
-    // Verifica se il residuo è sufficientemente piccolo
-    if (r.norm() >= tol) {
-        return Vector3d(NAN, NAN, NAN);
-    }
+//     // Verifica se il residuo è sufficientemente piccolo
+//     if (r.norm() >= tol) {
+//         return Vector3d(NAN, NAN, NAN);
+//     }
 
-    return punto_intersezione;
+//     return punto_intersezione;
 
-}
+// }
 
-bool Controllo_puntoIntersezione_segmentoFrattura (Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j, Vector3d pt){
+// bool Controllo_puntoIntersezione_segmentoFrattura (Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j, Vector3d pt){
 
-    double t1, t2, t3;
+//     double t1, t2, t3;
 
-    double tol = 1e-15;
+//     double tol = 1e-15;
 
-    t1 = (pt[0] - frattura.Vertices[id](0,i))/(frattura.Vertices[id](0,j)-frattura.Vertices[id](0,i));
-    t2 = (pt[1] - frattura.Vertices[id](1,i))/(frattura.Vertices[id](1,j)-frattura.Vertices[id](1,i));
-    t3 = (pt[2] - frattura.Vertices[id](2,i))/(frattura.Vertices[id](2,j)-frattura.Vertices[id](2,i));
+//     t1 = (pt[0] - frattura.Vertices[id](0,i))/(frattura.Vertices[id](0,j)-frattura.Vertices[id](0,i));
+//     t2 = (pt[1] - frattura.Vertices[id](1,i))/(frattura.Vertices[id](1,j)-frattura.Vertices[id](1,i));
+//     t3 = (pt[2] - frattura.Vertices[id](2,i))/(frattura.Vertices[id](2,j)-frattura.Vertices[id](2,i));
 
-    if (t1 >= 0-tol &&  t1 <= 1+tol){
-        if (t2 >= 0-tol &&  t2 <= 1+tol){
-            if (t3 >= 0-tol &&  t3 <= 1+tol){
-                return true;
-            }else{
-                return false;
-            }
-        }else{
-            return false;
-        }
-    }else{
-        return false;
-    }
-}
+//     if (t1 >= 0-tol &&  t1 <= 1+tol){
+//         if (t2 >= 0-tol &&  t2 <= 1+tol){
+//             if (t3 >= 0-tol &&  t3 <= 1+tol){
+//                 return true;
+//             }else{
+//                 return false;
+//             }
+//         }else{
+//             return false;
+//         }
+//     }else{
+//         return false;
+//     }
+// }
 
 }

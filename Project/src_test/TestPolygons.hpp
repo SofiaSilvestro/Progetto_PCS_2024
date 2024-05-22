@@ -19,6 +19,7 @@ array<double, 3> PolyCentroid(vector<array<double, 3>> &Vertices)
     unsigned int NumVert = Vertices.size();
     for(unsigned int i = 0; i < 3; i++) // ciclo sulle coordinate
     {
+        iCent = 0;
         // ciclo sui vertici considerando la coord i (i = 0: x, i = 1: y, i = 2: z)
         for(unsigned int j = 0; j < NumVert; j++)
         {
@@ -51,7 +52,29 @@ TEST(DistanceTest, TwoPoints)
     Vector3d secondP = {3, 3, 3};
     double result = distanza_al_quadrato(firstP, secondP);
     double expected = 3.;
-    ASSERT_EQ(result, expected);
+    ASSERT_DOUBLE_EQ(result, expected);
 }
+
+// ///TEST FUNZIONE PER TROVARE PUNTO DI INTERSEZIONE TRA LA RETTA FORMATA DALLE 2 FRATTURE E LA RETTA GENERATA DAL SEGMENTO DI UNA FRATTURA
+//     //poi da togliere
+// cout << endl;
+// cout << "TEST INTERSEZIONE" <<endl;
+// array<double, 6> r_intersez = {1, 0, 0, 0, 0, 0}; // x = t, y = 0, z = 0
+// array<double, 6> r_fratt = {0, 1, 0, 1, 1, 0}; // x = 1, y = s + 1, z = 0
+// Vector3d intersezione = Punto_intersezione_rette_piano_frattura(r_intersez, r_fratt);
+// if (isnan(intersezione[0])) {
+//     cout << "Le rette non si intersecano" << endl;
+// } else {
+//     cout << "Il punto di intersezione e': " << intersezione.transpose() << endl;
+// }
+
+// return 0;
+
+
+
+
+
+
+
 
 #endif
