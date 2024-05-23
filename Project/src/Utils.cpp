@@ -178,6 +178,7 @@ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_frat
     // tale parametro deve essere controllato tra zero e uno per il segmento
     return x;
 }
+
 void caricamento_dati(Traces& traccia, Fractures& frattura){
     unsigned int NumberTraces=0;
     array<unsigned int,2> Id;
@@ -513,7 +514,8 @@ void esportazione(Traces& traccia, Fractures& frattura)
 
 
 }
-/*Vector3d baricentro (Fractures& frattura, unsigned int& Id1){
+/*
+Vector3d baricentro (Fractures& frattura, unsigned int& Id1){
     Vector3d coord_bar_1;
     unsigned int n1 = frattura.Vertices[Id1].cols(); //numero di colonne della frattura
     for(unsigned int h=0; h<3; h++){
@@ -523,5 +525,5 @@ void esportazione(Traces& traccia, Fractures& frattura)
         coord_bar_1[h] =coord_bar_1[h]/n1;
     }
     return coord_bar_1;
-}
-*/
+}*/
+
