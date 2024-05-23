@@ -47,22 +47,21 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned
 //Calcolo del punto P sulla retta (x1, y1, z1)
 array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j);
 
+///La funzione alpha_di_intersezione calcola i parametri alpha e beta
+//t1 rappresenta la direzione della retta che è l'intersezione di due piani
+//t2 rappresenta la direzione di una retta che passa attraverso i vertici di un poligono di frattura
+//La matrice A è una matrice 3x2 dove:
+//La prima colonna (A.col(0)) è il vettore t1, che rappresenta la direzione della retta di intersezione tra i piani
+//La seconda colonna (A.col(1)) è il vettore -t2, che rappresenta la direzione opposta della retta che passa attraverso i vertici del poligono
+//b = [r_intersez[3]-r_fratt[3], r_intersez[4]-r_fratt[4], r_intersez[5]-r_fratt[5]]
+//x = [alpha, beta]
+// alpha: È il parametro scalare che, quando moltiplicato per t1 (la direzione della retta di intersezione tra i piani), ci dice dove si trova il punto di intersezione lungo questa retta
+// beta:  È il parametro scalare che, quando moltiplicato per -t2 (la direzione della retta attraverso i vertici del poligono), ci dice dove si trova il punto di intersezione lungo questa retta
+// se alpha è tra 0 e 1, il punto è su un segmento finito della retta di intersezione
 Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_fratt);
+
+
 Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
 double raggio(Fractures& frattura, unsigned int& Id1, Vector3d& coord_bar_1);
-
-///La funzione Punto_intersezione_rette_piano_frattura trova il punto di intersezione (se esiste) fra la retta generata dal piano e la retta generata dal segmento
-//Restituirà il punto di intersezione se trovato con successo, altrimenti restituirà un vettore con valori NaN
-//Viene risolto il sistema lineare usando la decomposizione QR per trovare i valori dei parametri t
-//Con il valore di t, viene calcolato il punto di intersezione sulla retta
-//Viene calcolato il residuo r come differenza tra il termine noto originale e il risultato ottenuto moltiplicando A per t
-//Si verifica se il residuo è sufficientemente piccolo rispetto a una soglia di tolleranza. Se il residuo supera questa soglia, significa che il punto calcolato non è un'intersezione accurata, quindi viene restituito un vettore con valori NaN
-Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, array<double,6> r_fratt);
-
-///La funzione Controllo_puntoIntersezione_segmentoFrattura controlla se il punto pt appartiene al segmento definito dai vertici della frattura identificata dall'id, utilizzando l'indice dei due vertici i e j
-//Calcola i parametri t1,t2,t3 che rappresentano le coordinate parametriche del punto pt rispetto al segmento formato dai due vertici della frattura
-//Verifica se ciascun parametro t è compreso tra 0 e 1 (con una tolleranza di 10^-15)
-//Se tutti e tre i parametri sono all'interno di questo intervallo, allora il punto pt è considerato all'interno del segmento e la funzione restituirà true, altrimenti restituirà false
-bool Controllo_puntoIntersezione_segmentoFrattura (Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j, Vector3d pt);
 
 }
