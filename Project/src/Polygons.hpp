@@ -30,8 +30,8 @@ struct Fractures{
 
 struct Traces{
 
-    // Identificatore univoco per ogni traccia
-    unsigned int Id;
+    // numero tracce
+    unsigned int Number;
 
     // Mappa che associa un id di traccia a un array di due id di frattura.
     map<unsigned int, array<unsigned int, 2>> FracturesId;

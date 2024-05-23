@@ -48,6 +48,9 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned
 array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j);
 
 Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_fratt);
+void caricamento_dati(Traces& traccia, Fractures& frattura);
+
+
 Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
 double raggio(Fractures& frattura, unsigned int& Id1, Vector3d& coord_bar_1);
 
