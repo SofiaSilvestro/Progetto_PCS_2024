@@ -249,7 +249,6 @@ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_frat
     // tale parametro deve essere controllato tra zero e uno per il segmento
     return x;
 }
-
 Vector3d baricentro (Fractures& frattura, unsigned int& Id1){
     Vector3d coord_bar_1;
     unsigned int n1 = frattura.Vertices[Id1].cols(); //numero di colonne della frattura
@@ -293,13 +292,12 @@ Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, arr
         r_intersez[1], -r_fratt[1],
         r_intersez[2], -r_fratt[2];
 
-    Vector3d b = Vector3d::Zero();
-    b << r_intersez[3] -r_fratt[3],
-        r_intersez[4] -r_fratt[4],
-        r_intersez[5] -r_fratt[5];
+//     Vector3d b = Vector3d::Zero();
+//     b << r_intersez[3] -r_fratt[3],
+//         r_intersez[4] -r_fratt[4],
+//         r_intersez[5] -r_fratt[5];
 
-    Vector2d ts = Vector2d::Zero();
-
+//     Vector2d ts = Vector2d::Zero();
     ts = A.householderQr().solve(b); // coincide con alpha
     double t = ts[0];
 
@@ -308,29 +306,29 @@ Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, arr
         r_intersez[1] * t + r_intersez[4],
         r_intersez[2] * t + r_intersez[5]; //ok
 
-    VectorXd r = b - A * ts;
+//     VectorXd r = b - A * ts;
 
-    // Soglia di tolleranza per il residuo
-    double tol = 1e-15;
+//     // Soglia di tolleranza per il residuo
+//     double tol = 1e-15;
 
-    // Verifica se il residuo è sufficientemente piccolo
-    if (r.norm() >= tol) {
-        return Vector3d(NAN, NAN, NAN);
-    }
+//     // Verifica se il residuo è sufficientemente piccolo
+//     if (r.norm() >= tol) {
+//         return Vector3d(NAN, NAN, NAN);
+//     }
 
-    return punto_intersezione;
+//     return punto_intersezione;
 
-}
+// }
 
-bool Controllo_puntoIntersezione_segmentoFrattura (Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j, Vector3d pt){
+// bool Controllo_puntoIntersezione_segmentoFrattura (Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j, Vector3d pt){
 
-    double t1, t2, t3;
+//     double t1, t2, t3;
 
-    double tol = 1e-15;
+//     double tol = 1e-15;
 
-    t1 = (pt[0] - frattura.Vertices[id](0,i))/(frattura.Vertices[id](0,j)-frattura.Vertices[id](0,i));
-    t2 = (pt[1] - frattura.Vertices[id](1,i))/(frattura.Vertices[id](1,j)-frattura.Vertices[id](1,i));
-    t3 = (pt[2] - frattura.Vertices[id](2,i))/(frattura.Vertices[id](2,j)-frattura.Vertices[id](2,i));
+//     t1 = (pt[0] - frattura.Vertices[id](0,i))/(frattura.Vertices[id](0,j)-frattura.Vertices[id](0,i));
+//     t2 = (pt[1] - frattura.Vertices[id](1,i))/(frattura.Vertices[id](1,j)-frattura.Vertices[id](1,i));
+//     t3 = (pt[2] - frattura.Vertices[id](2,i))/(frattura.Vertices[id](2,j)-frattura.Vertices[id](2,i));
 
     if (t1 >= 0-tol &&  t1 <= 1+tol){
         if (t2 >= 0-tol &&  t2 <= 1+tol){

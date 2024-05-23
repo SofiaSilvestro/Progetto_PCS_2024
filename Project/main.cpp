@@ -27,12 +27,14 @@ int main()
                         //piani paralleli
                     }
                     else{
+                        array<double, 4> coefficienti;
                         //piani non paralleli
                         //calcolo la retta tra i lati adiacenti del poligono 1
                         unsigned int h=0;
                         unsigned int k=1;
                         unsigned int cont=0;
                         while(h<frattura.Vertices[i].cols()){
+
                             //con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                             if(k==frattura.Vertices[i].cols()){
                                 k=0;
@@ -51,14 +53,21 @@ int main()
                                     coeff[cont]=x[1];
                                     cont++;
                                 }
+                                // if(x[0]>=-tol && x[0]<=1+tol){
+                                //     cout<<x[0]<<" "<<x[1]<<endl;
+                                //     cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
+                                //     conta_p1++;
+                                // }
                             }
                             h++;
                             k++;
+
                         }
                         //calcolo la retta tra i lati adiacenti del poligono 2
                         h=0;
                         k=1;
                         while(h<frattura.Vertices[j].cols()){
+
                             //con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                             if(k==frattura.Vertices[j].cols()){
                                 k=0;
@@ -76,9 +85,16 @@ int main()
                                     coeff[cont]=x[1];
                                     cont++;
                                 }
+
+                                // if(x[0]>=-tol && x[0]<=1+tol){
+                                //     cout<<x[0]<<" "<<x[1]<<endl;
+                                //     cout<<"Il punto di intersezione e'"<<setprecision(16)<< punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
+                                //     conta_p2++;
+                                // }
                             }
                             h++;
                             k++;
+
                         }
                         if(cont>3){
                             //Trovare ora l'intervallo di intersezione
