@@ -249,12 +249,48 @@ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_frat
     // tale parametro deve essere controllato tra zero e uno per il segmento
     return x;
 }
+Vector3d baricentro (Fractures& frattura, unsigned int& Id1){
+    Vector3d coord_bar_1;
+    unsigned int n1 = frattura.Vertices[Id1].cols(); //numero di colonne della frattura
+    for(unsigned int h=0; h<3; h++){
+        for (unsigned int k=0; k<n1; k++){
+            coord_bar_1[h]=coord_bar_1[h]+frattura.Vertices[Id1](h,k);
+        }
+        coord_bar_1[h] =coord_bar_1[h]/n1;
+    }
+    return coord_bar_1;
+}
 
-// Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, array<double,6> r_fratt){
-//     MatrixXd A = MatrixXd::Zero(3,2);
-//     A << r_intersez[0], -r_fratt[0],
-//         r_intersez[1], -r_fratt[1],
-//         r_intersez[2], -r_fratt[2];
+double raggio(Fractures& frattura, unsigned int& Id1, Vector3d& coord_bar){
+    // Definisco due vettori che contengono le coordinate del mio baricentro
+    Vector3d coord_bar_1;
+    coord_bar_1[0]=coord_bar[0];
+    coord_bar_1[1]=coord_bar[1];
+    coord_bar_1[2]=coord_bar[2];
+    unsigned int n1 = frattura.Vertices[Id1].cols();
+    // Calcolo i possibili raggi della palla
+    VectorXd raggi_candidati1;
+    raggi_candidati1.resize(n1);
+    for(unsigned int h=0; h<n1; h++){
+        Vector3d point = frattura.Vertices[Id1].col(h);
+        raggi_candidati1(h) = distanza_al_quadrato(coord_bar_1,point);
+    }
+    // Calcolo il raggio
+    double raggio1 = *max_element(raggi_candidati1.begin(), raggi_candidati1.end());
+    return raggio1;
+}
+
+
+
+
+
+
+/*
+Vector3d Punto_intersezione_rette_piano_frattura(array<double,6> r_intersez, array<double,6> r_fratt){
+    MatrixXd A = MatrixXd::Zero(3,2);
+    A << r_intersez[0], -r_fratt[0],
+        r_intersez[1], -r_fratt[1],
+        r_intersez[2], -r_fratt[2];
 
 //     Vector3d b = Vector3d::Zero();
 //     b << r_intersez[3] -r_fratt[3],
@@ -262,14 +298,13 @@ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_frat
 //         r_intersez[5] -r_fratt[5];
 
 //     Vector2d ts = Vector2d::Zero();
+    ts = A.householderQr().solve(b); // coincide con alpha
+    double t = ts[0];
 
-//     ts = A.householderQr().solve(b);
-//     double t = ts[0];
-
-//     Vector3d punto_intersezione;
-//     punto_intersezione << r_intersez[0] * t + r_intersez[3],
-//         r_intersez[1] * t + r_intersez[4],
-//         r_intersez[2] * t + r_intersez[5];
+    Vector3d punto_intersezione;
+    punto_intersezione << r_intersez[0] * t + r_intersez[3],
+        r_intersez[1] * t + r_intersez[4],
+        r_intersez[2] * t + r_intersez[5]; //ok
 
 //     VectorXd r = b - A * ts;
 
@@ -295,19 +330,19 @@ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_frat
 //     t2 = (pt[1] - frattura.Vertices[id](1,i))/(frattura.Vertices[id](1,j)-frattura.Vertices[id](1,i));
 //     t3 = (pt[2] - frattura.Vertices[id](2,i))/(frattura.Vertices[id](2,j)-frattura.Vertices[id](2,i));
 
-//     if (t1 >= 0-tol &&  t1 <= 1+tol){
-//         if (t2 >= 0-tol &&  t2 <= 1+tol){
-//             if (t3 >= 0-tol &&  t3 <= 1+tol){
-//                 return true;
-//             }else{
-//                 return false;
-//             }
-//         }else{
-//             return false;
-//         }
-//     }else{
-//         return false;
-//     }
-// }
-
+    if (t1 >= 0-tol &&  t1 <= 1+tol){
+        if (t2 >= 0-tol &&  t2 <= 1+tol){
+            if (t3 >= 0-tol &&  t3 <= 1+tol){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+*/
 }

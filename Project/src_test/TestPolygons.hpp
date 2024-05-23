@@ -11,6 +11,7 @@
 using namespace std;
 using namespace Eigen;
 
+
 /** PROVA: TEST SU FUNZIONE CHE CALCOLA IL BARICENTRO **/
 array<double, 3> PolyCentroid(vector<array<double, 3>> &Vertices)
 {
@@ -23,9 +24,10 @@ array<double, 3> PolyCentroid(vector<array<double, 3>> &Vertices)
         // ciclo sui vertici considerando la coord i (i = 0: x, i = 1: y, i = 2: z)
         for(unsigned int j = 0; j < NumVert; j++)
         {
-            iCent += Vertices[j][i]; // iCent = iCent + Vertices[j][i]
+            iCent += Vertices[j][i]; // iCent = iCent + Vertices[i][j]
         }
     CoordCent[i] = iCent / NumVert;
+    iCent=0;
     }
     return CoordCent;
 }
