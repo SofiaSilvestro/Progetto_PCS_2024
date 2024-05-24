@@ -1,9 +1,11 @@
 #include <iostream>
 #include <Polygons.hpp>
 #include <Utils.hpp>
-#include<iomanip>
+#include <iomanip>
+
 using namespace std;
 using namespace FracturesLib;
+
 int main()
 {
     Fractures frattura;
@@ -13,9 +15,10 @@ int main()
     {
         return 1;
     }
-    else{
-        caricamento_dati(traccia,frattura);
-        esportazione(traccia,frattura);
+    else
+    {
+        caricamento_dati(traccia, frattura);
+        esportazione(traccia, frattura);
         return 0;
     }
 }

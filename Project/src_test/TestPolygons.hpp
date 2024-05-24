@@ -7,10 +7,14 @@
 #include <vector>
 #include <iostream>
 #include <Eigen/Eigen>
+#include "Utils.hpp"
+#include "UCDUtilities.hpp"
+#include "Polygons.hpp"
 
 using namespace std;
 using namespace Eigen;
 
+namespace FracturesLib{
 
 /** PROVA: TEST SU FUNZIONE CHE CALCOLA IL BARICENTRO **/
 array<double, 3> PolyCentroid(vector<array<double, 3>> &Vertices)
@@ -27,7 +31,6 @@ array<double, 3> PolyCentroid(vector<array<double, 3>> &Vertices)
             iCent += Vertices[j][i]; // iCent = iCent + Vertices[i][j]
         }
     CoordCent[i] = iCent / NumVert;
-    iCent=0;
     }
     return CoordCent;
 }
@@ -41,12 +44,6 @@ TEST(CentroidTest, Quadrangle)
 }
 
 /** TEST SU FUNZIONE CHE CALCOLA LA DISTANZA (AL QUADRATO) TRA DUE PUNTI **/
-double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
-{
-    return (v1[0] - v2[0]) * (v1[0] - v2[0])
-           + (v1[1] - v2[1]) * (v1[1] - v2[1])
-           + (v1[2] - v2[2]) * (v1[2] - v2[2]);
-}
 
 TEST(DistanceTest, TwoPoints)
 {
@@ -75,8 +72,19 @@ TEST(DistanceTest, TwoPoints)
 
 
 
+/*
+Vector3d baricentro (Fractures& frattura, unsigned int& Id1){
+    Vector3d coord_bar_1;
+    unsigned int n1 = frattura.Vertices[Id1].cols(); //numero di colonne della frattura
+    for(unsigned int h=0; h<3; h++){
+        for (unsigned int k=0; k<n1; k++){
+            coord_bar_1[h]=coord_bar_1[h]+frattura.Vertices[Id1](h,k);
+        }
+        coord_bar_1[h] =coord_bar_1[h]/n1;
+    }
+    return coord_bar_1;
+}*/
 
 
-
-
+}
 #endif
