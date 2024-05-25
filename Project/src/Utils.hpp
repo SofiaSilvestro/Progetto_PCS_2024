@@ -91,9 +91,11 @@ void caricamento_dati(Traces& traccia, Fractures& frattura);
 
 
 
+
 ///La funzione OrdinamentoTracce ordina le tracce per passanti per entrambi i poligoni, passanti solo per un poligono, non passante per entrambi i poligoni. Inoltre le ordina in lunghezza decrescente
 //es elt del vettore: <id, {(x1, y1, z1), (x2, y2, z2)}, {true/false, true/false}>
 vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracce (Traces& traccia);
+
 
 Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
 
