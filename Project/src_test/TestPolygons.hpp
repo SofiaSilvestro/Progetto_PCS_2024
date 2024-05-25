@@ -16,43 +16,8 @@ using namespace Eigen;
 
 namespace FracturesLib{
 
-/** TEST SU FUNZIONE CHE CALCOLA IL BARICENTRO **/
-
-// Vector3d baricentro (Fractures& frattura, unsigned int& Id)
-// {
-//     Vector3d coord_bar = {};
-//     unsigned int n = frattura.Vertices[Id].cols(); // numero di vertici della frattura
-//     for(unsigned int h = 0; h < 3; h++)
-//     {
-//         for (unsigned int k = 0; k < n; k++)
-//         {
-//             coord_bar[h] = coord_bar[h] + frattura.Vertices[Id](h,k);
-//         }
-//         coord_bar[h] = coord_bar[h] / n;
-//     }
-//     return coord_bar;
-// }
-
-// TEST(CentroidTest, Quadrangle)
-// {
-//     Fractures frattura;
-//     unsigned int Id = 0;
-
-//     map<unsigned int, Matrix<double, 3, 4>> Vertices = {};
-//     Matrix<double, 3, 4> mat;
-//     mat [0][0] = 3; mat [0][1] = 0; mat [0][2] = 3; mat [0][3] = 0;
-//     mat [1][0] = 0; mat [1][1] = 0; mat [1][2] = -3; mat [1][3] = -3;
-//     mat [2][0] = 0; mat [2][1] = 3; mat [2][2] = 0; mat [2][3] = 3;
-//     Vertices[Id] = mat;
-
-//     Vector3d result = baricentro(frattura, Id);
-//     Vector3d expected = {3./2., -3./2., 3./2.};
-//     ASSERT_EQ(result, expected);
-// }
-
 /** TEST SU FUNZIONE CHE CALCOLA LA DISTANZA (AL QUADRATO) TRA DUE PUNTI **/
-
-TEST(DistanceTest, TwoPoints)
+TEST(TestDistanze, Tra2Punti)
 {
     Vector3d firstP = {2, 2, 2};
     Vector3d secondP = {3, 3, 3};
@@ -61,9 +26,47 @@ TEST(DistanceTest, TwoPoints)
     ASSERT_DOUBLE_EQ(result, expected);
 }
 
-/** TEST SU FUNZIONE CHE CALCOLA L'ASCISSA CURVILINEA DATE DUE RETTE IN FORMA PARAMETRICA **/
+/** TEST SU FUNZIONE CHE CALCOLA IL BARICENTRO **/
+TEST(TestBaricentro, Quadrilatero)
+{
+    Fractures frattura;
+    unsigned int Id = 0;
+    Matrix<double, 3, 4> Mat;
+    Mat << 3., 0. , 3., 0.,
+           0., 0., -3., -3.,
+           0., 3., 0., 3.;
+    frattura.Vertices[Id] = Mat;
 
-TEST(parametri_rette, ascissa_curvilinea)
+    Vector3d result = baricentro(frattura, Id);
+    Vector3d expected = {3./2., -3./2., 3./2.};
+    ASSERT_EQ(result, expected);
+}
+
+/** TEST SU FUNZIONE CHE VALUTA LA DISTANZA TRA DUE POLIGONI PER
+ *  DETERMINARE PRELIMINARMENTE LA POSSIBILITA' DELL'INTERSEZIONE **/
+TEST(RetteEPiani, Distanza_Tra_Poligoni)
+{
+    Fractures frattura;
+    unsigned int Id1 = 0;
+    unsigned int Id2 = 1;
+    frattura.Vertices[Id1] << 0., 1., 1., 0.,
+                              0., 0., 1., 1.,
+                              0., 0., 0., 0.;
+    frattura.Vertices[Id2] << 0.8, 0.8, 0.8, 0.8,
+                              0., 0., 1., 1.,
+                              -0.1, 0.3, 0.3, -0.1;
+
+    bool result = valuta_intersezione (frattura, Id1, Id2);
+    bool expected = true;
+    ASSERT_EQ(result, expected);
+}
+
+
+
+
+
+/** TEST SU FUNZIONE CHE CALCOLA L'ASCISSA CURVILINEA DATE DUE RETTE IN FORMA PARAMETRICA **/
+TEST(RetteEPiani, Ascissa_Curvilinea)
 {
     array<double, 6> r1 = {2, 6, 3, 2, 2, 1};
     array<double, 6> r2 = {4, 1, 5, 0, 18, 0};
@@ -72,6 +75,13 @@ TEST(parametri_rette, ascissa_curvilinea)
     Vector2d expected = {3, 2};
     ASSERT_EQ(result, expected);
 }
+
+
+
+
+
+
+
 
 }
 #endif

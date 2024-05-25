@@ -174,7 +174,7 @@ Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_f
     t1[1] = r_fratt[1];
     t1[2] = r_fratt[2];
     A.col(0) = t1;
-    // retta di intersezione tra i vertici del poligono della stessa frattura
+    // retta di intersezione tra i lati del poligono della stessa frattura
     Vector3d t2 = {};
     t2[0] = r_intersez[0];
     t2[1] = r_intersez[1];
