@@ -74,27 +74,30 @@ double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
     return (v1[0]-v2[0])*(v1[0]-v2[0]) + (v1[1]-v2[1])*(v1[1]-v2[1]) + (v1[2]-v2[2])*(v1[2]-v2[2]);
 }
 
+Vector3d baricentro (Fractures& frattura, unsigned int& Id)
+{
+    Vector3d coord_bar = {};
+    unsigned int n = frattura.Vertices[Id].cols(); // numero di vertici della frattura
+    for(unsigned int h = 0; h < 3; h++)
+    {
+        for (unsigned int k = 0; k < n; k++)
+        {
+            coord_bar[h] = coord_bar[h] + frattura.Vertices[Id](h,k);
+        }
+        coord_bar[h] = coord_bar[h] / n;
+    }
+    return coord_bar;
+}
 
 bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2)
 {
     // Definisco due vettori che contengono le coordinate del mio baricentro
-    Vector3d coord_bar_1 = {};
-    unsigned int n1 = frattura.Vertices[Id1].cols(); // numero di colonne della prima frattura
-    Vector3d coord_bar_2 = {};
-    unsigned int n2 = frattura.Vertices[Id2].cols(); // numero di colonne della seconda frattura
-    for(unsigned int i = 0; i < 3; i++)
-    {
-        for (unsigned int j=0; j<n1; j++)
-        {
-            coord_bar_1[i] = coord_bar_1[i] + frattura.Vertices[Id1](i,j);
-        }
-        coord_bar_1[i] = coord_bar_1[i] / n1;
-        for (unsigned int j = 0; j < n2; j++)
-        {
-            coord_bar_2[i] = coord_bar_2[i] + frattura.Vertices[Id2](i,j);
-        }
-        coord_bar_2[i] = coord_bar_2[i] / n2;
-    }
+    Vector3d coord_bar_1 = baricentro(frattura, Id1);
+    Vector3d coord_bar_2 = baricentro(frattura, Id2);
+
+    unsigned int n1 = frattura.Vertices[Id1].cols(); // numero di vertici della prima frattura
+    unsigned int n2 = frattura.Vertices[Id2].cols(); // numero di vertici della seconda frattura
+
     // Calcolo i possibili raggi delle due palle avente centro nei baricentri precedentemente calcolati
     VectorXd raggi_candidati1 = {};
     raggi_candidati1.resize(n1);
@@ -120,13 +123,12 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
         return false; // le fratture sicuramente non si intersecano
 }
 
-
 array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
 {
     // Data l'equazione della retta:
-    // x= coord_retta[0]*t+coord_retta[3]
-    // y= coord_retta[1]*t+coord_retta[4]
-    // z= coord_retta[2]*t+coord_retta[5]
+    // x = coord_retta[0] * t + coord_retta[3]
+    // y = coord_retta[1] * t + coord_retta[4]
+    // z = coord_retta[2] * t + coord_retta[5]
     array<double, 6> coord_retta = {};
     // Calcolo la direzione della retta intersecante mediante prodotto vettoriale
     coord_retta[0] = frattura.Piano[id1][1] * frattura.Piano[id2][2] - frattura.Piano[id1][2] * frattura.Piano[id2][1];
@@ -163,10 +165,10 @@ array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsign
 
 Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_fratt)
 {
-    //imposto un sistema lineare per la ricerca dei parametri alpha e beta
-    //imposto i coefficienti della matrice
+    // imposto un sistema lineare per la ricerca dei parametri alpha e beta
+    // imposto i coefficienti della matrice
     MatrixXd A = MatrixXd::Zero(3,2);
-    //retta di intersezione tra i piani
+    // retta di intersezione tra i piani
     Vector3d t1 = {};
     t1[0] = r_fratt[0];
     t1[1] = r_fratt[1];
@@ -612,9 +614,9 @@ void esportazione(Traces& traccia, Fractures& frattura)
     // CAPIRE COME ORDINARE IN MODO DECRESCENTE RAGGRUPPANDO PER TIPS
 }
 
-vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracce (Traces& traccia){
-
-    //es elt del vettore: <id, {(x1, y1, z1), (x2, y2, z2)}, {true/false, true/false}>
+vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracce (Traces& traccia)
+{
+    // es elt del vettore: <id, {(x1, y1, z1), (x2, y2, z2)}, {true/false, true/false}>
     vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> tracceOrdinate = {};
     // vettore dove mettiamo gli id delle tracce che sono passanti per entrambi i poligoni
     vector<unsigned int> both = {};
@@ -625,49 +627,69 @@ vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracc
 
     //mettiamo in ordine gli id delle tracce nel vettore ordinamentoTips
     //prima mettiamo le tracce passanti per entrambi i poligoni, poi quelle passanti per un solo poligono e poi quelle non passanti per entrambi i poligoni
-    for (const auto& [id, tips] : traccia.Tips) {
-        if (tips[0] == false && tips[1] == false) {
+    for (const auto& [id, tips] : traccia.Tips)
+    {
+        if (tips[0] == false && tips[1] == false)
+        {
             both.push_back(id);
-        }if((tips[0] == true && tips[1] == false) || (tips[0] == false && tips[1] == true) ) {
+        }
+        if((tips[0] == true && tips[1] == false) || (tips[0] == false && tips[1] == true))
+        {
             one.push_back(id);
-        }else {
-            both.push_back(id); }
+        }
+        else
+        {
+            both.push_back(id);
+        }
     }
 
     //vettore dove mettiamo la lunghezza della traccia a cui associamo l'id
     vector<pair<double, unsigned int>> vec;
 
-    for (const auto& it : traccia.Lenght){
+    for (const auto& it : traccia.Lenght)
+    {
         vec.push_back(make_pair(it.second, it.first));
     }
 
     //ordina il vettore in base alla lunghezza delle tracce
-    if (vec.size() < 10){
+    if (vec.size() < 10)
+    {
         SortLibrary::BubbleSort(vec);
-    } else {
-        SortLibrary::MergeSort (vec);
+    }
+    else
+    {
+        SortLibrary::MergeSort(vec);
     }
 
-    //scorriamo il vettore delle lunghezze ordinato e quando troviamo un id di una traccia passante per entrambi i poligoni lo mettiamo nel vettore tracce ordinate
-    for (const auto& it2 : vec){
-        for (const auto& it1 : both){
-            if (it2. second == it1){
+    // scorriamo il vettore delle lunghezze ordinato e quando troviamo un id di una traccia passante per entrambi i poligoni lo mettiamo nel vettore tracce ordinate
+    for (const auto& it2 : vec)
+    {
+        for (const auto& it1 : both)
+        {
+            if (it2. second == it1)
+            {
                 tracceOrdinate.push_back(make_tuple(it1, traccia.Vertices[it1], traccia.Tips[it1]));
             }
         }
     }
 
-    for (const auto& it2 : vec){
-        for (const auto& it1 : one){
-            if (it2. second == it1){
+    for (const auto& it2 : vec)
+    {
+        for (const auto& it1 : one)
+        {
+            if (it2. second == it1)
+            {
                 tracceOrdinate.push_back(make_tuple(it1, traccia.Vertices[it1], traccia.Tips[it1]));
             }
         }
     }
 
-    for (const auto& it2 : vec){
-        for (const auto& it1 : none){
-            if (it2. second == it1){
+    for (const auto& it2 : vec)
+    {
+        for (const auto& it1 : none)
+        {
+            if (it2. second == it1)
+            {
                 tracceOrdinate.push_back(make_tuple(it1, traccia.Vertices[it1], traccia.Tips[it1]));
             }
         }
@@ -676,8 +698,6 @@ vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracc
     return tracceOrdinate;
 
 }
-
-
 }
 
 
