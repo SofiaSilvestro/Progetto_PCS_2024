@@ -196,6 +196,7 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
     array<unsigned int, 2> Id = {};
     array<Vector3d, 2> Vertici = {};
     array<bool, 2> Tipo = {};
+
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         unsigned int j = i + 1;
@@ -541,6 +542,13 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
     traccia.Number = NumberTraces;
     cout << NumberTraces;
 
+    for (const auto& [id, coord] : traccia.Vertices){
+        Vector3d v1 = coord[0];
+        Vector3d v2 = coord[1];
+        traccia.Lenght[id] = sqrt(distanza_al_quadrato(v1, v2));
+    }
+
+
 }
 void esportazione(Traces& traccia, Fractures& frattura)
 {
@@ -668,6 +676,7 @@ vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracc
     return tracceOrdinate;
 
 }
+
 
 }
 

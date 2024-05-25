@@ -87,19 +87,17 @@ array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsign
 // se alpha è tra 0 e 1, il punto è su un segmento finito della retta di intersezione
 Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_fratt);
 
-
 void caricamento_dati(Traces& traccia, Fractures& frattura);
 
 
-/// La funzione OrdinamentoTracce ordina le tracce per passanti per entrambi i poligoni,
-/// passanti solo per un poligono, non passante per entrambi i poligoni.
-/// Inoltre le ordina in lunghezza decrescente
-// es elt del vettore: <id, {(x1, y1, z1), (x2, y2, z2)}, {true/false, true/false}>
+
+
+///La funzione OrdinamentoTracce ordina le tracce per passanti per entrambi i poligoni, passanti solo per un poligono, non passante per entrambi i poligoni. Inoltre le ordina in lunghezza decrescente
+//es elt del vettore: <id, {(x1, y1, z1), (x2, y2, z2)}, {true/false, true/false}>
 vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracce (Traces& traccia);
 
 
 Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
-
 
 double raggio(Fractures& frattura, unsigned int& Id1, Vector3d& coord_bar_1);
 
