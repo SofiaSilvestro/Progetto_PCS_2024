@@ -628,7 +628,7 @@ vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracc
     for (const auto& [id, tips] : traccia.Tips) {
         if (tips[0] == false && tips[1] == false) {
             both.push_back(id);
-        }if(tips[0] == false || tips[1] == false) {
+        }if((tips[0] == true && tips[1] == false) || (tips[0] == false && tips[1] == true) ) {
             one.push_back(id);
         }else {
             both.push_back(id); }
