@@ -123,7 +123,7 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
         return false; // le fratture sicuramente non si intersecano
 }
 
-array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
+array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
 {
     // Data l'equazione della retta:
     // x = coord_retta[0] * t + coord_retta[3]
@@ -147,7 +147,7 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned
     return coord_retta;
 }
 
-array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
+array<double, 6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
 {
     //data l'equazione parametrica è X = at+P trovo direttrice e punto di partenza della retta
     // t:(x2-x1,y2-y1,z2-z1)
