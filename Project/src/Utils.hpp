@@ -5,7 +5,7 @@ using namespace std;
 
 namespace FracturesLib{
 
-/// La funzione importazione legge i dati da un file e popola una struttura Fractures con questi dati
+// La funzione importazione legge i dati da un file e popola una struttura Fractures con questi dati
 // Apre un file di testo
 // Legge il numero di fratture presenti nel file e lo memorizza in frattura.NumberFractures
 // Per ogni frattura:
@@ -23,7 +23,11 @@ bool importazione(const string& filename, Fractures& frattura);
 double distanza_al_quadrato(Vector3d& v1, Vector3d& v2);
 
 
-/// La funzione esportazione salva i dati delle tracce e delle fratture in un file di testo chiamato Traces.txt
+//La funzione serve per ordinare le tracce
+bool compare(array<double,2> a, array<double,2> b);
+
+
+// La funzione esportazione salva i dati delle tracce e delle fratture in un file di testo chiamato Traces.txt
 // Il file Traces.txt viene aperto in modalità di scrittura.
 // Se il file non può essere aperto, viene visualizzato un messaggio di errore e la funzione termina
 // Scrive nel file il numero totale di tracce
@@ -37,8 +41,8 @@ double distanza_al_quadrato(Vector3d& v1, Vector3d& v2);
 void esportazione(Traces& traccia, Fractures& frattura);
 
 
-/// La funzione valuta_intersezione determina se due fratture potrebbero intersecarsi basandosi
-/// su una verifica geometrica preliminare
+// La funzione valuta_intersezione determina se due fratture potrebbero intersecarsi basandosi
+// su una verifica geometrica preliminare
 // Per entrambe le fratture, si calcola il baricentro sommando le coordinate di tutti i vertici e
 // dividendo per il numero totale di vertici
 // Calcolo dei raggi:
@@ -52,8 +56,8 @@ void esportazione(Traces& traccia, Fractures& frattura);
 bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2);
 
 
-/// La funzione Retta_tra_piani restituisce un array di 6 elementi che descrive
-/// la retta di intersezione tra due fratture
+// La funzione Retta_tra_piani restituisce un array di 6 elementi che descrive
+// la retta di intersezione tra due fratture
 // I primi tre elementi dell'array coord_retta rappresentano la direzione della retta di intersezione e
 // vengono calcolati come il prodotto vettoriale delle normali dei due piani
 // Risoluzione sistema lineare A*x=b con A matrice costruita con i coefficienti dei piani e
@@ -62,13 +66,13 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
 array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2);
 
 
-/// La funzione Retta_per_due_vertici_della_frattura calcola la retta passante per due vertici di una frattura
+// La funzione Retta_per_due_vertici_della_frattura calcola la retta passante per due vertici di una frattura
 // Calcolo della direzione della retta (x2 - x1, y2 - y1, z2 - z1)
 // Calcolo del punto P sulla retta (x1, y1, z1)
 array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j);
 
 
-/// La funzione alpha_di_intersezione calcola i parametri alpha e beta
+// La funzione alpha_di_intersezione calcola i parametri alpha e beta
 // t1 rappresenta la direzione della retta che è l'intersezione di due piani
 // t2 rappresenta la direzione di una retta che passa attraverso i vertici di un poligono di frattura
 // La matrice A è una matrice 3x2 dove:
@@ -88,23 +92,17 @@ array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsign
 Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_fratt);
 
 
+//La funzione vuota carica i dati elaborati
 void caricamento_dati(Traces& traccia, Fractures& frattura);
 
 
-///La funzione OrdinamentoTracce ordina le tracce per passanti per entrambi i poligoni,
-/// passanti solo per un poligono, non passante per entrambi i poligoni.
-/// Inoltre le ordina in lunghezza decrescente
-//es elt del vettore: <id, {(x1, y1, z1), (x2, y2, z2)}, {true/false, true/false}>
-vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracce (Traces& traccia);
-
-
+//La funzione calcola il baricentro
 Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
-
-
-double raggio(Fractures& frattura, unsigned int& Id1, Vector3d& coord_bar_1);
 
 }
 
+
+//------------------------------------------------------------------------------------------------------------------
 using namespace FracturesLib;
 namespace PolygonalLibrary{
 using namespace FracturesLib;

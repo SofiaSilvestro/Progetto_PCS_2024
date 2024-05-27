@@ -544,16 +544,14 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
         }
     }
     traccia.Number = NumberTraces;
-    //cout << NumberTraces;
-
-    /*for (const auto& [id, coord] : traccia.Vertices){
-        Vector3d v1 = coord[0];
-        Vector3d v2 = coord[1];
-        traccia.Lenght.push_back(sqrt(distanza_al_quadrato(v1, v2)));
-    }*/
-
-
 }
+
+
+bool compare(array<double,2> a, array<double,2> b){
+    return (a[1]>b[1]);
+}
+
+
 void esportazione(Traces& traccia, Fractures& frattura)
 {
     string fileoutput = "Traces.txt";
@@ -599,111 +597,36 @@ void esportazione(Traces& traccia, Fractures& frattura)
             ofs << "# TraceId; Tips; Length" << endl;
             int contatore=0;
             while(contatore<2){
+                unsigned int conta_per_tipo=0;
+                vector<array<double,2>>ordinamento={};
+                array<double,2>ord={};
                 for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
                 {
-                    // se il primo o il secondo id è i stampo le relative informazioni (while<2)
-                    if(i == traccia.FracturesId[j][0] && traccia.Tips[j][0]==contatore)
+                    // se il primo o il secondo id è i
+                    if((i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1]) && traccia.Tips[j][0]==contatore)
                     {
-                        ofs << j << ";" << traccia.Tips[j][0] << ";"
-                            << sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1])) << endl;
-                    }
-                    if(i == traccia.FracturesId[j][1] && traccia.Tips[j][1]==contatore)
-                    {
-                        ofs << j << ";" << traccia.Tips[j][1] << ";"
-                            << sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1])) << endl;
+                        //ofs << j << ";" << contatore << ";"
+                        //    << sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1])) << endl;
+                        conta_per_tipo++;
+                        ord[0]=j;
+                        ord[1]=sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1]));
+                        ordinamento.push_back(ord);
                     }
                 }
-            contatore++;
+                //condizioni per ordinamento vettore usare sort
+                sort(ordinamento.begin(),ordinamento.end(),compare);
+                //stampiamo dall'inizio alla fine
+                for (unsigned int k=0;k<conta_per_tipo;k++)
+                {
+                    ofs<<int(ordinamento[k][0])<<";" <<contatore<<";" <<ordinamento[k][1]<<endl;
+                }
+                contatore++;
             }
+            ofs<<endl;
         }
     }
-    // CAPIRE COME ORDINARE IN MODO DECRESCENTE RAGGRUPPANDO PER TIPS
 }
-/*
-vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracce (Traces& traccia)
-{
-    // es elt del vettore: <id, {(x1, y1, z1), (x2, y2, z2)}, {true/false, true/false}>
-    vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> tracceOrdinate = {};
-    // vettore dove mettiamo gli id delle tracce che sono passanti per entrambi i poligoni
-    vector<unsigned int> both = {};
-    // vettore dove mettiamo gli id delle tracce che sono passanti per un solo poligon
-    vector<unsigned int> one = {};
-    // vettore dove mettiamo gli id delle tracce che sono non passanti per entrambi i poligoni
-    vector<unsigned int> none = {};
 
-    //mettiamo in ordine gli id delle tracce nel vettore ordinamentoTips
-    //prima mettiamo le tracce passanti per entrambi i poligoni, poi quelle passanti per un solo poligono e poi quelle non passanti per entrambi i poligoni
-    for (const auto& [id, tips] : traccia.Tips)
-    {
-        if (tips[0] == false && tips[1] == false)
-        {
-            both.push_back(id);
-        }
-        if((tips[0] == true && tips[1] == false) || (tips[0] == false && tips[1] == true))
-        {
-            one.push_back(id);
-        }
-        else
-        {
-            both.push_back(id);
-        }
-    }
-
-    //vettore dove mettiamo la lunghezza della traccia a cui associamo l'id
-    vector<pair<double, unsigned int>> vec;
-
-    for (const auto& it : traccia.Lenght)
-    {
-        vec.push_back(make_pair(it.second, it.first));
-    }
-
-    //ordina il vettore in base alla lunghezza delle tracce
-    if (vec.size() < 10)
-    {
-        SortLibrary::BubbleSort(vec);
-    }
-    else
-    {
-        SortLibrary::MergeSort(vec);
-    }
-
-    // scorriamo il vettore delle lunghezze ordinato e quando troviamo un id di una traccia passante per entrambi i poligoni lo mettiamo nel vettore tracce ordinate
-    for (const auto& it2 : vec)
-    {
-        for (const auto& it1 : both)
-        {
-            if (it2. second == it1)
-            {
-                tracceOrdinate.push_back(make_tuple(it1, traccia.Vertices[it1], traccia.Tips[it1]));
-            }
-        }
-    }
-
-    for (const auto& it2 : vec)
-    {
-        for (const auto& it1 : one)
-        {
-            if (it2. second == it1)
-            {
-                tracceOrdinate.push_back(make_tuple(it1, traccia.Vertices[it1], traccia.Tips[it1]));
-            }
-        }
-    }
-
-    for (const auto& it2 : vec)
-    {
-        for (const auto& it1 : none)
-        {
-            if (it2. second == it1)
-            {
-                tracceOrdinate.push_back(make_tuple(it1, traccia.Vertices[it1], traccia.Tips[it1]));
-            }
-        }
-    }
-
-    return tracceOrdinate;
-
-}*/
 }
 
 
