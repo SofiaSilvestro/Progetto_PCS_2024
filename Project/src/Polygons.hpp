@@ -19,10 +19,10 @@ struct Fractures
 
     // Mappa che associa un id di frattura a una matrice di vertici
     // La matrice ha 3 righe(coord x, y,z) e un numero dinamico di colonne (il numero dei vertici è variabile)
-    map<unsigned int, Matrix<double, 3, Dynamic>> Vertices = {};
+    vector<Matrix<double, 3, Dynamic>> Vertices = {};
 
     // Mappa che associa un id di frattura a un array di 4 elementi di tipo double (che rappresentano a,b,c,d dell'eq. del piano ax+by+cz+d=0 su cui è appoggiato il poligono)
-    map<unsigned int, array<double, 4>> Piano = {};
+    vector<array<double, 4>> Piano = {};
 };
 
 

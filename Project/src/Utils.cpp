@@ -26,6 +26,7 @@ bool importazione(const string& filename, Fractures& frattura)
     frattura.NumberFractures = stoi(line);
     char separatore;
     int numVertices = 0;
+    array<double,4> param_piano;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         getline(file, header); // Leggo la riga da trascurare
@@ -47,7 +48,7 @@ bool importazione(const string& filename, Fractures& frattura)
         }
         file >> separatore;
         // Aggiungo quanto trovato all'interno della mappa
-        frattura.Vertices.insert(make_pair(frattura.Id, Tab_coord_vertici));
+        frattura.Vertices.push_back(Tab_coord_vertici);
     }
     // Calcolo i coefficienti del piano per ciascuna frattura
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
@@ -59,10 +60,11 @@ bool importazione(const string& filename, Fractures& frattura)
         //(x-x1  x-y1  x-z1
         // x2-x1 y2-y1 z2-z1
         // x3-x1 y3-y1 z3-z1)
-        frattura.Piano[i][0] = (point2[1]-point1[1])*(point3[2]-point1[2]) - (point2[2]-point1[2])*(point3[1]-point1[1]);
-        frattura.Piano[i][1] = -((point2[0]-point1[0])*(point3[2]-point1[2]) - (point3[0]-point1[0])*(point2[2]-point1[2]));
-        frattura.Piano[i][2] = (point2[0]-point1[0])*(point3[1]-point1[1]) - (point3[0]-point1[0])*(point2[1]-point1[1]);
-        frattura.Piano[i][3] = -frattura.Piano[i][0]*point1[0]-frattura.Piano[i][1]*point1[1]-frattura.Piano[i][2]*point1[2];
+        param_piano[0] = (point2[1]-point1[1])*(point3[2]-point1[2]) - (point2[2]-point1[2])*(point3[1]-point1[1]);
+        param_piano[1] = -((point2[0]-point1[0])*(point3[2]-point1[2]) - (point3[0]-point1[0])*(point2[2]-point1[2]));
+        param_piano[2] = (point2[0]-point1[0])*(point3[1]-point1[1]) - (point3[0]-point1[0])*(point2[1]-point1[1]);
+        param_piano[3] = -param_piano[0]*point1[0]-param_piano[1]*point1[1]-param_piano[2]*point1[2];
+        frattura.Piano.push_back(param_piano);
     }
     file.close();
     return true;
@@ -574,7 +576,7 @@ void esportazione(Traces& traccia, Fractures& frattura)
     ofs << endl;
 
     // Organizzo una mappa che associa l'Id della frattura al numero complessivo di tracce
-    map<unsigned int, unsigned int> frattura_traccia = {};
+    map<unsigned int,unsigned int> frattura_traccia = {};
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         frattura_traccia[i] = 0;
