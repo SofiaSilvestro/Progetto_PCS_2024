@@ -12,7 +12,7 @@ int main()
     Fractures frattura;
     PolygonalMesh mesh;
     Traces traccia;
-    string filepath = "./DFN/FR3_data.txt";
+    string filepath = "./DFN/FR10_data.txt";
     if(!importazione(filepath, frattura))
     {
         return 1;
@@ -28,7 +28,7 @@ int main()
         esportazione(traccia, frattura);
 
 
-        /*//!\\PROVA
+    /*    //!\\PROVA
         //lascio così vedete cosa ho fatto, ma poi si può togliere
 
         cout << endl;

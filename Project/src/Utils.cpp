@@ -597,19 +597,23 @@ void esportazione(Traces& traccia, Fractures& frattura)
             ofs << "# FractureId; NumTraces" << endl;
             ofs << i << ";" << frattura_traccia[i] << endl;
             ofs << "# TraceId; Tips; Length" << endl;
-            for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
-            {
-                // se il primo o il secondo id è i stampo le relative informazioni
-                if(i == traccia.FracturesId[j][0])
+            int contatore=0;
+            while(contatore<2){
+                for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
                 {
-                    ofs << j << ";" << traccia.Tips[j][0] << ";"
-                        << sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1])) << endl;
+                    // se il primo o il secondo id è i stampo le relative informazioni (while<2)
+                    if(i == traccia.FracturesId[j][0] && traccia.Tips[j][0]==contatore)
+                    {
+                        ofs << j << ";" << traccia.Tips[j][0] << ";"
+                            << sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1])) << endl;
+                    }
+                    if(i == traccia.FracturesId[j][1] && traccia.Tips[j][1]==contatore)
+                    {
+                        ofs << j << ";" << traccia.Tips[j][1] << ";"
+                            << sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1])) << endl;
+                    }
                 }
-                if(i == traccia.FracturesId[j][1])
-                {
-                    ofs << j << ";" << traccia.Tips[j][1] << ";"
-                        << sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1])) << endl;
-                }
+            contatore++;
             }
         }
     }
