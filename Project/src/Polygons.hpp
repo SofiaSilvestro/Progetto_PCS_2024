@@ -60,7 +60,7 @@ struct PolygonalMesh
     ///CELL1D
     unsigned int NumberCell1D = 0; // number of Cell1D
     vector<unsigned int> Cell1DId = {}; // Cell1D id, size 1 x NumberCell1D
-    vector<Vector2i> Cell1DVertices = {}; // Cell1D vertices indices, size 2 x NumberCell1D (fromId,toId)
+    vector<array<unsigned int,2>> Cell1DIdVertices = {};
 
     ///CELL2D
     unsigned int NumberCell2D = 0; // number of Cell2D

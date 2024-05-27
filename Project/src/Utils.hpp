@@ -104,3 +104,11 @@ Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
 double raggio(Fractures& frattura, unsigned int& Id1, Vector3d& coord_bar_1);
 
 }
+
+using namespace FracturesLib;
+namespace PolygonalLibrary{
+using namespace FracturesLib;
+bool importazione_2(const string& filename, Fractures& frattura,PolygonalMesh& mesh);
+void caricamento_dati_2(Traces& traccia, Fractures& frattura);
+
+}

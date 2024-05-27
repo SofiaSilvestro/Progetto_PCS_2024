@@ -303,11 +303,11 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                         if (sx < dx)
                         {
                             NumberTraces++;
-                            cout << endl << "I piani " << i << " " << j << " potrebbero intersecarsi" << endl;
+                            //cout << endl << "I piani " << i << " " << j << " potrebbero intersecarsi" << endl;
                             Id[0] = i;
                             Id[1] = j;
                             //calcolo la retta tra i lati adiacenti del poligono 1
-                            cout << "PRIMO POLIGONO " << endl;
+                            //cout << "PRIMO POLIGONO " << endl;
                             unsigned int conta_p1 = 0;
                             unsigned int h = 0;
                             unsigned int k = 1;
@@ -345,8 +345,8 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                             punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                             punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
                                             Vertici[conta_p1] = punto_intersezione;
-                                            cout << "Il punto di intersezione e' " << setprecision(16) << punto_intersezione[0]
-                                                 << " " << punto_intersezione[1] << " " << punto_intersezione[2] << endl;
+                                            //cout << "Il punto di intersezione e' " << setprecision(16) << punto_intersezione[0]
+                                            //     << " " << punto_intersezione[1] << " " << punto_intersezione[2] << endl;
                                             conta_p1++;
                                         }
                                     }
@@ -359,10 +359,10 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                             // Non mi serve calcolare altri punti
                             if(conta_p1 == 2)
                             {
-                                cout << "Traccia passante" << endl;
+                                //cout << "Traccia passante" << endl;
                                 Tipo[0] = 0;
                                 // calcolo la retta tra i lati adiacenti del poligono 2
-                                cout << endl << "SECONDO POLIGONO " << endl;
+                                //cout << endl << "SECONDO POLIGONO " << endl;
                                 unsigned int conta_p2 = 0;
                                 h = 0;
                                 k = 1;
@@ -403,12 +403,12 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                 }
                                 if(conta_p2 == 2)
                                 {
-                                    cout << "Traccia passante" << endl;
+                                   // cout << "Traccia passante" << endl;
                                     Tipo[1] = 0;
                                 }
                                 else
                                 {
-                                    cout << "Traccia non passante" << endl;
+                                    //cout << "Traccia non passante" << endl;
                                     Tipo[1] = 1;
                                 }
                             }
@@ -416,10 +416,10 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
 
                             if(conta_p1 == 0)
                             {
-                                cout << "Traccia non passante" << endl;
+                                //cout << "Traccia non passante" << endl;
                                 Tipo[0] = 1;
                                 // calcolo la retta tra i lati adiacenti del poligono 2
-                                cout << endl << "SECONDO POLIGONO " << endl;
+                                //cout << endl << "SECONDO POLIGONO " << endl;
                                 unsigned int conta_p2 = 0;
                                 h = 0;
                                 k = 1;
@@ -457,8 +457,8 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                                 punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                                 punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
                                                 Vertici[conta_p2] = punto_intersezione;
-                                                cout << "Il punto di intersezione e' " << setprecision(16) << punto_intersezione[0]
-                                                     << " " << punto_intersezione[1] << " " << punto_intersezione[2] << endl;
+                                                //cout << "Il punto di intersezione e' " << setprecision(16) << punto_intersezione[0]
+                                                //     << " " << punto_intersezione[1] << " " << punto_intersezione[2] << endl;
                                                 conta_p2++;
                                             }
                                         }
@@ -468,12 +468,12 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                 }
                                 if(conta_p2 == 2)
                                 {
-                                    cout << "Traccia passante" << endl;
+                                    //cout << "Traccia passante" << endl;
                                     Tipo[1] = 0;
                                 }
                                 else
                                 {
-                                    cout << "Traccia non passante" << endl;
+                                    //cout << "Traccia non passante" << endl;
                                     Tipo[1] = 1;
                                 }
                             }
@@ -481,10 +481,10 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
 
                             if(conta_p1 == 1)
                             {
-                                cout << "Traccia non passante" << endl;
+                                //cout << "Traccia non passante" << endl;
                                 Tipo[0] = 1;
                                 //calcolo la retta tra i lati adiacenti del poligono 2
-                                cout << endl << "SECONDO POLIGONO " << endl;
+                                //cout << endl << "SECONDO POLIGONO " << endl;
                                 h = 0;
                                 k = 1;
                                 while(h < frattura.Vertices[j].cols())
@@ -520,15 +520,15 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                                 punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                                 punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
                                                 Vertici[1] = punto_intersezione;
-                                                cout << "Il punto di intersezione e' " << setprecision(16) << punto_intersezione[0]
-                                                     << " " << punto_intersezione[1] << " " << punto_intersezione[2] << endl;
+                                                //cout << "Il punto di intersezione e' " << setprecision(16) << punto_intersezione[0]
+                                                //     << " " << punto_intersezione[1] << " " << punto_intersezione[2] << endl;
                                             }
                                         }
                                     }
                                     h++;
                                     k++;
                                 }
-                                cout << "Traccia non passante" << endl;
+                                //cout << "Traccia non passante" << endl;
                                 Tipo[1] = 1;
                             }
                         }
@@ -542,7 +542,7 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
         }
     }
     traccia.Number = NumberTraces;
-    cout << NumberTraces;
+    //cout << NumberTraces;
 
     for (const auto& [id, coord] : traccia.Vertices){
         Vector3d v1 = coord[0];
