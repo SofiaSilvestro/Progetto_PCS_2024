@@ -534,9 +534,9 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                         }
                     }
                 } // chiusura if
-                traccia.Vertices.insert(make_pair(NumberTraces-1, Vertici));
-                traccia.FracturesId.insert(make_pair(NumberTraces-1, Id));
-                traccia.Tips.insert(make_pair(NumberTraces-1, Tipo));
+                traccia.Vertices.push_back(Vertici);
+                traccia.FracturesId.push_back(Id);
+                traccia.Tips.push_back(Tipo);
             }
             j++;
         }
@@ -544,11 +544,11 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
     traccia.Number = NumberTraces;
     //cout << NumberTraces;
 
-    for (const auto& [id, coord] : traccia.Vertices){
+    /*for (const auto& [id, coord] : traccia.Vertices){
         Vector3d v1 = coord[0];
         Vector3d v2 = coord[1];
-        traccia.Lenght[id] = sqrt(distanza_al_quadrato(v1, v2));
-    }
+        traccia.Lenght.push_back(sqrt(distanza_al_quadrato(v1, v2)));
+    }*/
 
 
 }
@@ -613,7 +613,7 @@ void esportazione(Traces& traccia, Fractures& frattura)
     }
     // CAPIRE COME ORDINARE IN MODO DECRESCENTE RAGGRUPPANDO PER TIPS
 }
-
+/*
 vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracce (Traces& traccia)
 {
     // es elt del vettore: <id, {(x1, y1, z1), (x2, y2, z2)}, {true/false, true/false}>
@@ -697,7 +697,7 @@ vector<tuple<unsigned int, array<Vector3d, 2>, array<bool, 2>>> OrdinamentoTracc
 
     return tracceOrdinate;
 
-}
+}*/
 }
 
 

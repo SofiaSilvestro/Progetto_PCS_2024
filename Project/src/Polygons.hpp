@@ -32,17 +32,17 @@ struct Traces
     unsigned int Number = {};
 
     // Mappa che associa un id di traccia a un array di due id di frattura.
-    map<unsigned int, array<unsigned int, 2>> FracturesId = {};
+    vector<array<unsigned int, 2>> FracturesId = {};
 
     // Mappa che associa un id di traccia a un array di due vettori tridimensionali (che rappresentano le coordinate dei 2 vertici della traccia)
-    map<unsigned int, array<Vector3d, 2>> Vertices = {};
+    vector<array<Vector3d, 2>> Vertices = {};
 
     // Mappa che associa un id di traccia a un array di due valori booleani (che ci dicono se la traccia è passante [false] oppure non-passante [true]) per ciascuno delle due fratture che definiscono la traccia)
     // il primo bool per il poligono FracturesId[i][0] e il secondo per FracturesId[i][1]
-    map<unsigned int, array<bool, 2>> Tips = {};
+    vector<array<bool, 2>> Tips = {};
 
     // Vettore che indica la lunghezza delle tracce
-    map<unsigned int, double> Lenght = {};
+    vector<double> Lenght = {};
 };
 
 } // chiusura namespace FracturesLib

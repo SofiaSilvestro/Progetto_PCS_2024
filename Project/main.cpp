@@ -28,7 +28,7 @@ int main()
         esportazione(traccia, frattura);
 
 
-        //!\\PROVA
+        /*//!\\PROVA
         //lascio così vedete cosa ho fatto, ma poi si può togliere
 
         cout << endl;
@@ -101,7 +101,7 @@ int main()
         }else{
             cout << "Il vettore di tuple e' vuoto." << endl;
         }
-
+*/
         return 0;
     }
 }
