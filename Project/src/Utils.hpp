@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
 #include "Polygons.hpp"
+
 using namespace std;
+using namespace Eigen;
 
 namespace FracturesLib{
 
@@ -17,29 +19,12 @@ namespace FracturesLib{
 // Chiude il file e ritorna true se l'operazione è avvenuta con successo, false altrimenti
 bool importazione(const string& filename, Fractures& frattura);
 
-
 // La funzione distanza_al_quadrato calcola la distanza euclidea al quadrato tra due vettori
 // tridimensionali v1 e v2
 double distanza_al_quadrato(Vector3d& v1, Vector3d& v2);
 
-
-//La funzione serve per ordinare le tracce
-bool compare(array<double,2> a, array<double,2> b);
-
-
-// La funzione esportazione salva i dati delle tracce e delle fratture in un file di testo chiamato Traces.txt
-// Il file Traces.txt viene aperto in modalità di scrittura.
-// Se il file non può essere aperto, viene visualizzato un messaggio di errore e la funzione termina
-// Scrive nel file il numero totale di tracce
-// Per ogni traccia, scrive l'ID della traccia, gli ID delle due fratture associate e
-// le coordinate dei due vertici che definiscono la traccia
-// Crea una mappa (frattura_traccia) che associa l'ID di ogni frattura al numero di tracce che la coinvolgono
-// Per ogni frattura, se ha almeno una traccia associata, scrive l'ID della frattura e
-// il numero di tracce che la coinvolgono
-// Per ogni traccia associata alla frattura, scrive l'ID della traccia,
-// se è passante o no e la lunghezza della traccia
-void esportazione(Traces& traccia, Fractures& frattura);
-
+//La funzione calcola il baricentro
+Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
 
 // La funzione valuta_intersezione determina se due fratture potrebbero intersecarsi basandosi
 // su una verifica geometrica preliminare
@@ -55,7 +40,6 @@ void esportazione(Traces& traccia, Fractures& frattura);
     // ma se questo è falso sicuramente non si intersecano
 bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2);
 
-
 // La funzione Retta_tra_piani restituisce un array di 6 elementi che descrive
 // la retta di intersezione tra due fratture
 // I primi tre elementi dell'array coord_retta rappresentano la direzione della retta di intersezione e
@@ -70,7 +54,6 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned
 // Calcolo della direzione della retta (x2 - x1, y2 - y1, z2 - z1)
 // Calcolo del punto P sulla retta (x1, y1, z1)
 array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j);
-
 
 // La funzione alpha_di_intersezione calcola i parametri alpha e beta
 // t1 rappresenta la direzione della retta che è l'intersezione di due piani
@@ -91,22 +74,33 @@ array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsign
 // se alpha è tra 0 e 1, il punto è su un segmento finito della retta di intersezione
 Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_fratt);
 
-
 //La funzione vuota carica i dati elaborati
 void caricamento_dati(Traces& traccia, Fractures& frattura);
 
+//La funzione serve per ordinare le tracce
+bool compare(array<double,2> a, array<double,2> b);
 
-//La funzione calcola il baricentro
-Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
-
+// La funzione esportazione salva i dati delle tracce e delle fratture in un file di testo chiamato Traces.txt
+// Il file Traces.txt viene aperto in modalità di scrittura.
+// Se il file non può essere aperto, viene visualizzato un messaggio di errore e la funzione termina
+// Scrive nel file il numero totale di tracce
+// Per ogni traccia, scrive l'ID della traccia, gli ID delle due fratture associate e
+// le coordinate dei due vertici che definiscono la traccia
+// Crea una mappa (frattura_traccia) che associa l'ID di ogni frattura al numero di tracce che la coinvolgono
+// Per ogni frattura, se ha almeno una traccia associata, scrive l'ID della frattura e
+// il numero di tracce che la coinvolgono
+// Per ogni traccia associata alla frattura, scrive l'ID della traccia,
+// se è passante o no e la lunghezza della traccia
+void esportazione(Traces& traccia, Fractures& frattura);
 }
 
 
-//------------------------------------------------------------------------------------------------------------------
+//-----PARTE 2------------------------------------------------------------------------------------------------
 using namespace FracturesLib;
+
 namespace PolygonalLibrary{
-using namespace FracturesLib;
-bool importazione_2(const string& filename, Fractures& frattura,PolygonalMesh& mesh);
+
+bool importazione_2(const string& filename, Fractures& frattura, PolygonalMesh& mesh);
 void caricamento_dati_2(Traces& traccia, Fractures& frattura);
 
 }

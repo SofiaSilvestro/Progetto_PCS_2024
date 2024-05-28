@@ -1,5 +1,3 @@
-#include <Polygons.hpp>
-#include <Utils.hpp>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -8,6 +6,8 @@
 #include <cmath>
 #include <iomanip>
 #include <algorithm>
+#include "Polygons.hpp"
+#include "Utils.hpp"
 
 using namespace std;
 using namespace Eigen;
@@ -70,7 +70,6 @@ bool importazione(const string& filename, Fractures& frattura)
     return true;
 }
 
-
 double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
 {
     return (v1[0]-v2[0])*(v1[0]-v2[0]) + (v1[1]-v2[1])*(v1[1]-v2[1]) + (v1[2]-v2[2])*(v1[2]-v2[2]);
@@ -84,7 +83,7 @@ Vector3d baricentro (Fractures& frattura, unsigned int& Id)
     {
         for (unsigned int k = 0; k < n; k++)
         {
-            coord_bar[h] = coord_bar[h] + frattura.Vertices[Id](h,k);
+            coord_bar[h] = coord_bar[h] + frattura.Vertices[Id](h, k);
         }
         coord_bar[h] = coord_bar[h] / n;
     }
@@ -170,13 +169,13 @@ Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_f
     // imposto un sistema lineare per la ricerca dei parametri alpha e beta
     // imposto i coefficienti della matrice
     MatrixXd A = MatrixXd::Zero(3,2);
-    // retta di intersezione tra i piani
+    // retta di intersezione tra i lati del poligono della stessa frattura
     Vector3d t1 = {};
     t1[0] = r_fratt[0];
     t1[1] = r_fratt[1];
     t1[2] = r_fratt[2];
     A.col(0) = t1;
-    // retta di intersezione tra i lati del poligono della stessa frattura
+    // retta di intersezione tra i piani
     Vector3d t2 = {};
     t2[0] = r_intersez[0];
     t2[1] = r_intersez[1];
@@ -546,11 +545,10 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
     traccia.Number = NumberTraces;
 }
 
-
-bool compare(array<double,2> a, array<double,2> b){
-    return (a[1]>b[1]);
+bool compare(array<double, 2> a, array<double, 2> b)
+{
+    return (a[1] > b[1]);
 }
-
 
 void esportazione(Traces& traccia, Fractures& frattura)
 {
@@ -567,14 +565,14 @@ void esportazione(Traces& traccia, Fractures& frattura)
     ofs << "# TraceId; FracturesId1; FracturesId2; X1; Y1; Z1; X2; Y2; Z2" << endl;
     for(unsigned int i = 0; i < traccia.FracturesId.size(); i++)
     {
-        ofs << i << ";" << traccia.FracturesId[i][0] << ";" << traccia.FracturesId[i][1] << ";"
-            << setprecision(16) << scientific << traccia.Vertices[i][0][0] << ";" << traccia.Vertices[i][0][1] << ";" << traccia.Vertices[i][0][2]
-            << ";" << traccia.Vertices[i][1][0] << ";" << traccia.Vertices[i][1][1] << ";" << traccia.Vertices[i][1][2] << endl;
+        ofs << i << "; " << traccia.FracturesId[i][0] << "; " << traccia.FracturesId[i][1] << "; "
+            << setprecision(16) << scientific << traccia.Vertices[i][0][0] << "; " << traccia.Vertices[i][0][1] << "; " << traccia.Vertices[i][0][2]
+            << "; " << traccia.Vertices[i][1][0] << "; " << traccia.Vertices[i][1][1] << "; " << traccia.Vertices[i][1][2] << endl;
     }
     ofs << endl;
 
     // Organizzo una mappa che associa l'Id della frattura al numero complessivo di tracce
-    map<unsigned int,unsigned int> frattura_traccia = {};
+    map<unsigned int, unsigned int> frattura_traccia = {};
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         frattura_traccia[i] = 0;
@@ -593,32 +591,33 @@ void esportazione(Traces& traccia, Fractures& frattura)
         {
             ofs << endl;
             ofs << "# FractureId; NumTraces" << endl;
-            ofs << i << ";" << frattura_traccia[i] << endl;
+            ofs << i << "; " << frattura_traccia[i] << endl;
             ofs << "# TraceId; Tips; Length" << endl;
-            int contatore=0;
-            while(contatore<2){
-                unsigned int conta_per_tipo=0;
-                vector<array<double,2>>ordinamento={};
-                array<double,2>ord={};
+            int contatore = 0;
+            while(contatore < 2)
+            {
+                unsigned int conta_per_tipo = 0;
+                vector<array<double, 2>> ordinamento = {};
+                array<double, 2> ord = {};
                 for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
                 {
                     // se il primo o il secondo id è i
-                    if((i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1]) && traccia.Tips[j][0]==contatore)
+                    if((i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1]) && traccia.Tips[j][0] == contatore)
                     {
-                        //ofs << j << ";" << contatore << ";"
+                        // ofs << j << "; " << contatore << "; "
                         //    << sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1])) << endl;
                         conta_per_tipo++;
-                        ord[0]=j;
-                        ord[1]=sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1]));
+                        ord[0] = j;
+                        ord[1] = sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1]));
                         ordinamento.push_back(ord);
                     }
                 }
-                //condizioni per ordinamento vettore usare sort
-                sort(ordinamento.begin(),ordinamento.end(),compare);
-                //stampiamo dall'inizio alla fine
-                for (unsigned int k=0;k<conta_per_tipo;k++)
+                // condizioni per ordinamento vettore usare sort
+                sort(ordinamento.begin(), ordinamento.end(), compare);
+                // stampiamo dall'inizio alla fine
+                for(unsigned int k = 0; k < conta_per_tipo; k++)
                 {
-                    ofs<<int(ordinamento[k][0])<<";" <<contatore<<";" <<ordinamento[k][1]<<endl;
+                    ofs << int(ordinamento[k][0]) << "; " << contatore << "; " << ordinamento[k][1] << endl;
                 }
                 contatore++;
             }
@@ -627,6 +626,6 @@ void esportazione(Traces& traccia, Fractures& frattura)
     }
 }
 
-}
+} // chiusura FracturesLib
 
 

@@ -1,21 +1,21 @@
-// Svilpuppiamo la seconda parte del progetto in modo indipendente dal primo
+// Sviluppiamo la seconda parte del progetto in modo indipendente dalla prima parte
 #include <iostream>
-#include<fstream>
-#include<sstream>
+#include <fstream>
+#include <sstream>
 #include <array>
 #include <vector>
 #include <cmath>
 #include <iomanip>
 #include <algorithm>
-#include <Polygons.hpp>
-#include<Utils.hpp>
+#include "Polygons.hpp"
+#include "Utils.hpp"
 
 using namespace std;
 using namespace Eigen;
 using namespace FracturesLib;
 
 namespace PolygonalLibrary{
-bool importazione_2(const string& filename, Fractures& frattura,PolygonalMesh& mesh)
+bool importazione_2(const string& filename, Fractures& frattura, PolygonalMesh& mesh)
 {
     ifstream file(filename);
     if (!file.is_open())
@@ -23,13 +23,13 @@ bool importazione_2(const string& filename, Fractures& frattura,PolygonalMesh& m
     string header;
     getline(file, header); // Leggo la prima riga da trascurare
     string line;
-    getline(file,line); // Leggo la riga che contiene il numero di frat
+    getline(file,line); // Leggo la riga che contiene il numero di fratture
     frattura.NumberFractures = stoi(line);
     char separatore;
     int numVertices = 0;
-    int contatore_vertici=0; // bisogna poi aggiungere 1 per avere il numero esatto di vertici perchè parto a contare da zero
-    int contatore_lati=0;
-    array<unsigned int,2> id_vertici;
+    int contatore_vertici = 0; // Bisogna poi aggiungere 1 per avere il numero esatto di vertici perchè parto a contare da zero
+    int contatore_lati = 0;
+    array<unsigned int, 2> id_vertici = {};
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         getline(file, header); // Leggo la riga da trascurare
@@ -37,7 +37,7 @@ bool importazione_2(const string& filename, Fractures& frattura,PolygonalMesh& m
         stringstream ss(line);
         ss >> frattura.Id >> separatore >> numVertices;
         // Creo la tabella che contiene le coordinate dei punti
-        Vector3d vertice;
+        Vector3d vertice = {};
         Matrix<double, 3, Dynamic> Tab_coord_vertici(3, numVertices);
         getline(file, header); // Leggo la riga da trascurare
         string val = "";
@@ -51,30 +51,36 @@ bool importazione_2(const string& filename, Fractures& frattura,PolygonalMesh& m
             }
         }
         file >> separatore;
-        for (int k=0;k<numVertices;k++){
-            vertice=Tab_coord_vertici.col(k);
-            cout<<"Vertice  "<<contatore_vertici<<setprecision(16)<<scientific<<" "<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
+        for (int k = 0; k < numVertices; k++)
+        {
+            vertice = Tab_coord_vertici.col(k);
+            cout << "Vertice  " << contatore_vertici << setprecision(16) << scientific
+                 << " " << vertice[0] << " " << vertice[1] << " " << vertice[2] << endl;
             mesh.Cell0DId.push_back(contatore_vertici);
             mesh.Cell0DCoordinates.push_back(vertice);
-            if(k==numVertices-1){
-                cout<<"Lato  "<<contatore_lati<<" "<<contatore_vertici<<" "<<contatore_vertici-numVertices+1<<endl;
+            if(k == numVertices - 1)
+            {
+                cout <<"Lato  " << contatore_lati << " " << contatore_vertici << " "
+                     << contatore_vertici - numVertices + 1 << endl;
                 mesh.Cell1DId.push_back(contatore_lati);
-                id_vertici[0]=contatore_vertici;
-                id_vertici[1]=contatore_vertici-numVertices+1;
+                id_vertici[0] = contatore_vertici;
+                id_vertici[1] = contatore_vertici - numVertices + 1;
             }
-            else{
-                cout<<"Lato  "<<contatore_lati<<" "<<contatore_vertici<<" "<<contatore_vertici+1<<endl;
+            else
+            {
+                cout << "Lato  " << contatore_lati << " " << contatore_vertici
+                     << " " << contatore_vertici + 1 << endl;
                 mesh.Cell1DId.push_back(contatore_lati);
-                id_vertici[0]=contatore_vertici;
-                id_vertici[1]=contatore_vertici+1;
+                id_vertici[0] = contatore_vertici;
+                id_vertici[1] = contatore_vertici+1;
                 mesh.Cell1DIdVertices.push_back(id_vertici);
             }
             contatore_lati++;
             contatore_vertici++;
         }
     }
-    mesh.NumberCell0D=contatore_vertici+1;
-    mesh.NumberCell1D=contatore_lati+1;
+    mesh.NumberCell0D = contatore_vertici + 1;
+    mesh.NumberCell1D = contatore_lati + 1;
     file.close();
     return true;
 }
