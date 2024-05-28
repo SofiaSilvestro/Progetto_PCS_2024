@@ -1,0 +1,75 @@
+@startuml
+
+package DFNLibrary <<Node>> #line:DarkSlateGrey;line.bold;back:Azure
+{
+
+class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
+{
+
++ NumberFractures : unsigned int 
++ IdF : unsigned int
++ Vertices : vector<Matrix<double, 3, Dynamic>>
++ Piano : vector<array<double, 4>>
+
+' fine classe Fractures
+}
+
+class Traces << (T, violet) >> #line:Navy;line.bold;back:aliceblue
+{
+
++ IdT : unsigned int
++ FracturesId : map<unsigned int, array<unsigned int, 2>> 
++ Vertices : map<unsigned int, array<Vector3d,2>> 
++ Tips : map<unsigned int, array<bool,2>>
++ vector<double> Lenght
+
+' fine classe Traces
+} 
+Fractures *-[#Chocolate]-* Traces
+
+
+class TEST << (T, Yellow) >> #line:OrangeRed;line.dashed;back:Snow
+{
+..TestDistanze..
+
++ TraDuePunti
+
+..TestBaricentro..
+
++ Quadrilatero
+
+..TestRetteEPiani..
+
++ DistanzaTraQuadrilateri
++ RettaTraPiani
++ RettaTraVertici
++ AscissaCurvilinea
+
+' fine TEST
+}
+Traces -left-> TEST
+Fractures -left-> TEST
+
+class FUNZIONI << (F, YellowGreen) >> #line:Red;line.dashed;back:Snow
+{
+
++ bool importazione(const string &filename, Fractures1 &frattura)
++ double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
++ Vector3d baricentro (Fractures& frattura, unsigned int& Id)
++ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2)
++ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
++ array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
++ Vector2d alpha_di_intersezione(array<double,6> r_intersez,array<double,6> r_fratt)
++ void caricamento_dati(Traces& traccia, Fractures& frattura)
++ bool compare(array<double, 2> a, array<double, 2> b)
++ void esportazione(Traces& traccia, Fractures& frattura)
+
+}
+Traces -down-> FUNZIONI
+Fractures -down-> FUNZIONI
+
+' fine namespace DFNLibrary
+} 
+
+
+@enduml
