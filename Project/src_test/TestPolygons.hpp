@@ -75,8 +75,8 @@ TEST(TestRetteEPiani, RettaTraPiani)
     array<double, 4> Arr1 = {3, 2, 1, -2};
     array<double, 4> Arr2 = {6, 5, 4, -11};
 
-    frattura.Piano.push_back(Arr1);
-    frattura.Piano.push_back(Arr2);
+    frattura.Plane.push_back(Arr1);
+    frattura.Plane.push_back(Arr2);
 
     array<double, 6> result = Retta_tra_piani(frattura, Id1, Id2);
     array<double, 6> expected = {3, -6, 3, -1, 1, 3};

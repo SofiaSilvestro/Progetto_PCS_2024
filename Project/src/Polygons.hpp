@@ -24,7 +24,7 @@ struct Fractures
 
     // Vettore di array formati da 4 elementi di tipo double
     // (che rappresentano a,b,c,d dell'eq. del piano ax+by+cz+d=0 su cui è appoggiato il poligono)
-    vector<array<double, 4>> Piano = {};
+    vector<array<double, 4>> Plane = {};
 };
 
 
@@ -46,7 +46,7 @@ struct Traces
     // il primo bool per il poligono FracturesId[i][0] e il secondo per FracturesId[i][1]
     vector<array<bool, 2>> Tips = {};
 };
-} // chiusura namespace FracturesLib
+}
 
 namespace PolygonalLibrary{
 
@@ -68,5 +68,5 @@ struct PolygonalMesh
     vector<vector<unsigned int>> Cell2DVertices = {}; // Cell2D Vertices indices, size 1 x NumberCell2DVertices[NumberCell2D]
     vector<vector<unsigned int>> Cell2DEdges = {};// Cell2D Cell1D indices, size 1 x NumberCell2DEdges[NumberCell2D]
 };
-}// chiusura namespace PolygonalLibrary
+}
 
