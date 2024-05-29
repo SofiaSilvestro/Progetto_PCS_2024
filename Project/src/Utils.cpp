@@ -445,18 +445,18 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                 }
                                 Tipo[1] = 1;//Traccia non passante
                             }
+                            traccia.Vertices.push_back(Vertici);
+                            traccia.FracturesId.push_back(Id);
+                            traccia.Tips.push_back(Tipo);
                         }
                     }
                 } // chiusura if
             }
-            traccia.Vertices.push_back(Vertici);
-            traccia.FracturesId.push_back(Id);
-            traccia.Tips.push_back(Tipo);
             j++;
         }
     }
     traccia.Number = NumberTraces;
-    cout<<traccia.Number;
+    cout<<traccia.Number; // Stampa corretta
 }
 
 bool compare(array<double, 2> a, array<double, 2> b)
@@ -475,7 +475,7 @@ void esportazione(Traces& traccia, Fractures& frattura)
     }
     ofs << "# Number of Traces" << endl;
     // considero il numero di mappature
-    ofs << traccia.FracturesId.size() << endl;
+    ofs << traccia.Number<< endl;
     ofs << "# TraceId; FracturesId1; FracturesId2; X1; Y1; Z1; X2; Y2; Z2" << endl;
     for(unsigned int i = 0; i < traccia.FracturesId.size(); i++)
     {
