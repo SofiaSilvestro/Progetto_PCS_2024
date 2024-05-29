@@ -26,7 +26,7 @@ bool importazione(const string& filename, Fractures& frattura)
     frattura.NumberFractures = stoi(line);
     char separatore;
     int numVertices = 0;
-    array<double,4> param_piano;
+    array<double, 4> param_piano = {};
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         getline(file, header); // Leggo la riga da trascurare
@@ -57,13 +57,13 @@ bool importazione(const string& filename, Fractures& frattura)
         Vector3d point2 = frattura.Vertices[i].col(2);
         Vector3d point3 = frattura.Vertices[i].col(3);
         // Calcolo indiretto dei coefficienti mediante il determinante uguale a zero e relativo inserimento nel vettore di array
-        //(x-x1  x-y1  x-z1
+        // (x-x1  x-y1  x-z1
         // x2-x1 y2-y1 z2-z1
         // x3-x1 y3-y1 z3-z1)
-        param_piano[0] = (point2[1]-point1[1])*(point3[2]-point1[2]) - (point2[2]-point1[2])*(point3[1]-point1[1]);
-        param_piano[1] = -((point2[0]-point1[0])*(point3[2]-point1[2]) - (point3[0]-point1[0])*(point2[2]-point1[2]));
-        param_piano[2] = (point2[0]-point1[0])*(point3[1]-point1[1]) - (point3[0]-point1[0])*(point2[1]-point1[1]);
-        param_piano[3] = -param_piano[0]*point1[0]-param_piano[1]*point1[1]-param_piano[2]*point1[2];
+        param_piano[0] = (point2[1] - point1[1]) * (point3[2] - point1[2]) - (point2[2] - point1[2]) * (point3[1] - point1[1]);
+        param_piano[1] = - ((point2[0] - point1[0]) * (point3[2] - point1[2]) - (point3[0] - point1[0]) * (point2[2] - point1[2]));
+        param_piano[2] = (point2[0] - point1[0]) * (point3[1] - point1[1]) - (point3[0] - point1[0]) * (point2[1] - point1[1]);
+        param_piano[3] = - param_piano[0] * point1[0] - param_piano[1] * point1[1] - param_piano[2] * point1[2];
         frattura.Plane.push_back(param_piano);
     }
     file.close();
@@ -96,8 +96,8 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
     Vector3d coord_bar_1 = baricentro(frattura, Id1);
     Vector3d coord_bar_2 = baricentro(frattura, Id2);
 
-    unsigned int n1 = frattura.Vertices[Id1].cols(); // numero di vertici della prima frattura
-    unsigned int n2 = frattura.Vertices[Id2].cols(); // numero di vertici della seconda frattura
+    unsigned int n1 = frattura.Vertices[Id1].cols(); // Numero di vertici della prima frattura
+    unsigned int n2 = frattura.Vertices[Id2].cols(); // Numero di vertici della seconda frattura
 
     // Calcolo i possibili raggi delle due palle avente centro nei baricentri precedentemente calcolati
     VectorXd raggi_candidati1 = {};
@@ -135,12 +135,12 @@ array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigne
     coord_retta[0] = frattura.Plane[id1][1] * frattura.Plane[id2][2] - frattura.Plane[id1][2] * frattura.Plane[id2][1];
     coord_retta[1] = frattura.Plane[id1][2] * frattura.Plane[id2][0] - frattura.Plane[id1][0] * frattura.Plane[id2][2];
     coord_retta[2] = frattura.Plane[id1][0] * frattura.Plane[id2][1] - frattura.Plane[id1][1] * frattura.Plane[id2][0];
-    //Calcolo un punto che appartiene alla retta intersecante
+    // Calcolo un punto che appartiene alla retta intersecante
     Matrix<double, 3, 3> A = {};
     A << frattura.Plane[id1][0], frattura.Plane[id1][1], frattura.Plane[id1][2],
-        frattura.Plane[id2][0], frattura.Plane[id2][1], frattura.Plane[id2][2],
-        coord_retta[0], coord_retta[1], coord_retta[2];
-    Vector3d b = {-frattura.Plane[id1][3], -frattura.Plane[id2][3], 0};
+         frattura.Plane[id2][0], frattura.Plane[id2][1], frattura.Plane[id2][2],
+         coord_retta[0], coord_retta[1], coord_retta[2];
+    Vector3d b = {- frattura.Plane[id1][3], - frattura.Plane[id2][3], 0};
     Vector3d x = A.lu().solve(b);
     coord_retta[3] = x[0];
     coord_retta[4] = x[1];
@@ -150,7 +150,7 @@ array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigne
 
 array<double, 6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
 {
-    //data l'equazione parametrica è X = at+P trovo direttrice e punto di partenza della retta
+    // Data l'equazione parametrica è X = at+P trovo direttrice e punto di partenza della retta
     // t:(x2-x1,y2-y1,z2-z1)
     // P:(x1,y1,z1)
     // salviamo i relativi valori in un array
@@ -166,30 +166,30 @@ array<double, 6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsig
 
 Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_fratt)
 {
-    // imposto un sistema lineare per la ricerca dei parametri alpha e beta
-    // imposto i coefficienti della matrice
+    // Imposto un sistema lineare per la ricerca dei parametri alpha e beta
+    // Imposto i coefficienti della matrice
     MatrixXd A = MatrixXd::Zero(3,2);
-    // retta di intersezione tra i lati del poligono della stessa frattura
+    // Retta di intersezione tra i lati del poligono della stessa frattura
     Vector3d t1 = {};
     t1[0] = r_fratt[0];
     t1[1] = r_fratt[1];
     t1[2] = r_fratt[2];
     A.col(0) = t1;
-    // retta di intersezione tra i piani
+    // Retta di intersezione tra i piani
     Vector3d t2 = {};
     t2[0] = r_intersez[0];
     t2[1] = r_intersez[1];
     t2[2] = r_intersez[2];
     A.col(1) = -t2;
-    // imposto i coefficienti del termine noto
+    // Imposto i coefficienti del termine noto
     Vector3d b = Vector3d::Zero();
     b[0] = r_intersez[3] - r_fratt[3];
     b[1] = r_intersez[4] - r_fratt[4];
     b[2] = r_intersez[5] - r_fratt[5];
-    Vector2d x = A.householderQr().solve(b); // x =[alpha;beta]
-    // dove beta è l'ascissa curvilinea della retta generata dall'intersezione tra piani e
+    Vector2d x = A.householderQr().solve(b); // x = [alpha; beta]
+    // Dove beta è l'ascissa curvilinea della retta generata dall'intersezione tra piani e
     // alpha è l'ascissa curvilinea della retta passante per due punti
-    // tale parametro deve essere controllato tra zero e uno per il segmento
+    // Tale parametro deve essere controllato tra zero e uno per il segmento
     return x;
 }
 
@@ -209,61 +209,62 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
             if(valuta_intersezione(frattura, i, j))
             {
                 array<double, 4> coeff = {};
-                // calcolo la retta passante tra i due piani
+                // Calcolo la retta passante tra i due piani
                 array<double, 6> r_piano = Retta_tra_piani(frattura, i, j);
-                // sulla carta sappiamo che se il prodotto vettoriale delle due normali ai piani è zero allora sono paralleli
-                // le coordinate del risultato sono memorizzate nei primi tre spazi dell'array r_piano
+                // Sulla carta sappiamo che se il prodotto vettoriale delle due normali ai piani è zero allora sono paralleli
+                // Le coordinate del risultato sono memorizzate nei primi tre spazi dell'array r_piano
                 if(abs(r_piano[0]) < tol && abs(r_piano[1]) < tol && abs(r_piano[2]) < tol)
                 {
-                    //piani paralleli
+                    // Piani paralleli
                 }
                 else
                 {
-                    //piani non paralleli
-                    //calcolo la retta tra i lati adiacenti del poligono 1
-                    unsigned int h = 0; // usato per accedere a tutti i punti della frattura
-                    unsigned int k = 1; // usato per accedere a tutti i punti della stessa frattura per il punto adiacente
-                    unsigned int cont = 0; // usato per inserire l'ascissa curvilinea in coeff per trovare poi l'intervallo di intersezione
+                    // Piani non paralleli
+                    // Calcolo la retta tra i lati adiacenti del poligono 1
+                    unsigned int h = 0; // Usato per accedere a tutti i punti della frattura
+                    unsigned int k = 1; // Usato per accedere a tutti i punti della stessa frattura per il punto adiacente
+                    unsigned int cont = 0; // Usato per inserire l'ascissa curvilinea in coeff per trovare poi l'intervallo di intersezione
                     while(h < frattura.Vertices[i].cols())
                     {
-                        //con l'if gestisco il caso dell'ultimo punto con il primo del poligono
+                        // Con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                         if(k == frattura.Vertices[i].cols())
                         {
                             k = 0;
                         }
                         array<double, 6> r_tra_punti = Retta_per_due_vertici_della_frattura(frattura, i, h, k);
                         // Escludo il parallelismo: calcolo prodotto vettoriale e verifico che sia maggiore di tol
-                        double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[0]))+ (r_piano[0] * r_tra_punti[1])- (r_piano[1] * r_tra_punti[0]);
-                        if (abs(parallelo)>tol)
+                        double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[0])) + (r_piano[0] * r_tra_punti[1]) - (r_piano[1] * r_tra_punti[0]);
+                        if (abs(parallelo) > tol)
                         {
                             Vector2d x = alpha_di_intersezione(r_piano, r_tra_punti);
                             // CONDIZIONI : verifichiamo che appartenga al segmento
                             if(x[0] >= -tol && x[0] <= 1 + tol)
                             {
-                                coeff[cont] = x[1]; // memorizziamo in coeff l'ascissa curvilinea dei piani : beta
+                                coeff[cont] = x[1]; // Memorizziamo in coeff l'ascissa curvilinea dei piani : beta
                                 cont++;
                             }
                         }
                         h++;
                         k++;
                     }
-                    //calcolo la retta tra i lati adiacenti del poligono 2
+                    // Calcolo la retta tra i lati adiacenti del poligono 2
                     h = 0;
                     k = 1;
                     while(h < frattura.Vertices[j].cols())
                     {
-                        //con l'if gestisco il caso dell'ultimo punto con il primo del poligono
+                        // Con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                         if(k == frattura.Vertices[j].cols())
                         {
                             k = 0;
                         }
                         array<double, 6> r_tra_punti = Retta_per_due_vertici_della_frattura(frattura, j, h, k);
                         // Escludo il parallelismo: calcolo il prodotto vettoriale
-                        double parallelo = (r_piano[1] * r_tra_punti[2])- (r_piano[2] * r_tra_punti[1])- ((r_piano[0] * r_tra_punti[2])- (r_piano[2] * r_tra_punti[0]))+ (r_piano[0] * r_tra_punti[1])- (r_piano[1] * r_tra_punti[0]);
+                        double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[0])) + (r_piano[0] * r_tra_punti[1]) - (r_piano[1] * r_tra_punti[0]);
                         if (abs(parallelo) > tol)
                         {
                             Vector2d x = alpha_di_intersezione(r_piano, r_tra_punti);
-                            if(x[0] >= -tol && x[0] <= 1+tol){
+                            if(x[0] >= -tol && x[0] <= 1+tol)
+                            {
                                 coeff[cont] = x[1];
                                 cont++;
                             }
@@ -280,26 +281,26 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                         double min_el_dx = min(coeff[2], coeff[3]);
                         double sx = max(min_el_sx, min_el_dx); // Estremo sinistro dell'intersezione
                         double dx = min(max_el_sx, max_el_dx); // Estremo destro dell'intersezione
-                        // gli intervalli si sovrappongono se:
+                        // Gli intervalli si sovrappongono se:
                         if (sx < dx)
                         {
                             NumberTraces++;
                             Id[0] = i;
                             Id[1] = j;
-                            //Rianalizziamo ora il poligono 1
+                            // Rianalizziamo ora il poligono 1
                             unsigned int conta_p1 = 0;
                             unsigned int h = 0;
                             unsigned int k = 1;
                             while(h < frattura.Vertices[i].cols())
                             {
-                                //con l'if gestisco il caso dell'ultimo punto con il primo del poligono
+                                // Con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                                 if(k == frattura.Vertices[i].cols())
                                 {
                                     k = 0;
                                 }
                                 array<double, 6> r_tra_punti = Retta_per_due_vertici_della_frattura(frattura, i, h, k);
                                 // Escludo il parallelismo: calcolo prodotto vettoriale
-                                double parallelo = (r_piano[1] * r_tra_punti[2])- (r_piano[2] * r_tra_punti[1])- ((r_piano[0] * r_tra_punti[2])- (r_piano[2] * r_tra_punti[0]))+ (r_piano[0] * r_tra_punti[1])- (r_piano[1] * r_tra_punti[0]);
+                                double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[0])) + (r_piano[0] * r_tra_punti[1]) - (r_piano[1] * r_tra_punti[0]);
                                 if (abs(parallelo) > tol)
                                 {
                                     Vector2d x = alpha_di_intersezione(r_piano, r_tra_punti);
@@ -308,7 +309,7 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                     {
                                         if(x[1] > sx - tol && x[1] < dx + tol)
                                         {
-                                            //Calcolo il punto di intersezione
+                                            // Calcolo il punto di intersezione
                                             Vector3d punto_intersezione = {};
                                             punto_intersezione[0] = r_tra_punti[0] * x[0] + r_tra_punti[3];
                                             punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
@@ -321,31 +322,30 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                 h++;
                                 k++;
                             }
-                            //-----------------------------------------------------------------------------------
-                            //ANALIZZIAMO LE VARIE CASISTICHE PER IL POLIGONO 2
+                            //------------------------------------------------------------------------------------------
+                            // ANALIZZIAMO LE VARIE CASISTICHE PER IL POLIGONO 2
                             // CASO 1: Traccia passante per il primo (passante o non passante per il secondo)
                             if(conta_p1 == 2)
                             {
                                 Tipo[0] = 0;
-                                //Rianalizziamo il poligono 2
+                                // Rianalizziamo il poligono 2
                                 unsigned int conta_p2 = 0;
                                 h = 0;
                                 k = 1;
                                 while(h < frattura.Vertices[j].cols())
                                 {
-                                    // con l'if gestisco il caso dell'ultimo punto con il primo del poligono
+                                    // Con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                                     if(k == frattura.Vertices[j].cols())
                                     {
                                         k = 0;
                                     }
                                     array<double, 6> r_tra_punti = Retta_per_due_vertici_della_frattura(frattura, j, h, k);
                                     // Escludo il parallelismo: calcolo il prodotto vettoriale
-                                    double parallelo = (r_piano[1] * r_tra_punti[2])- (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[0]))+ (r_piano[0] * r_tra_punti[1]) - (r_piano[1] * r_tra_punti[0]);
-                                    if (abs(parallelo)>tol)
+                                    double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[0])) + (r_piano[0] * r_tra_punti[1]) - (r_piano[1] * r_tra_punti[0]);
+                                    if (abs(parallelo) > tol)
                                     {
                                         Vector2d x = alpha_di_intersezione(r_piano, r_tra_punti);
                                         // CONDIZIONI: verifichiamo che appartenga al segmento e all'altro poligono
-                                        double tol = 1e-15;
                                         if(x[0] >= -tol && x[0] <= 1 + tol)
                                         {
                                             if(x[1] > sx - tol && x[1] < dx + tol)
@@ -369,21 +369,21 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                             // CASO 2 : non passante per il primo e passante per il secondo
                             if(conta_p1 == 0)
                             {
-                                Tipo[0] = 1; //Traccia non passante
+                                Tipo[0] = 1; // Traccia non passante
                                 // Rianalizziamo il poligono 2
                                 unsigned int conta_p2 = 0;
                                 h = 0;
                                 k = 1;
                                 while(h < frattura.Vertices[j].cols())
                                 {
-                                    // con l'if gestisco il caso dell'ultimo punto con il primo del poligono
+                                    // Con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                                     if(k == frattura.Vertices[j].cols())
                                     {
                                         k = 0;
                                     }
                                     array<double, 6> r_tra_punti = Retta_per_due_vertici_della_frattura(frattura, j, h, k);
                                     // Escludo il parallelismo: calcolo il prodotto vettoriale
-                                    double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2])- (r_piano[2] * r_tra_punti[0]))+ (r_piano[0] * r_tra_punti[1])- (r_piano[1] * r_tra_punti[0]);
+                                    double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[0])) + (r_piano[0] * r_tra_punti[1]) - (r_piano[1] * r_tra_punti[0]);
                                     if (abs(parallelo) >tol)
                                     {
                                         Vector2d x = alpha_di_intersezione(r_piano, r_tra_punti);
@@ -392,7 +392,7 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                         {
                                             if(x[1] > sx - tol && x[1] < dx + tol)
                                             {
-                                                //Calcolo il punto di intersezione
+                                                // Calcolo il punto di intersezione
                                                 Vector3d punto_intersezione = {};
                                                 punto_intersezione[0] = r_tra_punti[0] * x[0] + r_tra_punti[3];
                                                 punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
@@ -407,28 +407,29 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                 }
                                 Tipo[1] = 0; // Traccia passante
                             }
-                            // CASO 3: non passante per il primo con 1 punto : non passante per il secondo con 1 punto
+                            // CASO 3: non passante per il primo con 1 punto e non passante per il secondo con 1 punto
                             if(conta_p1 == 1)
                             {
                                 Tipo[0] = 1; // Traccia non passante
-                                //Rianalizzo poligono 2
+                                // Rianalizzo poligono 2
                                 h = 0;
                                 k = 1;
                                 while(h < frattura.Vertices[j].cols())
                                 {
-                                    //con l'if gestisco il caso dell'ultimo punto con il primo del poligono
+                                    // Con l'if gestisco il caso dell'ultimo punto con il primo del poligono
                                     if(k == frattura.Vertices[j].cols())
                                     {
                                         k = 0;
                                     }
                                     array<double, 6> r_tra_punti = Retta_per_due_vertici_della_frattura(frattura, j, h, k);
                                     // Escludo il parallelismo: calcolo il prodotto vettoriale
-                                    double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1])- ((r_piano[0] * r_tra_punti[2])- (r_piano[2] * r_tra_punti[0]))+ (r_piano[0] * r_tra_punti[1])- (r_piano[1] * r_tra_punti[0]);
+                                    double parallelo = (r_piano[1] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[1]) - ((r_piano[0] * r_tra_punti[2]) - (r_piano[2] * r_tra_punti[0])) + (r_piano[0] * r_tra_punti[1]) - (r_piano[1] * r_tra_punti[0]);
                                     if (abs(parallelo) > tol)
                                     {
                                         Vector2d x = alpha_di_intersezione(r_piano, r_tra_punti);
                                         // CONDIZIONI: verifichiamo che appartenga al segmento e all'altro poligono
-                                        if(x[0] >= -tol && x[0] <= 1 + tol){
+                                        if(x[0] >= -tol && x[0] <= 1 + tol)
+                                        {
                                             if(x[1] > sx - tol && x[1] < dx + tol)
                                             {
                                                 //Calcolo il punto di intersezione
@@ -443,7 +444,7 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                                     h++;
                                     k++;
                                 }
-                                Tipo[1] = 1;//Traccia non passante
+                                Tipo[1] = 1; // Traccia non passante
                             }
                             traccia.Vertices.push_back(Vertici);
                             traccia.FracturesId.push_back(Id);
@@ -473,7 +474,7 @@ void esportazione(Traces& traccia, Fractures& frattura)
         return;
     }
     ofs << "# Number of Traces" << endl;
-    // considero il numero di mappature
+    // Considero il numero di mappature
     ofs << traccia.Number<< endl;
     ofs << "# TraceId; FracturesId1; FracturesId2; X1; Y1; Z1; X2; Y2; Z2" << endl;
     for(unsigned int i = 0; i < traccia.FracturesId.size(); i++)
@@ -515,7 +516,7 @@ void esportazione(Traces& traccia, Fractures& frattura)
                 array<double, 2> ord = {};
                 for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
                 {
-                    // se il primo o il secondo id è i
+                    // Se il primo o il secondo id è i
                     if((i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1]) && traccia.Tips[j][0] == contatore)
                     {
                         conta_per_tipo++;
@@ -524,9 +525,9 @@ void esportazione(Traces& traccia, Fractures& frattura)
                         ordinamento.push_back(ord);
                     }
                 }
-                // condizioni per ordinamento vettore usare sort
+                // Condizioni per ordinamento vettore usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare);
-                // stampiamo dall'inizio alla fine
+                // Stampiamo dall'inizio alla fine
                 for(unsigned int k = 0; k < conta_per_tipo; k++)
                 {
                     ofs << int(ordinamento[k][0]) << "; " << contatore << "; " << ordinamento[k][1] << endl;
