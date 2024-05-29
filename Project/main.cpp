@@ -12,7 +12,7 @@ int main()
     Fractures frattura;
     PolygonalMesh mesh;
     Traces traccia;
-    string filepath = "./DFN/FR10_data.txt";
+    string filepath = "./DFN/FR3_data.txt";
     if(!importazione(filepath, frattura))
     {
         return 1;

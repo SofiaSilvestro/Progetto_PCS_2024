@@ -456,7 +456,6 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
         }
     }
     traccia.Number = NumberTraces;
-    cout<<traccia.Number; // Stampa corretta
 }
 
 bool compare(array<double, 2> a, array<double, 2> b)
