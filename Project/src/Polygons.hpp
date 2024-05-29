@@ -25,9 +25,8 @@ struct Fractures
     vector<Matrix<double, 3, Dynamic>> Vertices = {};
 
     // Vettore di array formati da 4 elementi di tipo double
-    // (che rappresentano a,b,c,d dell'eq. del piano
-    // ax+by+cz+d=0 su cui è appoggiato il poligono)
-    vector<array<double, 4>> Piano = {};
+    // (che rappresentano a,b,c,d dell'eq. del piano ax+by+cz+d=0 su cui è appoggiato il poligono)
+    vector<array<double, 4>> Plane = {};
 };
 
 
@@ -54,7 +53,7 @@ struct Traces
     // e il secondo per FracturesId[i][1]
     vector<array<bool, 2>> Tips = {};
 };
-} // chiusura namespace FracturesLib
+}
 
 namespace PolygonalLibrary{
 
@@ -93,5 +92,5 @@ struct PolygonalMesh
     vector<vector<unsigned int>> Cell2DEdges = {};
 
 };
-}// chiusura namespace PolygonalLibrary
+}
 
