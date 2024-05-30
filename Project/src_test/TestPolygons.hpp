@@ -46,7 +46,7 @@ TEST(TestBaricentro, Quadrilatero)
 
 /** TEST SULLA FUNZIONE CHE VALUTA LA DISTANZA TRA DUE POLIGONI PER
  *  DETERMINARE PRELIMINARMENTE LA POSSIBILITA' DELL'INTERSEZIONE **/
-TEST(TestRetteEPiani, DistanzaTraQuadrilateri)
+TEST(TestDistanze, TraQuadrilateri)
 {
     Fractures frattura;
     unsigned int Id1 = 0;
