@@ -9,7 +9,7 @@ class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
 + NumberFractures : unsigned int 
 + IdF : unsigned int
 + Vertices : vector<Matrix<double, 3, Dynamic>>
-+ Piano : vector<array<double, 4>>
++ Plane : vector<array<double, 4>>
 
 ..NonMemberFunctions..
 
@@ -33,11 +33,10 @@ __TESTFRAC__
 class Traces << (T, violet) >> #line:Navy;line.bold;back:aliceblue
 {
 
-+ IdT : unsigned int
-+ FracturesId : map<unsigned int, array<unsigned int, 2>> 
-+ Vertices : map<unsigned int, array<Vector3d,2>> 
-+ Tips : map<unsigned int, array<bool,2>>
-+ vector<double> Lenght
++ Number : unsigned int
++ FracturesId : vector<array<unsigned int, 2>>
++ Vertices : vector<array<Vector3d, 2>> 
++ Tips : vector<array<bool, 2>>
 
 __TESTTRAC__
 

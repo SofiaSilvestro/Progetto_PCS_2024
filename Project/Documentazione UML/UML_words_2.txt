@@ -7,9 +7,9 @@ class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
 {
 
 + NumberFractures : unsigned int 
-+ IdF : unsigned int
++ Id : unsigned int
 + Vertices : vector<Matrix<double, 3, Dynamic>>
-+ Piano : vector<array<double, 4>>
++ Plane : vector<array<double, 4>>
 
 ' fine classe Fractures
 }
@@ -17,11 +17,10 @@ class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
 class Traces << (T, violet) >> #line:Navy;line.bold;back:aliceblue
 {
 
-+ IdT : unsigned int
-+ FracturesId : map<unsigned int, array<unsigned int, 2>> 
-+ Vertices : map<unsigned int, array<Vector3d,2>> 
-+ Tips : map<unsigned int, array<bool,2>>
-+ vector<double> Lenght
++ Number : unsigned int
++ FracturesId : vector<array<unsigned int, 2>>
++ Vertices : vector<array<Vector3d, 2>> 
++ Tips : vector<array<bool, 2>>
 
 ' fine classe Traces
 } 
@@ -33,6 +32,7 @@ class TEST << (T, Yellow) >> #line:OrangeRed;line.dashed;back:Snow
 ..TestDistanze..
 
 + TraDuePunti
++ TraQuadrilateri
 
 ..TestBaricentro..
 
@@ -40,7 +40,6 @@ class TEST << (T, Yellow) >> #line:OrangeRed;line.dashed;back:Snow
 
 ..TestRetteEPiani..
 
-+ DistanzaTraQuadrilateri
 + RettaTraPiani
 + RettaTraVertici
 + AscissaCurvilinea
