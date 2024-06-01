@@ -26,14 +26,13 @@ bool importazione(const string& filename, Fractures& frattura)
     frattura.NumberFractures = stoi(line);
     char separatore;
     int numVertices = 0;
-    array<double, 4> param_piano = {};
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         getline(file, header); // Leggo la riga da trascurare
         getline(file, line);
         stringstream ss(line);
         ss >> frattura.Id >> separatore >> numVertices;
-        // Creo la tabella che contiene le coordinate dei punti
+        // Creo la tabella che contiene le coordinate dei vertici
         Matrix<double, 3, Dynamic> Tab_coord_vertici(3, numVertices);
         getline(file, header); // Leggo la riga da trascurare
         string val = "";
@@ -47,27 +46,51 @@ bool importazione(const string& filename, Fractures& frattura)
             }
         }
         file >> separatore;
-        // Aggiungo quanto trovato all'interno del vettore di matrici
+        // Aggiungo quanto trovato all'interno del vettore di matrici della struttura
         frattura.Vertices.push_back(Tab_coord_vertici);
     }
-    // Calcolo i coefficienti del piano per ciascuna frattura
+
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        Vector3d point1 = frattura.Vertices[i].col(1);
-        Vector3d point2 = frattura.Vertices[i].col(2);
-        Vector3d point3 = frattura.Vertices[i].col(3);
-        // Calcolo indiretto dei coefficienti mediante il determinante uguale a zero e relativo inserimento nel vettore di array
-        // (x-x1  x-y1  x-z1
-        // x2-x1 y2-y1 z2-z1
-        // x3-x1 y3-y1 z3-z1)
-        param_piano[0] = (point2[1] - point1[1]) * (point3[2] - point1[2]) - (point2[2] - point1[2]) * (point3[1] - point1[1]);
-        param_piano[1] = - ((point2[0] - point1[0]) * (point3[2] - point1[2]) - (point3[0] - point1[0]) * (point2[2] - point1[2]));
-        param_piano[2] = (point2[0] - point1[0]) * (point3[1] - point1[1]) - (point3[0] - point1[0]) * (point2[1] - point1[1]);
-        param_piano[3] = - param_piano[0] * point1[0] - param_piano[1] * point1[1] - param_piano[2] * point1[2];
+        array<double, 4> param_piano = EqPiano(frattura, i);
         frattura.Plane.push_back(param_piano);
     }
+    // Calcolo i coefficienti del piano per ciascuna frattura, sfruttando le formule del piano passante per tre punti
+    // array<double, 4> param_piano = {};
+    // for(unsigned int i = 0; i < frattura.NumberFractures; i++)
+    // {
+    //     Vector3d point1 = frattura.Vertices[i].col(1);
+    //     Vector3d point2 = frattura.Vertices[i].col(2);
+    //     Vector3d point3 = frattura.Vertices[i].col(3);
+    //     // Calcolo indiretto dei coefficienti mediante il determinante uguale a zero e relativo inserimento nel vettore di array
+    //     // (x-x1  y-y1  z-z1
+    //     //  x2-x1 y2-y1 z2-z1
+    //     //  x3-x1 y3-y1 z3-z1)
+    //     param_piano[0] = (point2[1] - point1[1]) * (point3[2] - point1[2]) - (point2[2] - point1[2]) * (point3[1] - point1[1]);
+    //     param_piano[1] = - ((point2[0] - point1[0]) * (point3[2] - point1[2]) - (point3[0] - point1[0]) * (point2[2] - point1[2]));
+    //     param_piano[2] = (point2[0] - point1[0]) * (point3[1] - point1[1]) - (point3[0] - point1[0]) * (point2[1] - point1[1]);
+    //     param_piano[3] = - param_piano[0] * point1[0] - param_piano[1] * point1[1] - param_piano[2] * point1[2];
+    //     frattura.Plane.push_back(param_piano);
+    // }
     file.close();
     return true;
+}
+
+array<double, 4> EqPiano(Fractures& frattura, unsigned int& Id)
+{
+    array<double, 4> param_piano = {};
+    Vector3d point1 = frattura.Vertices[Id].col(1);
+    Vector3d point2 = frattura.Vertices[Id].col(2);
+    Vector3d point3 = frattura.Vertices[Id].col(3);
+    // Calcolo indiretto dei coefficienti mediante il determinante uguale a zero e relativo inserimento nel vettore di array
+    // (x-x1  y-y1  z-z1
+    //  x2-x1 y2-y1 z2-z1
+    //  x3-x1 y3-y1 z3-z1)
+    param_piano[0] = (point2[1] - point1[1]) * (point3[2] - point1[2]) - (point2[2] - point1[2]) * (point3[1] - point1[1]);
+    param_piano[1] = - ((point2[0] - point1[0]) * (point3[2] - point1[2]) - (point3[0] - point1[0]) * (point2[2] - point1[2]));
+    param_piano[2] = (point2[0] - point1[0]) * (point3[1] - point1[1]) - (point3[0] - point1[0]) * (point2[1] - point1[1]);
+    param_piano[3] = - param_piano[0] * point1[0] - param_piano[1] * point1[1] - param_piano[2] * point1[2];
+    return param_piano;
 }
 
 double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
@@ -78,7 +101,7 @@ double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
 Vector3d baricentro (Fractures& frattura, unsigned int& Id)
 {
     Vector3d coord_bar = {};
-    unsigned int n = frattura.Vertices[Id].cols(); // numero di vertici della frattura
+    unsigned int n = frattura.Vertices[Id].cols(); // Numero di vertici della frattura
     for(unsigned int h = 0; h < 3; h++)
     {
         for (unsigned int k = 0; k < n; k++)
@@ -114,15 +137,38 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
         Vector3d point = frattura.Vertices[Id2].col(i);
         raggi_candidati2(i) = distanza_al_quadrato(coord_bar_2, point);
     }
-    // Calcolo il raggio delle due palle avente centro nei baricentri precedentemente calcolati
+
+    // VectorXd raggi_candidati1 = RaggiCandidati(frattura, Id1);
+    // VectorXd raggi_candidati2 = RaggiCandidati(frattura, Id2);
+
+    // Scelgo il massimo tra i raggi trovati
     double raggio1 = *max_element(raggi_candidati1.begin(), raggi_candidati1.end());
     double raggio2 = *max_element(raggi_candidati2.begin(), raggi_candidati2.end());
     double tol = 1e-10;
-    if (distanza_al_quadrato(coord_bar_1,coord_bar_2) <= (((raggio1+raggio2)*(raggio1+raggio2)) - tol))
+    if (distanza_al_quadrato(coord_bar_1, coord_bar_2) <= (((raggio1 + raggio2) * (raggio1 + raggio2)) - tol))
         return true; // le fratture potrebbero intersecarsi
     else
         return false; // le fratture sicuramente non si intersecano
 }
+
+// VectorXd RaggiCandidati(Fractures& frattura, unsigned int& Id)
+// {
+//     // Definisco vettore che contiene le coordinate del mio baricentro
+//     Vector3d coord_bar = baricentro(frattura, Id);
+
+//     unsigned int n = frattura.Vertices[Id].cols(); // Numero di vertici della frattura
+
+//     // Calcolo i possibili raggi della palla avente centro nel baricentro precedentemente calcolato
+//     VectorXd raggi_candidati = {};
+//     raggi_candidati.resize(n);
+//     for(unsigned int i = 0; i < n; i++)
+//     {
+//         Vector3d point = frattura.Vertices[Id].col(i);
+//         raggi_candidati(i) = distanza_al_quadrato(coord_bar, point);
+//     }
+//     return raggi_candidati;
+// }
+
 
 array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
 {
@@ -131,7 +177,7 @@ array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigne
     // y = coord_retta[1] * t + coord_retta[4]
     // z = coord_retta[2] * t + coord_retta[5]
     array<double, 6> coord_retta = {};
-    // Calcolo la direzione della retta intersecante mediante prodotto vettoriale
+    // Calcolo la direzione della retta intersecante i piani mediante prodotto vettoriale
     coord_retta[0] = frattura.Plane[id1][1] * frattura.Plane[id2][2] - frattura.Plane[id1][2] * frattura.Plane[id2][1];
     coord_retta[1] = frattura.Plane[id1][2] * frattura.Plane[id2][0] - frattura.Plane[id1][0] * frattura.Plane[id2][2];
     coord_retta[2] = frattura.Plane[id1][0] * frattura.Plane[id2][1] - frattura.Plane[id1][1] * frattura.Plane[id2][0];

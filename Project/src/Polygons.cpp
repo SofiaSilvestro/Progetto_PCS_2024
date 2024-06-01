@@ -54,22 +54,22 @@ bool importazione_2(const string& filename, Fractures& frattura, PolygonalMesh& 
         for (int k = 0; k < numVertices; k++)
         {
             vertice = Tab_coord_vertici.col(k);
-            cout << "Vertice  " << contatore_vertici << setprecision(16) << scientific
-                 << " " << vertice[0] << " " << vertice[1] << " " << vertice[2] << endl;
+            // cout << "Vertice  " << contatore_vertici << setprecision(16) << scientific
+                // << " " << vertice[0] << " " << vertice[1] << " " << vertice[2] << endl;
             mesh.Cell0DId.push_back(contatore_vertici);
             mesh.Cell0DCoordinates.push_back(vertice);
             if(k == numVertices - 1)
             {
-                cout <<"Lato  " << contatore_lati << " " << contatore_vertici << " "
-                     << contatore_vertici - numVertices + 1 << endl;
+                // cout <<"Lato  " << contatore_lati << " " << contatore_vertici << " "
+                    // << contatore_vertici - numVertices + 1 << endl;
                 mesh.Cell1DId.push_back(contatore_lati);
                 id_vertici[0] = contatore_vertici;
                 id_vertici[1] = contatore_vertici - numVertices + 1;
             }
             else
             {
-                cout << "Lato  " << contatore_lati << " " << contatore_vertici
-                     << " " << contatore_vertici + 1 << endl;
+                // cout << "Lato  " << contatore_lati << " " << contatore_vertici
+                    // << " " << contatore_vertici + 1 << endl;
                 mesh.Cell1DId.push_back(contatore_lati);
                 id_vertici[0] = contatore_vertici;
                 id_vertici[1] = contatore_vertici+1;

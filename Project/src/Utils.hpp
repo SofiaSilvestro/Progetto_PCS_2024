@@ -19,6 +19,10 @@ namespace FracturesLib{
 // Chiude il file e ritorna true se l'operazione è avvenuta con successo, false altrimenti
 bool importazione(const string& filename, Fractures& frattura);
 
+
+
+array<double, 4> EqPiano(Fractures& frattura, unsigned int& Id);
+
 // La funzione distanza_al_quadrato calcola la distanza euclidea al quadrato tra due vettori
 // tridimensionali v1 e v2
 double distanza_al_quadrato(Vector3d& v1, Vector3d& v2);
@@ -39,6 +43,10 @@ Vector3d baricentro (Fractures& frattura, unsigned int& Id1);
     // Se questo è vero le fratture potrebbero intersecarsi,
     // ma se questo è falso sicuramente non si intersecano
 bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2);
+
+
+
+VectorXd RaggiCandidati(Fractures& frattura, unsigned int& Id);
 
 // La funzione Retta_tra_piani restituisce un array di 6 elementi che descrive
 // la retta di intersezione tra due fratture
