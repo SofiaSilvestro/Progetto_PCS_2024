@@ -13,9 +13,9 @@
 using namespace std;
 using namespace Eigen;
 
-namespace FracturesLib{
+namespace DFNLibrary{
 
-/** TEST SULLA FUNZIONE CHE CALCOLA L'EQUAZIONE DEL PIANO APSSANTE PER 3 PUNTI **/
+/** TEST SULLA FUNZIONE CHE CALCOLA L'EQUAZIONE DEL PIANO PASSANTE PER 3 PUNTI **/
 TEST(TestRetteEPiani, EqPiano3Punti)
 {
     Fractures frattura;
@@ -81,25 +81,6 @@ TEST(TestDistanze, TraQuadrilateri)
     bool expected = true;
     ASSERT_EQ(result, expected);
 }
-
-
-/** TEST SULLA FUNZIONE CHE CALCOLA TUTTI I POSSIBILI RAGGI DELLA SFERA CIRCOSCRITTA AD UNA FRATTURA **/
-// TEST(TestDistanze, BaricentroVertici)
-// {
-//     Fractures frattura;
-//     unsigned int Id = 0;
-
-//     Matrix<double, 3, 4> Vert = {};
-//     Vert << 3., 0. , 3., 0.,
-//             0., 0., -3., -3.,
-//             0., 3., 0., 3.;
-//     frattura.Vertices.push_back(Vert);
-
-//     Vector4d result = RaggiCandidati(frattura, Id);
-//     Vector4d expected = {2.6, 2.6, 2.6, 2.6};
-//     ASSERT_EQ(result, expected);
-// }
-
 
 /** TEST SULLA FUNZIONE CHE VALUTA L'INTERSEZIONE TRA DUE PIANI GENERATI RISPETTIVAMENTE DA DUE POLIGONI DISTINTI **/
 TEST(TestRetteEPiani, RettaTraPiani)

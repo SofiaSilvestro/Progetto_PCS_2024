@@ -7,50 +7,40 @@
 using namespace std;
 using namespace Eigen;
 
-namespace FracturesLib{
+namespace DFNLibrary{
 
 struct Fractures
 {
-    // Variabile di tipo intero senza segno
-    // che salva il numero di fratture
+    // Variabile di tipo intero senza segno salva il numero di fratture
     unsigned int NumberFractures = 0;
 
     // Identificatore univoco per ogni frattura
     unsigned int Id = 0;
 
     // Vettore di matrici contenente tutti i vertici
-    // La matrice ha 3 righe(coord x, y,z) e
-    // un numero dinamico di colonne
-    // (il numero dei vertici è variabile)
+    // La matrice ha 3 righe(coord x, y,z) e un numero dinamico di colonne perchè il numero dei vertici è variabile
     vector<Matrix<double, 3, Dynamic>> Vertices = {};
 
     // Vettore di array formati da 4 elementi di tipo double
-    // (che rappresentano a,b,c,d dell'eq. del piano ax+by+cz+d=0 su cui è appoggiato il poligono)
+    // che rappresentano a, b, c, d dell'eq. cartesiana del piano ax+by+cz+d=0 su cui è appoggiato il poligono
     vector<array<double, 4>> Plane = {};
 };
 
 
 struct Traces
 {
-    // Variabile di tipo intero senza segno che
-    // salva il numero di tracce
-    unsigned int Number = 0;
+    // Variabile di tipo intero senza segno che salva il numero di tracce
+    unsigned int NumberTraces = 0;
 
-    // Vettore di array di dimensione 2 che contiene gli
-    // identificatori delle fratture che generano la traccia
+    // Vettore di array di dimensione 2 che contiene gli identificatori delle fratture che generano la traccia
     vector<array<unsigned int, 2>> FracturesId = {};
 
-    // Vettore di array di dimensione 2 contenente 2 vettori
-    // tridimensionali (che rappresentano le coordinate
-    // dei 2 vertici della traccia)
+    // Vettore di array di dimensione 2 contenente 2 vettori tridimensionali che rappresentano le coordinate dei 2 vertici della traccia
     vector<array<Vector3d, 2>> Vertices = {};
 
-    // Vettore di array formato da due valori booleani
-    // (che contengono informazione rigurado se
-    // la traccia è passante [false] oppure non-passante [true]
-    // per ciascuna delle due fratture che definiscono la traccia)
-    // il primo bool per il poligono FracturesId[i][0]
-    // e il secondo per FracturesId[i][1]
+    // Vettore di array formato da due valori booleani: contengono informazione riguardante il fatto che la traccia sia passante [false]
+    // oppure non-passante [true] per ciascuna delle due fratture che generano la traccia
+    // Il primo bool per il poligono FracturesId[i][0] e il secondo per FracturesId[i][1]
     vector<array<bool, 2>> Tips = {};
     vector<unsigned int> frattura_traccia = {};
 };
@@ -76,7 +66,6 @@ struct PolygonalMesh
     vector<unsigned int> Cell1DId = {};
     /* Indice vertici, arrat 2 dim di interi
      * dim = 2 x Numero celle (da,per) */
-    /// vector<Vector2i> VerticiCelle1D = {};
     vector<array<unsigned int,2>> Cell1DIdVertices = {};
 
     //Cell2D
@@ -89,7 +78,6 @@ struct PolygonalMesh
     vector<vector<unsigned int>> Cell2DVertices = {};
     /* Indice cella, vettore di vettore di int senza segno di dim 3
      * dim = 1 x Numero lati */
-    /// vector<array<unsigned int, 3>> LatiCelle2D = {};
     vector<vector<unsigned int>> Cell2DEdges = {};
 
 };

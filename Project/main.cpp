@@ -4,7 +4,7 @@
 #include "Polygons.hpp"
 
 using namespace std;
-using namespace FracturesLib;
+using namespace DFNLibrary;
 using namespace PolygonalLibrary;
 
 int main()

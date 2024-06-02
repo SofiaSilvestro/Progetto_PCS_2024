@@ -12,7 +12,7 @@
 using namespace std;
 using namespace Eigen;
 
-namespace FracturesLib{
+namespace DFNLibrary{
 
 bool importazione(const string& filename, Fractures& frattura)
 {
@@ -121,9 +121,6 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
         raggi_candidati2(i) = distanza_al_quadrato(coord_bar_2, point);
     }
 
-    // VectorXd raggi_candidati1 = RaggiCandidati(frattura, Id1);
-    // VectorXd raggi_candidati2 = RaggiCandidati(frattura, Id2);
-
     // Scelgo il massimo tra i raggi trovati
     double raggio1 = *max_element(raggi_candidati1.begin(), raggi_candidati1.end());
     double raggio2 = *max_element(raggi_candidati2.begin(), raggi_candidati2.end());
@@ -133,25 +130,6 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
     else
         return false; // le fratture sicuramente non si intersecano
 }
-
-// VectorXd RaggiCandidati(Fractures& frattura, unsigned int& Id)
-// {
-//     // Definisco vettore che contiene le coordinate del mio baricentro
-//     Vector3d coord_bar = baricentro(frattura, Id);
-
-//     unsigned int n = frattura.Vertices[Id].cols(); // Numero di vertici della frattura
-
-//     // Calcolo i possibili raggi della palla avente centro nel baricentro precedentemente calcolato
-//     VectorXd raggi_candidati = {};
-//     raggi_candidati.resize(n);
-//     for(unsigned int i = 0; i < n; i++)
-//     {
-//         Vector3d point = frattura.Vertices[Id].col(i);
-//         raggi_candidati(i) = distanza_al_quadrato(coord_bar, point);
-//     }
-//     return raggi_candidati;
-// }
-
 
 array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
 {
@@ -179,17 +157,17 @@ array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigne
 
 array<double, 6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
 {
-    // Data l'equazione parametrica è X = at+P trovo direttrice e punto di partenza della retta
-    // t:(x2-x1,y2-y1,z2-z1)
-    // P:(x1,y1,z1)
-    // salviamo i relativi valori in un array
+    // Data l'equazione parametrica X = a t + P trovo direttrice e punto di partenza della retta
+    // t: (x2 - x1, y2 - y1, z2 - z1)
+    // P: (x1, y1, z1)
+    // Salviamo i relativi valori in un array
     array<double, 6> coord_retta_vertici = {};
-    coord_retta_vertici[0] = frattura.Vertices[id](0,j) - frattura.Vertices[id](0,i);
-    coord_retta_vertici[1] = frattura.Vertices[id](1,j) - frattura.Vertices[id](1,i);
-    coord_retta_vertici[2] = frattura.Vertices[id](2,j) - frattura.Vertices[id](2,i);
-    coord_retta_vertici[3] = frattura.Vertices[id](0,i);
-    coord_retta_vertici[4] = frattura.Vertices[id](1,i);
-    coord_retta_vertici[5] = frattura.Vertices[id](2,i);
+    coord_retta_vertici[0] = frattura.Vertices[id](0, j) - frattura.Vertices[id](0, i);
+    coord_retta_vertici[1] = frattura.Vertices[id](1, j) - frattura.Vertices[id](1, i);
+    coord_retta_vertici[2] = frattura.Vertices[id](2, j) - frattura.Vertices[id](2, i);
+    coord_retta_vertici[3] = frattura.Vertices[id](0, i);
+    coord_retta_vertici[4] = frattura.Vertices[id](1, i);
+    coord_retta_vertici[5] = frattura.Vertices[id](2, i);
     return coord_retta_vertici;
 }
 
@@ -197,8 +175,8 @@ Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_f
 {
     // Imposto un sistema lineare per la ricerca dei parametri alpha e beta
     // Imposto i coefficienti della matrice
-    MatrixXd A = MatrixXd::Zero(3,2);
-    // Retta di intersezione tra i lati del poligono della stessa frattura
+    MatrixXd A = MatrixXd::Zero(3, 2);
+    // Retta generata da un lato della frattura
     Vector3d t1 = {};
     t1[0] = r_fratt[0];
     t1[1] = r_fratt[1];
@@ -225,20 +203,20 @@ Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_f
 void caricamento_dati(Traces& traccia, Fractures& frattura)
 {
     double tol = 1e-10;
-    unsigned int NumberTraces = 0;
+    unsigned int NumberTrac = 0;
     array<unsigned int, 2> Id = {};
     array<Vector3d, 2> Vertici = {};
     array<bool, 2> Tipo = {};
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        unsigned int j = i + 1; // valuta la frattura successiva
+        unsigned int j = i + 1; // Valuta la frattura successiva
         while(j < frattura.NumberFractures)
         {
             // Verifichiamo che i poligoni abbiano distanza minore della somma dei due raggi delle palle
             if(valuta_intersezione(frattura, i, j))
             {
                 array<double, 4> coeff = {};
-                // Calcolo la retta passante tra i due piani
+                // Calcolo la retta di intersezione tra i piani dei poligoni i e j
                 array<double, 6> r_piano = Retta_tra_piani(frattura, i, j);
                 // Sulla carta sappiamo che se il prodotto vettoriale delle due normali ai piani è zero allora sono paralleli
                 // Le coordinate del risultato sono memorizzate nei primi tre spazi dell'array r_piano
@@ -249,13 +227,13 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                 else
                 {
                     // Piani non paralleli
-                    // Calcolo la retta tra i lati adiacenti del poligono 1
-                    unsigned int h = 0; // Usato per accedere a tutti i punti della frattura
-                    unsigned int k = 1; // Usato per accedere a tutti i punti della stessa frattura per il punto adiacente
-                    unsigned int cont = 0; // Usato per inserire l'ascissa curvilinea in coeff per trovare poi l'intervallo di intersezione
+                    // Calcolo la retta tra i vertici adiacenti del poligono 1
+                    unsigned int h = 0; // Usato per accedere a tutti i vertici della frattura
+                    unsigned int k = 1; // Usato per accedere a tutti i vertici della stessa frattura a partire dal secondo
+                    unsigned int cont = 0; // Usato per inserire l'ascissa curvilinea in coeff, poi per trovare l'intervallo di intersezione
                     while(h < frattura.Vertices[i].cols())
                     {
-                        // Con l'if gestisco il caso dell'ultimo punto con il primo del poligono
+                        // Con l'if gestisco il caso dell'ultimo vertice con il primo del poligono
                         if(k == frattura.Vertices[i].cols())
                         {
                             k = 0;
@@ -313,7 +291,7 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                         // Gli intervalli si sovrappongono se:
                         if (sx < dx)
                         {
-                            NumberTraces++;
+                            NumberTrac++;
                             Id[0] = i;
                             Id[1] = j;
                             // Rianalizziamo ora il poligono 1
@@ -485,7 +463,7 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
             j++;
         }
     }
-    traccia.Number = NumberTraces;
+    traccia.NumberTraces = NumberTrac;
 }
 
 bool compare(array<double, 2> a, array<double, 2> b)
@@ -504,7 +482,7 @@ void esportazione(Traces& traccia, Fractures& frattura)
     }
     ofs << "# Number of Traces" << endl;
     // Considero il numero di mappature
-    ofs << traccia.Number<< endl;
+    ofs << traccia.NumberTraces<< endl;
     ofs << "# TraceId; FracturesId1; FracturesId2; X1; Y1; Z1; X2; Y2; Z2" << endl;
     for(unsigned int i = 0; i < traccia.FracturesId.size(); i++)
     {
@@ -568,5 +546,3 @@ void esportazione(Traces& traccia, Fractures& frattura)
     }
 }
 }
-
-

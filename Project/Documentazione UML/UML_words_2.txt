@@ -17,7 +17,7 @@ class Fractures << (F, orchid) >> #line:Navy;line.bold;back:aliceblue
 class Traces << (T, violet) >> #line:Navy;line.bold;back:aliceblue
 {
 
-+ Number : unsigned int
++ NumberTraces : unsigned int
 + FracturesId : vector<array<unsigned int, 2>>
 + Vertices : vector<array<Vector3d, 2>> 
 + Tips : vector<array<bool, 2>>

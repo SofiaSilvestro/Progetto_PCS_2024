@@ -12,7 +12,7 @@
 
 using namespace std;
 using namespace Eigen;
-using namespace FracturesLib;
+using namespace DFNLibrary;
 
 namespace PolygonalLibrary{
 double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
