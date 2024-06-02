@@ -12,7 +12,7 @@
 
 using namespace std;
 using namespace Eigen;
-using namespace FracturesLib;
+using namespace DFNLibrary;
 
 namespace PolygonalLibrary{
 bool importazione_2(const string& filename, Fractures& frattura, PolygonalMesh& mesh)
