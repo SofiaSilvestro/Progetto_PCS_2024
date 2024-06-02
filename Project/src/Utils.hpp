@@ -107,8 +107,8 @@ void esportazione(Traces& traccia, Fractures& frattura);
 using namespace FracturesLib;
 
 namespace PolygonalLibrary{
-
-bool importazione_2(const string& filename, Fractures& frattura, PolygonalMesh& mesh);
+double distanza_al_quadrato(Vector3d& v1, Vector3d& v2);
+bool compare(array<double,2> a, array<double,2> b);
 void caricamento_dati_2(Traces& traccia, Fractures& frattura);
 
 }

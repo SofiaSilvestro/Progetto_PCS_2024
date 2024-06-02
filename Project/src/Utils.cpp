@@ -49,29 +49,12 @@ bool importazione(const string& filename, Fractures& frattura)
         // Aggiungo quanto trovato all'interno del vettore di matrici della struttura
         frattura.Vertices.push_back(Tab_coord_vertici);
     }
-
+    // Calcolo i coefficienti del piano per ciascuna frattura, sfruttando le formule del piano passante per tre punti
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         array<double, 4> param_piano = EqPiano(frattura, i);
         frattura.Plane.push_back(param_piano);
     }
-    // Calcolo i coefficienti del piano per ciascuna frattura, sfruttando le formule del piano passante per tre punti
-    // array<double, 4> param_piano = {};
-    // for(unsigned int i = 0; i < frattura.NumberFractures; i++)
-    // {
-    //     Vector3d point1 = frattura.Vertices[i].col(1);
-    //     Vector3d point2 = frattura.Vertices[i].col(2);
-    //     Vector3d point3 = frattura.Vertices[i].col(3);
-    //     // Calcolo indiretto dei coefficienti mediante il determinante uguale a zero e relativo inserimento nel vettore di array
-    //     // (x-x1  y-y1  z-z1
-    //     //  x2-x1 y2-y1 z2-z1
-    //     //  x3-x1 y3-y1 z3-z1)
-    //     param_piano[0] = (point2[1] - point1[1]) * (point3[2] - point1[2]) - (point2[2] - point1[2]) * (point3[1] - point1[1]);
-    //     param_piano[1] = - ((point2[0] - point1[0]) * (point3[2] - point1[2]) - (point3[0] - point1[0]) * (point2[2] - point1[2]));
-    //     param_piano[2] = (point2[0] - point1[0]) * (point3[1] - point1[1]) - (point3[0] - point1[0]) * (point2[1] - point1[1]);
-    //     param_piano[3] = - param_piano[0] * point1[0] - param_piano[1] * point1[1] - param_piano[2] * point1[2];
-    //     frattura.Plane.push_back(param_piano);
-    // }
     file.close();
     return true;
 }
@@ -532,7 +515,7 @@ void esportazione(Traces& traccia, Fractures& frattura)
     ofs << endl;
 
     // Organizzo un vettore che memorizza il numero complessivo di tracce per ogni poligono
-    vector<unsigned int> frattura_traccia = {};
+    //vector<unsigned int> frattura_traccia = {};
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         unsigned int conta_tracce_per_fratt=0;
@@ -544,15 +527,15 @@ void esportazione(Traces& traccia, Fractures& frattura)
                 conta_tracce_per_fratt = conta_tracce_per_fratt + 1;
             }
         }
-        frattura_traccia.push_back(conta_tracce_per_fratt);
+        traccia.frattura_traccia.push_back(conta_tracce_per_fratt);
     }
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        if(frattura_traccia[i] != 0)
+        if(traccia.frattura_traccia[i] != 0)
         {
             ofs << endl;
             ofs << "# FractureId; NumTraces" << endl;
-            ofs << i << "; " << frattura_traccia[i] << endl;
+            ofs << i << "; " << traccia.frattura_traccia[i] << endl;
             ofs << "# TraceId; Tips; Length" << endl;
             int contatore = 0;
             while(contatore < 2)

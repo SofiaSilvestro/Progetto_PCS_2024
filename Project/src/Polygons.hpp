@@ -52,6 +52,7 @@ struct Traces
     // il primo bool per il poligono FracturesId[i][0]
     // e il secondo per FracturesId[i][1]
     vector<array<bool, 2>> Tips = {};
+    vector<unsigned int> frattura_traccia = {};
 };
 }
 
