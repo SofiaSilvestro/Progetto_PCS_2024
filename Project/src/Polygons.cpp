@@ -29,6 +29,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
     unsigned int conta_vertici=0;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
+        //salvo i vertici che già ci sono
         for(unsigned int v=0;v<4;v++){
             Vector3d vertice=frattura.Vertices[i].col(v);
             cout<<"Vertice"<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
@@ -54,15 +55,22 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 }
                 // Condizioni per ordinamento vettore usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare);
-                // Stampiamo dall'inizio alla fine
-                for(unsigned int k = 0; k < conta_per_tipo; k++)
-                {
-                    //ofs << int(ordinamento[k][0]) << "; " << contatore << "; " << ordinamento[k][1] << endl;
+
+
+                if(contatore==0){
+                    for(unsigned int k = 0; k < conta_per_tipo; k++)
+                    {
+                        //cout<<"Vertice "<<":"<<traccia.Vertices[ordinamento[k][0]][0][0]<<" "<<traccia.Vertices[ordinamento[k][0]][0][1]<<" "<<traccia.Vertices[ordinamento[k][0]][0][2]<<endl;
+                        //conta_vertici++;
+                        //cout<<"Vertice "<<":"<<traccia.Vertices[ordinamento[k][0]][1][0]<<" "<<traccia.Vertices[ordinamento[k][0]][1][1]<<" "<<traccia.Vertices[ordinamento[k][0]][1][2]<<endl;
+                        //conta_vertici++;
+                    }
                 }
                 contatore++;
             }
         }
     }
-
 }
+
+
 }
