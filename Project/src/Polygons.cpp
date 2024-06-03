@@ -1,4 +1,4 @@
-// Sviluppiamo la seconda parte del progetto in modo indipendente dalla prima parte
+// Sviluppiamo la seconda parte del progetto
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -15,11 +15,13 @@ using namespace Eigen;
 using namespace DFNLibrary;
 
 namespace PolygonalLibrary{
-double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
+
+double distanza_al_quadrato_2(Vector3d& v1, Vector3d& v2)
 {
     return (v1[0]-v2[0])*(v1[0]-v2[0]) + (v1[1]-v2[1])*(v1[1]-v2[1]) + (v1[2]-v2[2])*(v1[2]-v2[2]);
 }
-bool compare(array<double, 2> a, array<double, 2> b)
+
+bool compare_2(array<double, 2> a, array<double, 2> b)
 {
     return (a[1] > b[1]);
 }
@@ -32,7 +34,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
         //salvo i vertici che già ci sono
         for(unsigned int v=0;v<4;v++){
             Vector3d vertice=frattura.Vertices[i].col(v);
-            cout<<"Vertice"<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
+            cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
             conta_vertici++;
         }
         if(traccia.frattura_traccia[i] != 0)
@@ -50,27 +52,35 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                     {
                         conta_per_tipo++;
                         ord[0] = j;
-                        ord[1] = sqrt(distanza_al_quadrato(traccia.Vertices[j][0], traccia.Vertices[j][1]));
+                        ord[1] = sqrt(distanza_al_quadrato_2(traccia.Vertices[j][0], traccia.Vertices[j][1]));
+                        //ordinamento.push_back(ord);
                     }
                 }
                 // Condizioni per ordinamento vettore usare sort
-                sort(ordinamento.begin(), ordinamento.end(), compare);
-
-
-                if(contatore==0){
+                sort(ordinamento.begin(), ordinamento.end(), compare_2);
+                // Caso di traccia passante
+                /*if(contatore==0){
                     for(unsigned int k = 0; k < conta_per_tipo; k++)
                     {
-                        //cout<<"Vertice "<<":"<<traccia.Vertices[ordinamento[k][0]][0][0]<<" "<<traccia.Vertices[ordinamento[k][0]][0][1]<<" "<<traccia.Vertices[ordinamento[k][0]][0][2]<<endl;
-                        //conta_vertici++;
-                        //cout<<"Vertice "<<":"<<traccia.Vertices[ordinamento[k][0]][1][0]<<" "<<traccia.Vertices[ordinamento[k][0]][1][1]<<" "<<traccia.Vertices[ordinamento[k][0]][1][2]<<endl;
-                        //conta_vertici++;
+                        int id_traccia=0;
+                        id_traccia=int(ordinamento[k][0]);
+                        cout<<id_traccia;
+                        Vector3d punto1=traccia.Vertices[id_traccia][0];
+                        Vector3d punto2=traccia.Vertices[id_traccia][1];
+                        cout<<"Vertice "<<conta_vertici<<":"<<punto1[0]<<" "<<punto1[1]<<" "<<punto1[2]<<endl;
+                        conta_vertici++;
+                        cout<<"Vertice "<<conta_vertici<<":"<<punto2[0]<<" "<<punto2[1]<<" "<<punto2[2]<<endl;
+                        conta_vertici++;
                     }
-                }
+                }*/
+                //Caso di traccia non passante da sviluppare
+
                 contatore++;
             }
         }
     }
 }
+
 
 
 }
