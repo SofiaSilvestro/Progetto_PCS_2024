@@ -42,6 +42,8 @@ struct Traces
     // oppure non-passante [true] per ciascuna delle due fratture che generano la traccia
     // Il primo bool per il poligono FracturesId[i][0] e il secondo per FracturesId[i][1]
     vector<array<bool, 2>> Tips = {};
+
+
     vector<unsigned int> frattura_traccia = {};
 };
 }

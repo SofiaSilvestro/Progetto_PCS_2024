@@ -28,13 +28,15 @@ bool compare_2(array<double, 2> a, array<double, 2> b)
 
 void caricamento_dati_2(Traces& traccia, Fractures& frattura)
 {
-    unsigned int conta_vertici=0;
+    unsigned int conta_vertici = 0;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        //salvo i vertici che già ci sono
-        for(unsigned int v=0;v<4;v++){
-            Vector3d vertice=frattura.Vertices[i].col(v);
-            cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
+        cout << "Poligono " << i << endl;
+        // Salvo i vertici che già ci sono, cioè i vertici dei poligoni presi dal file
+        for(unsigned int v = 0; v < 4; v++)
+        {
+            Vector3d vertice = frattura.Vertices[i].col(v);
+            cout << "Vertice " << conta_vertici << ": " << setprecision(16) << scientific << vertice[0] << " " << vertice[1] << " " << vertice[2] << endl;
             conta_vertici++;
         }
         if(traccia.frattura_traccia[i] != 0)
@@ -47,7 +49,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 array<double, 2> ord = {};
                 for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
                 {
-                    // Se il primo o il secondo id è i
+                    // Se il primo o il secondo id è i, cioè la frattura i è coinvolta nella traccia j
                     if((i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1]) && traccia.Tips[j][0] == contatore)
                     {
                         conta_per_tipo++;
@@ -59,17 +61,18 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 // Condizioni per ordinamento vettore usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare_2);
                 // Caso di traccia passante
-                /*if(contatore==0){
+                /*if(contatore == 0)
+                {
                     for(unsigned int k = 0; k < conta_per_tipo; k++)
                     {
-                        int id_traccia=0;
-                        id_traccia=int(ordinamento[k][0]);
-                        cout<<id_traccia;
-                        Vector3d punto1=traccia.Vertices[id_traccia][0];
-                        Vector3d punto2=traccia.Vertices[id_traccia][1];
-                        cout<<"Vertice "<<conta_vertici<<":"<<punto1[0]<<" "<<punto1[1]<<" "<<punto1[2]<<endl;
+                        int id_traccia = 0;
+                        id_traccia = int(ordinamento[k][0]);
+                        cout << id_traccia;
+                        Vector3d punto1 = traccia.Vertices[id_traccia][0];
+                        Vector3d punto2 = traccia.Vertices[id_traccia][1];
+                        cout << "Vertice " << conta_vertici << ":" << punto1[0] << " " << punto1[1] << " " << punto1[2] << endl;
                         conta_vertici++;
-                        cout<<"Vertice "<<conta_vertici<<":"<<punto2[0]<<" "<<punto2[1]<<" "<<punto2[2]<<endl;
+                        cout << "Vertice " << conta_vertici << ":" << punto2[0] << " " << punto2[1] << " " << punto2[2] << endl;
                         conta_vertici++;
                     }
                 }*/
