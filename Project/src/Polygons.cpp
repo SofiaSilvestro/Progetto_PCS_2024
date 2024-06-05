@@ -20,6 +20,8 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
 {
     unsigned int conta_vertici=0;
     double tol = 1e-10;
+    vector<unsigned int> frattura_traccia = {};
+    frattura_traccia.reserve(traccia.NumberTraces);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         unsigned int conta_tracce_per_fratt=0;
@@ -31,7 +33,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 conta_tracce_per_fratt = conta_tracce_per_fratt + 1;
             }
         }
-        traccia.frattura_traccia.push_back(conta_tracce_per_fratt);
+        frattura_traccia.push_back(conta_tracce_per_fratt);
     }
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
@@ -42,7 +44,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
             cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
             conta_vertici++;
         }
-        if(traccia.frattura_traccia[i] != 0)
+        if(frattura_traccia[i] != 0)
         {
             int contatore = 0;
             while(contatore < 1) //2 per analizzare non passanti
