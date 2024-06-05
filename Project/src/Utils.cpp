@@ -50,6 +50,7 @@ bool importazione(const string& filename, Fractures& frattura)
         frattura.Vertices.push_back(Tab_coord_vertici);
     }
     // Calcolo i coefficienti del piano per ciascuna frattura, sfruttando le formule del piano passante per tre punti
+    frattura.Plane.reserve(frattura.NumberFractures);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         array<double, 4> param_piano = EqPiano(frattura, i);
@@ -207,6 +208,9 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
     array<unsigned int, 2> Id = {};
     array<Vector3d, 2> Vertici = {};
     array<bool, 2> Tipo = {};
+    traccia.Vertices.reserve(10*frattura.NumberFractures);
+    traccia.FracturesId.reserve(10*frattura.NumberFractures);
+    traccia.Tips.reserve(10*frattura.NumberFractures);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         unsigned int j = i + 1; // Valuta la frattura successiva
@@ -493,11 +497,12 @@ void esportazione(Traces& traccia, Fractures& frattura)
     ofs << endl;
 
     // Organizzo un vettore che memorizza il numero complessivo di tracce per ogni poligono
-    //vector<unsigned int> frattura_traccia = {};
+    vector<unsigned int> frattura_traccia = {};
+    frattura_traccia.reserve(traccia.NumberTraces);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         unsigned int conta_tracce_per_fratt = 0;
-        for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
+        for(unsigned int j = 0; j < traccia.NumberTraces; j++)
         {
             // se il primo o il secondo id è i allora incremento di 1 il numero delle tracce
             if(i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1])
@@ -505,23 +510,24 @@ void esportazione(Traces& traccia, Fractures& frattura)
                 conta_tracce_per_fratt = conta_tracce_per_fratt + 1;
             }
         }
-        traccia.frattura_traccia.push_back(conta_tracce_per_fratt);
+        frattura_traccia.push_back(conta_tracce_per_fratt);
     }
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        if(traccia.frattura_traccia[i] != 0)
+        if(frattura_traccia[i] != 0)
         {
             ofs << endl;
             ofs << "# FractureId; NumTraces" << endl;
-            ofs << i << "; " << traccia.frattura_traccia[i] << endl;
+            ofs << i << "; " << frattura_traccia[i] << endl;
             ofs << "# TraceId; Tips; Length" << endl;
             unsigned int contatore = 0;
             while(contatore < 2)
             {
                 unsigned int conta_per_tipo = 0;
                 vector<array<double, 2>> ordinamento = {};
+                ordinamento.reserve(frattura_traccia[i]);
                 array<double, 2> ord = {};
-                for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
+                for(unsigned int j = 0; j < traccia.NumberTraces; j++)
                 {
                     // Se il primo o il secondo id è i
                     if((i == traccia.FracturesId[j][0] || i == traccia.FracturesId[j][1]) && traccia.Tips[j][0] == contatore)

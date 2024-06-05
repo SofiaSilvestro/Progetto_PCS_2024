@@ -50,9 +50,6 @@ array<double, 6> coord_retta_tra2punti(Vector3d& V1, Vector3d& V2);
 using namespace DFNLibrary;
 
 namespace PolygonalLibrary{
-
-double distanza_al_quadrato_2(Vector3d& v1, Vector3d& v2);
-bool compare_2(array<double,2> a, array<double,2> b);
 void caricamento_dati_2(Traces& traccia, Fractures& frattura);
 Vector3d intersezione_rette(array<double, 6>& r1, array<double, 6>& r2);
 array<double, 6> coord_retta_tra2punti(Vector3d& V1, Vector3d& V2);
