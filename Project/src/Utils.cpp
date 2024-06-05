@@ -157,7 +157,7 @@ array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigne
 
 array<double, 6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
 {
-    // Data l'equazione parametrica X = a t + P trovo direttrice e punto di partenza della retta
+    // Data l'equazione parametrica X = a t + P sdella retta
     // t: (x2 - x1, y2 - y1, z2 - z1)
     // P: (x1, y1, z1)
     // Salviamo i relativi valori in un array
@@ -546,9 +546,23 @@ void esportazione(Traces& traccia, Fractures& frattura)
     }
 }
 
-Vector3d intersezione_rette(array<double, 6>& r1, array<double, 6>& r2)
+array<double, 6> coord_retta_tra2punti(Vector3d& V1, Vector3d& V2)
+{
+    array<double, 6> coord_retta= {};
+    coord_retta[0] = V2[0] - V1[0];
+    coord_retta[1] = V2[1] - V1[1];
+    coord_retta[2] = V2[2] - V1[2];
+    coord_retta[3] = V1[0];
+    coord_retta[4] = V1[1];
+    coord_retta[5] = V1[2];
+    return coord_retta;
+}
+
+Vector3d intersezione_rette(Vector3d& V1, Vector3d& V2, Vector3d& V3, Vector3d& V4)
 {
     Vector3d punto_int = {};
+    array<double, 6> r1 = coord_retta_tra2punti(V1, V2);
+    array<double, 6> r2 = coord_retta_tra2punti(V3, V4);
     Vector2d t = alpha_di_intersezione(r1, r2);
     punto_int[0] = r2[0] - r2[3] * t[0];
     punto_int[1] = r2[1] - r2[4] * t[0];
@@ -557,5 +571,4 @@ Vector3d intersezione_rette(array<double, 6>& r1, array<double, 6>& r2)
     return punto_int;
 
 }
-
 }
