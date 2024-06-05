@@ -43,7 +43,6 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
         }
         traccia.frattura_traccia.push_back(conta_tracce_per_fratt);
     }
-    //cout<<traccia.frattura_traccia.size();
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         cout<<"POLIGONO : "<<i<<endl;
@@ -56,7 +55,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
         if(traccia.frattura_traccia[i] != 0)
         {
             int contatore = 0;
-            while(contatore < 2)
+            while(contatore < 1) //2 per analizzare non passanti
             {
                 unsigned int conta_per_tipo = 0;
                 vector<array<double, 2>> ordinamento = {};
@@ -74,22 +73,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 }
                 // Condizioni per ordinamento vettore usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare_2);
-                // Caso di traccia passante
-                if(contatore==0){
-                    for(unsigned int k = 0; k < conta_per_tipo; k++)
-                    {
-                        int id_traccia=0;
-                        id_traccia=int(ordinamento[k][0]);
-                        Vector3d punto1=traccia.Vertices[id_traccia][0];
-                        Vector3d punto2=traccia.Vertices[id_traccia][1];
-                        cout<<"Vertice* "<<conta_vertici<<":"<<punto1[0]<<" "<<punto1[1]<<" "<<punto1[2]<<endl;
-                        conta_vertici++;
-                        cout<<"Vertice* "<<conta_vertici<<":"<<punto2[0]<<" "<<punto2[1]<<" "<<punto2[2]<<endl;
-                        conta_vertici++;
-                    }
-                }
-                //Caso di traccia non passante
-                else{
+                // DA SISTEMARE INDENTAZIONE
                     for(unsigned int k = 0; k < conta_per_tipo; k++)
                     {
                         int id_traccia=0;
@@ -100,6 +84,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                             array<double, 6> r_piano = Retta_tra_piani(frattura, i, id_frattura2);
                             unsigned int h = 0; // Usato per accedere a tutti i vertici della frattura
                             unsigned int k = 1; // Usato per accedere a tutti i vertici della stessa frattura a partire dal secondo
+                            unsigned int contatore_interno=0;
                             while(h < frattura.Vertices[i].cols())
                             {
                                 // Con l'if gestisco il caso dell'ultimo vertice con il primo del poligono
@@ -118,16 +103,24 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                     punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                     punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
                                     cout<<"Vertice* "<<conta_vertici<<":"<<punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
+                                    cout<<"Lato avente vertici* "<<conta_vertici-4-contatore_interno+h<<" e "<<conta_vertici<<endl;
+                                    cout<<"Lato avente vertici* "<<conta_vertici-4-contatore_interno+k<<" e "<<conta_vertici<<endl;
                                     conta_vertici++;
+                                    contatore_interno++;
+                                }
+                                else{
+                                    cout<<"Lato avente vertici "<<conta_vertici-contatore_interno-4+h<<" e "<<conta_vertici-contatore_interno-4+k<<endl;
                                 }
                                 h++;
                                 k++;
                             }
+                            cout<<"Lato avente vertici** "<<conta_vertici-2<<" e "<<conta_vertici-1<<endl;
                         }
                         if(i==id_frattura2){
                             array<double, 6> r_piano = Retta_tra_piani(frattura, i, id_frattura1);
                             unsigned int h = 0; // Usato per accedere a tutti i vertici della frattura
                             unsigned int k = 1; // Usato per accedere a tutti i vertici della stessa frattura a partire dal secondo
+                            unsigned int contatore_interno=0;
                             while(h < frattura.Vertices[i].cols())
                             {
                                 // Con l'if gestisco il caso dell'ultimo vertice con il primo del poligono
@@ -146,14 +139,21 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                     punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                     punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
                                     cout<<"Vertice* "<<conta_vertici<<":"<<punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
+                                    cout<<"Lato avente vertici* "<<conta_vertici-contatore_interno-4+h<<" e "<<conta_vertici<<endl;
+                                    cout<<"Lato avente vertici* "<<conta_vertici-contatore_interno-4+k<<" e "<<conta_vertici<<endl;
                                     conta_vertici++;
+                                    contatore_interno++;
+                                }
+                                else{
+                                    cout<<"Lato avente vertici "<<conta_vertici-contatore_interno-4+h<<" e "<<conta_vertici-contatore_interno-4+k<<endl;
                                 }
                                 h++;
                                 k++;
                             }
+                            cout<<"Lato avente vertici** "<<conta_vertici-2<<" e "<<conta_vertici-1<<endl;
                         }
-                    }
-                }//chiusura if contatore
+
+                }
                 contatore++;
             } //chiusura while
         }
