@@ -548,13 +548,14 @@ void esportazione(Traces& traccia, Fractures& frattura)
 
 array<double, 6> coord_retta_tra2punti(Vector3d& V1, Vector3d& V2)
 {
-    array<double, 6> coord_retta= {};
+    array<double, 6> coord_retta = {};
     coord_retta[0] = V2[0] - V1[0];
     coord_retta[1] = V2[1] - V1[1];
     coord_retta[2] = V2[2] - V1[2];
     coord_retta[3] = V1[0];
     coord_retta[4] = V1[1];
     coord_retta[5] = V1[2];
+
     return coord_retta;
 }
 
@@ -563,12 +564,12 @@ Vector3d intersezione_rette(Vector3d& V1, Vector3d& V2, Vector3d& V3, Vector3d& 
     Vector3d punto_int = {};
     array<double, 6> r1 = coord_retta_tra2punti(V1, V2);
     array<double, 6> r2 = coord_retta_tra2punti(V3, V4);
-    Vector2d t = alpha_di_intersezione(r1, r2);
-    punto_int[0] = r2[0] - r2[3] * t[0];
-    punto_int[1] = r2[1] - r2[4] * t[0];
-    punto_int[2] = r2[2] - r2[5] * t[0];
+    Vector2d axc = alpha_di_intersezione(r1, r2);
+    punto_int[0] = r2[0] * axc[0] + r2[3];
+    punto_int[1] = r2[1] * axc[0] + r2[4];
+    punto_int[2] = r2[2] * axc[0] + r2[5];
 
     return punto_int;
-
 }
+
 }
