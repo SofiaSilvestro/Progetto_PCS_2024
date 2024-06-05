@@ -46,6 +46,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
     //cout<<traccia.frattura_traccia.size();
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
+        cout<<"POLIGONO : "<<i<<endl;
         //salvo i vertici che già ci sono
         for(unsigned int v=0;v<4;v++){
             Vector3d vertice=frattura.Vertices[i].col(v);
@@ -88,12 +89,11 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                     }
                 }
                 //Caso di traccia non passante
-                /*if(contatore==1){
+                else{
                     for(unsigned int k = 0; k < conta_per_tipo; k++)
                     {
                         int id_traccia=0;
                         id_traccia=int(ordinamento[k][0]);
-                        cout<<id_traccia;
                         unsigned int id_frattura1=traccia.FracturesId[id_traccia][0];
                         unsigned int id_frattura2=traccia.FracturesId[id_traccia][1];
                         if(i==id_frattura1){
@@ -120,6 +120,8 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                     cout<<"Vertice* "<<conta_vertici<<":"<<punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
                                     conta_vertici++;
                                 }
+                                h++;
+                                k++;
                             }
                         }
                         if(i==id_frattura2){
@@ -146,10 +148,12 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                     cout<<"Vertice* "<<conta_vertici<<":"<<punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
                                     conta_vertici++;
                                 }
+                                h++;
+                                k++;
                             }
                         }
                     }
-                }//chiusura if contatore*/
+                }//chiusura if contatore
                 contatore++;
             } //chiusura while
         }
