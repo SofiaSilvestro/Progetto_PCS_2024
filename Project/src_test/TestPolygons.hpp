@@ -77,7 +77,7 @@ TEST(TestDistanze, TraQuadrilateri)
     frattura.Vertices.push_back(Vert1);
     frattura.Vertices.push_back(Vert2);
 
-    bool result = valuta_intersezione (frattura, Id1, Id2);
+    bool result = valuta_intersezione(frattura, Id1, Id2);
     bool expected = true;
     ASSERT_EQ(result, expected);
 }
@@ -128,5 +128,5 @@ TEST(TestRetteEPiani, AscissaCurvilinea)
     Vector2d expected = {3, 2};
     ASSERT_EQ(result, expected);
 }
-} // chiusura namespace FracturesLib
+}
 #endif

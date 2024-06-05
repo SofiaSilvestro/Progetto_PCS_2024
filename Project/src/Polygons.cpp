@@ -28,7 +28,7 @@ bool compare_2(array<double, 2> a, array<double, 2> b)
 
 void caricamento_dati_2(Traces& traccia, Fractures& frattura)
 {
-    unsigned int conta_vertici=0;
+    unsigned int conta_vertici = 0;
     double tol = 1e-10;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
@@ -43,12 +43,13 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
         }
         traccia.frattura_traccia.push_back(conta_tracce_per_fratt);
     }
-    //cout<<traccia.frattura_traccia.size();
+    // cout<<traccia.frattura_traccia.size();
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        //salvo i vertici che già ci sono
-        for(unsigned int v=0;v<4;v++){
-            Vector3d vertice=frattura.Vertices[i].col(v);
+        // salvo i vertici che già ci sono
+        for(unsigned int v = 0; v < 4; v++)
+        {
+            Vector3d vertice = frattura.Vertices[i].col(v);
             cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
             conta_vertici++;
         }
@@ -74,20 +75,21 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 // Condizioni per ordinamento vettore usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare_2);
                 // Caso di traccia passante
-                if(contatore==0){
+                if(contatore==0)
+                {
                     for(unsigned int k = 0; k < conta_per_tipo; k++)
                     {
-                        int id_traccia=0;
-                        id_traccia=int(ordinamento[k][0]);
-                        Vector3d punto1=traccia.Vertices[id_traccia][0];
-                        Vector3d punto2=traccia.Vertices[id_traccia][1];
+                        int id_traccia = 0;
+                        id_traccia = int(ordinamento[k][0]);
+                        Vector3d punto1 = traccia.Vertices[id_traccia][0];
+                        Vector3d punto2 = traccia.Vertices[id_traccia][1];
                         cout<<"Vertice* "<<conta_vertici<<":"<<punto1[0]<<" "<<punto1[1]<<" "<<punto1[2]<<endl;
                         conta_vertici++;
                         cout<<"Vertice* "<<conta_vertici<<":"<<punto2[0]<<" "<<punto2[1]<<" "<<punto2[2]<<endl;
                         conta_vertici++;
                     }
                 }
-                //Caso di traccia non passante
+                // Caso di traccia non passante
                 /*if(contatore==1){
                     for(unsigned int k = 0; k < conta_per_tipo; k++)
                     {

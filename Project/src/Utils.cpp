@@ -545,4 +545,17 @@ void esportazione(Traces& traccia, Fractures& frattura)
         }
     }
 }
+
+Vector3d intersezione_rette(array<double, 6>& r1, array<double, 6>& r2)
+{
+    Vector3d punto_int = {};
+    Vector2d t = alpha_di_intersezione(r1, r2);
+    punto_int[0] = r2[0] - r2[3] * t[0];
+    punto_int[1] = r2[1] - r2[4] * t[0];
+    punto_int[2] = r2[2] - r2[5] * t[0];
+
+    return punto_int;
+
+}
+
 }
