@@ -105,8 +105,6 @@ void esportazione(Traces& traccia, Fractures& frattura);
 using namespace DFNLibrary;
 
 namespace PolygonalLibrary{
-double distanza_al_quadrato_2(Vector3d& v1, Vector3d& v2);
-bool compare_2(array<double,2> a, array<double,2> b);
 void caricamento_dati_2(Traces& traccia, Fractures& frattura);
 
 }
