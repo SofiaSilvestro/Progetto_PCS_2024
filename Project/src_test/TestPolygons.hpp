@@ -77,7 +77,7 @@ TEST(TestDistanze, TraQuadrilateri)
     frattura.Vertices.push_back(Vert1);
     frattura.Vertices.push_back(Vert2);
 
-    bool result = valuta_intersezione (frattura, Id1, Id2);
+    bool result = valuta_intersezione(frattura, Id1, Id2);
     bool expected = true;
     ASSERT_EQ(result, expected);
 }
@@ -128,5 +128,30 @@ TEST(TestRetteEPiani, AscissaCurvilinea)
     Vector2d expected = {3, 2};
     ASSERT_EQ(result, expected);
 }
-} // chiusura namespace FracturesLib
+
+/** TEST SULLA FUNZIONE CHE CALCOLA LA RETTA PASSANTE PER DUE PUNTI **/
+TEST(TestRetteEPiani, RettaPerDuePunti)
+{
+    Vector3d vert1 = {1, 2, 3};
+    Vector3d vert2 = {4, 5, 6};
+
+    array<double, 6> result = coord_retta_tra2punti(vert1, vert2);
+    array<double, 6> expected = {3, 3, 3, 1, 2, 3};
+    ASSERT_EQ(result, expected);
+}
+
+/** TEST CHE CALCOLA L'INTERSEZIONE TRA DUE RETTE NELLO SPAZIO **/
+TEST(TestRetteEPiani, IntersezioneRette)
+{
+    Vector3d vertice1 = {1, 2, 3};
+    Vector3d vertice2 = {4, 5, 6};
+    Vector3d vertice3 = {1, 5, 3};
+    Vector3d vertice4 = {4, 2, 6};
+
+    Vector3d result = intersezione_rette(vertice1, vertice2, vertice3, vertice4);
+    Vector3d expected = {2.5, 3.5, 4.5};
+    ASSERT_EQ(result, expected);
+}
+
+}
 #endif

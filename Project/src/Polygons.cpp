@@ -18,7 +18,7 @@ namespace PolygonalLibrary{
 
 void caricamento_dati_2(Traces& traccia, Fractures& frattura)
 {
-    unsigned int conta_vertici=0;
+    unsigned int conta_vertici = 0;
     double tol = 1e-10;
     vector<unsigned int> frattura_traccia = {};
     frattura_traccia.reserve(traccia.NumberTraces);
