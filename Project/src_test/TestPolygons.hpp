@@ -78,8 +78,7 @@ TEST(TestDistanze, TraQuadrilateri)
     frattura.Vertices.push_back(Vert2);
 
     bool result = valuta_intersezione(frattura, Id1, Id2);
-    bool expected = true;
-    ASSERT_EQ(result, expected);
+    ASSERT_TRUE(result);
 }
 
 /** TEST SULLA FUNZIONE CHE VALUTA L'INTERSEZIONE TRA DUE PIANI GENERATI RISPETTIVAMENTE DA DUE POLIGONI DISTINTI **/
