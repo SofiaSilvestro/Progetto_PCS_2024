@@ -222,11 +222,10 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                 array<double, 4> coeff = {};
                 // Calcolo la retta di intersezione tra i piani dei poligoni i e j
                 array<double, 6> r_piano = Retta_tra_piani(frattura, i, j);
-                // Sulla carta sappiamo che se il prodotto vettoriale delle due normali ai piani è zero allora sono paralleli
-                // Le coordinate del risultato sono memorizzate nei primi tre spazi dell'array r_piano
+                // Sulla carta sappiamo che se il prodotto vettoriale delle due normali ai piani è zero allora sono paralleli. Le coordinate del risultato sono memorizzate nei primi tre spazi dell'array r_piano
                 if(abs(r_piano[0]) < tol && abs(r_piano[1]) < tol && abs(r_piano[2]) < tol)
                 {
-                    // Piani paralleli
+                    cout << "I piani sono paralleli, nessuna intersezione possibile" << endl;
                 }
                 else
                 {
@@ -462,7 +461,11 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                             traccia.Tips.push_back(Tipo);
                         }
                     }
-                } // chiusura if
+                    else
+                    {
+                        cout << "Numero insufficiente di rette che generano intersezione" << endl;
+                    }
+                } // chiusura else piani non paralleli
             }
             j++;
         }
