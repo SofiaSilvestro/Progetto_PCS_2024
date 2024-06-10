@@ -21,12 +21,12 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
     unsigned int conta_vertici = 0;
     double tol = 1e-10;
     vector<unsigned int> frattura_traccia = {};
-    array<unsigned int , 2> aggiorna_1={};
-    array<unsigned int , 2> aggiorna_2={};
+    array<unsigned int , 2> aggiorna_1 = {};
+    array<unsigned int , 2> aggiorna_2 = {};
     frattura_traccia.reserve(traccia.NumberTraces);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        unsigned int conta_tracce_per_fratt=0;
+        unsigned int conta_tracce_per_fratt = 0;
         for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
         {
             // se il primo o il secondo id è i allora incremento di 1 il numero delle tracce
@@ -39,7 +39,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
     }
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        cout<<"POLIGONO : "<<i<<endl;
+        cout<<"POLIGONO: "<<i<<endl;
         if(frattura_traccia[i] != 0)
         {
             //Matrix<double, 3, Dynamic> CopiaMatrice = {};
@@ -48,7 +48,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
             while(contatore < 2)
             {
                 unsigned int conta_per_tipo = 0;
-                unsigned int giro=0;
+                unsigned int giro = 0;
                 vector<array<double, 2>> ordinamento = {};
                 array<double, 2> ord = {};
                 for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
@@ -67,15 +67,16 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 // i sottopoligoni
                 for(unsigned int k = 0; k < conta_per_tipo; k++)
                 {
-                    array<Vector3d,2> punti_nuovi;
-                    array<unsigned int,2> posizione;
-                    array<unsigned int,2> posizione_bis;
-                    unsigned int posto=0;
-                    int id_traccia=0;
-                    id_traccia=int(ordinamento[k][0]);
-                    unsigned int id_frattura1=traccia.FracturesId[id_traccia][0];
-                    unsigned int id_frattura2=traccia.FracturesId[id_traccia][1];
-                    if(i==id_frattura1){
+                    array<Vector3d, 2> punti_nuovi = {};
+                    array<unsigned int, 2> posizione = {};
+                    array<unsigned int, 2> posizione_bis = {};
+                    unsigned int posto = 0;
+                    int id_traccia = 0;
+                    id_traccia = int(ordinamento[k][0]);
+                    unsigned int id_frattura1 = traccia.FracturesId[id_traccia][0];
+                    unsigned int id_frattura2 = traccia.FracturesId[id_traccia][1];
+                    if(i == id_frattura1)
+                    {
                         array<double, 6> r_piano = Retta_tra_piani(frattura, i, id_frattura2);
                         unsigned int h = 0; // Usato per accedere a tutti i vertici della frattura
                         unsigned int k = 1; // Usato per accedere a tutti i vertici della stessa frattura a partire dal secondo
@@ -97,17 +98,20 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                 punto_intersezione[0] = r_tra_punti[0] * x[0] + r_tra_punti[3];
                                 punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                 punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
-                                punti_nuovi[posto]=punto_intersezione;
-                                if(giro==0){
-                                    posizione[0]=k;
-                                    posizione[1]=k+1;
-                                    posizione_bis[0]=k-1;
-                                    posizione_bis[1]=k+2;
-                                    if(posizione_bis[1]==4){
-                                       posizione_bis[1]=0;
+                                punti_nuovi[posto] = punto_intersezione;
+                                if(giro == 0)
+                                {
+                                    posizione[0] = k;
+                                    posizione[1] = k + 1;
+                                    posizione_bis[0] = k - 1;
+                                    posizione_bis[1] = k + 2;
+                                    if(posizione_bis[1] == 4)
+                                    {
+                                       posizione_bis[1] = 0;
                                     }
-                                    if(posizione[1]==4){
-                                        posizione_bis[1]=0;
+                                    if(posizione[1] == 4)
+                                    {
+                                        posizione_bis[1] = 0;
                                     }
                                     giro++;
                                 }
@@ -120,55 +124,58 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                         }// chiusura while
 
                         cout<<"SOTTOPOLIGONO 1"<<endl;
-                        for(unsigned int v=0;v<4;v++)
+                        for(unsigned int v = 0; v < 4; v++)
                         {
-                            if(v!=posizione[0] && v!=posizione[1])
+                            if(v != posizione[0] && v != posizione[1])
                             {
-                                Vector3d vertice=frattura.Vertices[i].col(v);
+                                Vector3d vertice = frattura.Vertices[i].col(v);
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
                             }
-                            if(v==posizione[0])
+                            if(v == posizione[0])
                             {
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[0][0]<<" "<<punti_nuovi[0][1]<<" "<<punti_nuovi[0][2]<<endl;
-                                aggiorna_1[0]=v;
+                                aggiorna_1[0] = v;
                             }
-                            if(v==posizione[1])
+                            if(v == posizione[1])
                             {
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[1][0]<<" "<<punti_nuovi[1][1]<<" "<<punti_nuovi[1][2]<<endl;
-                                aggiorna_1[1]=v;
+                                aggiorna_1[1] = v;
                             }
                             conta_vertici++;
                         }
                         cout<<"SOTTOPOLIGONO 2"<<endl;
-                        for(unsigned int v=0;v<4;v++){
-                            if(v!=posizione_bis[0] && v!=posizione_bis[1]){
-                                Vector3d vertice=frattura.Vertices[i].col(v);
-                                cout<<"Vertice"<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
+                        for(unsigned int v = 0; v < 4; v++)
+                        {
+                            if(v != posizione_bis[0] && v != posizione_bis[1])
+                            {
+                                Vector3d vertice = frattura.Vertices[i].col(v);
+                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
                             }
-                            if(v==posizione_bis[0])
+                            if(v == posizione_bis[0])
                             {
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[0][0]<<" "<<punti_nuovi[0][1]<<" "<<punti_nuovi[0][2]<<endl;
-                                aggiorna_2[0]=v;
+                                aggiorna_2[0] = v;
                             }
-                            if(v==posizione_bis[1])
+                            if(v == posizione_bis[1])
                             {
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[1][0]<<" "<<punti_nuovi[1][1]<<" "<<punti_nuovi[1][2]<<endl;
-                                aggiorna_2[1]=v;
+                                aggiorna_2[1] = v;
                             }
                             conta_vertici++;
                         }
                         //Quale poligono devo aggiornare per il taglio??
-                        frattura.Vertices[i].col(aggiorna_1[0])=punti_nuovi[0];
-                        frattura.Vertices[i].col(aggiorna_1[1])=punti_nuovi[1];
+                        frattura.Vertices[i].col(aggiorna_1[0]) = punti_nuovi[0];
+                        frattura.Vertices[i].col(aggiorna_1[1]) = punti_nuovi[1];
 
                     }
 
 
-                    if(i==id_frattura2){
+                    if(i == id_frattura2)
+                    {
                         array<double, 6> r_piano = Retta_tra_piani(frattura, i, id_frattura1);
                         unsigned int h = 0; // Usato per accedere a tutti i vertici della frattura
                         unsigned int k = 1; // Usato per accedere a tutti i vertici della stessa frattura a partire dal secondo
-                        unsigned int contatore_interno=0;
+                        unsigned int contatore_interno = 0;
                         while(h < frattura.Vertices[i].cols())
                         {
                             // Con l'if gestisco il caso dell'ultimo vertice con il primo del poligono
@@ -187,16 +194,19 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                 punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                 punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
                                 punti_nuovi[posto]=punto_intersezione;
-                                if(giro==0){
-                                    posizione[0]=k;
-                                    posizione[1]=k+1;
-                                    posizione_bis[0]=k-1;
-                                    posizione_bis[1]=k+2;
-                                    if(posizione_bis[1]==4){
-                                        posizione_bis[1]=0;
+                                if(giro == 0)
+                                {
+                                    posizione[0] = k;
+                                    posizione[1] = k + 1;
+                                    posizione_bis[0] = k - 1;
+                                    posizione_bis[1] = k + 2;
+                                    if(posizione_bis[1] == 4)
+                                    {
+                                        posizione_bis[1] = 0;
                                     }
-                                    if(posizione[1]==4){
-                                        posizione_bis[1]=0;
+                                    if(posizione[1] == 4)
+                                    {
+                                        posizione_bis[1] = 0;
                                     }
                                     giro++;
                                 }
@@ -208,44 +218,46 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                             k++;
                         }
                         cout<<"SOTTOPOLIGONO 1"<<endl;
-                        for(unsigned int v=0;v<4;v++)
+                        for(unsigned int v = 0; v < 4; v++)
                         {
-                            if(v!=posizione[0] && v!=posizione[1])
+                            if(v != posizione[0] && v != posizione[1])
                             {
-                                Vector3d vertice=frattura.Vertices[i].col(v);
+                                Vector3d vertice = frattura.Vertices[i].col(v);
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
                             }
-                            if(v==posizione[0])
+                            if(v == posizione[0])
                             {
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[0][0]<<" "<<punti_nuovi[0][1]<<" "<<punti_nuovi[0][2]<<endl;
-                                aggiorna_1[0]=v;
+                                aggiorna_1[0] = v;
                             }
-                            if(v==posizione[1])
+                            if(v == posizione[1])
                             {
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[1][0]<<" "<<punti_nuovi[1][1]<<" "<<punti_nuovi[1][2]<<endl;
-                                aggiorna_1[1]=v;
+                                aggiorna_1[1] = v;
                             }
                             conta_vertici++;
                         }
                         cout<<"SOTTOPOLIGONO 2"<<endl;
-                        for(unsigned int v=0;v<4;v++){
-                            if(v!=posizione_bis[0] && v!=posizione_bis[1]){
-                                Vector3d vertice=frattura.Vertices[i].col(v);
+                        for(unsigned int v = 0; v < 4; v++)
+                        {
+                            if(v != posizione_bis[0] && v != posizione_bis[1])
+                            {
+                                Vector3d vertice = frattura.Vertices[i].col(v);
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
                             }
-                            if(v==posizione_bis[0])
+                            if(v == posizione_bis[0])
                             {
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[0][0]<<" "<<punti_nuovi[0][1]<<" "<<punti_nuovi[0][2]<<endl;
                             }
-                            if(v==posizione_bis[1])
+                            if(v == posizione_bis[1])
                             {
                                 cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[1][0]<<" "<<punti_nuovi[1][1]<<" "<<punti_nuovi[1][2]<<endl;
                             }
                             conta_vertici++;
                         }
                         //Quale poligono devo aggiornare per il taglio??
-                        frattura.Vertices[i].col(aggiorna_1[0])=punti_nuovi[0];
-                        frattura.Vertices[i].col(aggiorna_1[1])=punti_nuovi[1];
+                        frattura.Vertices[i].col(aggiorna_1[0]) = punti_nuovi[0];
+                        frattura.Vertices[i].col(aggiorna_1[1]) = punti_nuovi[1];
                     }
                 }
                 contatore++;
@@ -254,7 +266,4 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
         cout<<endl;
     }
 }
-
-
-
 }
