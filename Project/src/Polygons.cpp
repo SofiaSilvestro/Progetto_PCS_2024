@@ -21,8 +21,8 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
     unsigned int conta_vertici = 0;
     double tol = 1e-10;
     vector<unsigned int> frattura_traccia = {};
-    array<unsigned int , 2> aggiorna_1 = {};
-    array<unsigned int , 2> aggiorna_2 = {};
+    array<unsigned int, 2> aggiorna_1 = {};
+    array<unsigned int, 2> aggiorna_2 = {};
     frattura_traccia.reserve(traccia.NumberTraces);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
@@ -39,7 +39,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
     }
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
-        cout<<"POLIGONO: "<<i<<endl;
+        cout<<"POLIGONO: "<< i <<endl;
         if(frattura_traccia[i] != 0)
         {
             //Matrix<double, 3, Dynamic> CopiaMatrice = {};
@@ -64,7 +64,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 }
                 // Condizioni per ordinamento vettore usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare);
-                // i sottopoligoni
+                // I sottopoligoni
                 for(unsigned int k = 0; k < conta_per_tipo; k++)
                 {
                     array<Vector3d, 2> punti_nuovi = {};
@@ -80,7 +80,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                         array<double, 6> r_piano = Retta_tra_piani(frattura, i, id_frattura2);
                         unsigned int h = 0; // Usato per accedere a tutti i vertici della frattura
                         unsigned int k = 1; // Usato per accedere a tutti i vertici della stessa frattura a partire dal secondo
-                        unsigned int contatore_interno=0;
+                        unsigned int contatore_interno = 0;
                         while(h < frattura.Vertices[i].cols())
                         {
                             // Con l'if gestisco il caso dell'ultimo vertice con il primo del poligono
@@ -121,7 +121,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                             }
                             h++;
                             k++;
-                        }// chiusura while
+                        } // Chiusura while
 
                         cout<<"SOTTOPOLIGONO 1"<<endl;
                         for(unsigned int v = 0; v < 4; v++)
@@ -193,7 +193,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                 punto_intersezione[0] = r_tra_punti[0] * x[0] + r_tra_punti[3];
                                 punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                 punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
-                                punti_nuovi[posto]=punto_intersezione;
+                                punti_nuovi[posto] = punto_intersezione;
                                 if(giro == 0)
                                 {
                                     posizione[0] = k;
@@ -261,7 +261,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                     }
                 }
                 contatore++;
-            } //chiusura while
+            } // Chiusura while
         }
         cout<<endl;
     }

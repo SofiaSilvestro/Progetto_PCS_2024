@@ -77,9 +77,9 @@ array<double, 4> EqPiano(Fractures& frattura, unsigned int& Id)
     return param_piano;
 }
 
-double distanza_al_quadrato(Vector3d& v1, Vector3d& v2)
+double distanza_al_quadrato(Vector3d& vec1, Vector3d& vec2)
 {
-    return (v1[0]-v2[0])*(v1[0]-v2[0]) + (v1[1]-v2[1])*(v1[1]-v2[1]) + (v1[2]-v2[2])*(v1[2]-v2[2]);
+    return (vec1[0]-vec2[0])*(vec1[0]-vec2[0]) + (vec1[1]-vec2[1])*(vec1[1]-vec2[1]) + (vec1[2]-vec2[2])*(vec1[2]-vec2[2]);
 }
 
 Vector3d baricentro (Fractures& frattura, unsigned int& Id)
@@ -97,28 +97,28 @@ Vector3d baricentro (Fractures& frattura, unsigned int& Id)
     return coord_bar;
 }
 
-bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& Id2)
+bool valuta_intersezione (Fractures& frattura, unsigned int& Idfrac1, unsigned int& Idfrac2)
 {
     // Definisco due vettori che contengono le coordinate del mio baricentro
-    Vector3d coord_bar_1 = baricentro(frattura, Id1);
-    Vector3d coord_bar_2 = baricentro(frattura, Id2);
+    Vector3d coord_bar_1 = baricentro(frattura, Idfrac1);
+    Vector3d coord_bar_2 = baricentro(frattura, Idfrac2);
 
-    unsigned int n1 = frattura.Vertices[Id1].cols(); // Numero di vertici della prima frattura
-    unsigned int n2 = frattura.Vertices[Id2].cols(); // Numero di vertici della seconda frattura
+    unsigned int n1 = frattura.Vertices[Idfrac1].cols(); // Numero di vertici della prima frattura
+    unsigned int n2 = frattura.Vertices[Idfrac2].cols(); // Numero di vertici della seconda frattura
 
     // Calcolo i possibili raggi delle due palle avente centro nei baricentri precedentemente calcolati
     VectorXd raggi_candidati1 = {};
     raggi_candidati1.resize(n1);
     for(unsigned int i = 0; i < n1; i++)
     {
-        Vector3d point = frattura.Vertices[Id1].col(i);
+        Vector3d point = frattura.Vertices[Idfrac1].col(i);
         raggi_candidati1(i) = distanza_al_quadrato(coord_bar_1, point);
     }
     VectorXd raggi_candidati2 = {};
     raggi_candidati2.resize(n2);
     for(unsigned int i = 0; i < n2; i++)
     {
-        Vector3d point = frattura.Vertices[Id2].col(i);
+        Vector3d point = frattura.Vertices[Idfrac2].col(i);
         raggi_candidati2(i) = distanza_al_quadrato(coord_bar_2, point);
     }
 
@@ -132,7 +132,7 @@ bool valuta_intersezione (Fractures& frattura, unsigned int& Id1, unsigned int& 
         return false; // le fratture sicuramente non si intersecano
 }
 
-array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigned int& id2)
+array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& idfrac1, unsigned int& idfrac2)
 {
     // Data l'equazione della retta:
     // x = coord_retta[0] * t + coord_retta[3]
@@ -140,15 +140,15 @@ array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigne
     // z = coord_retta[2] * t + coord_retta[5]
     array<double, 6> coord_retta = {};
     // Calcolo la direzione della retta intersecante i piani mediante prodotto vettoriale
-    coord_retta[0] = frattura.Plane[id1][1] * frattura.Plane[id2][2] - frattura.Plane[id1][2] * frattura.Plane[id2][1];
-    coord_retta[1] = frattura.Plane[id1][2] * frattura.Plane[id2][0] - frattura.Plane[id1][0] * frattura.Plane[id2][2];
-    coord_retta[2] = frattura.Plane[id1][0] * frattura.Plane[id2][1] - frattura.Plane[id1][1] * frattura.Plane[id2][0];
+    coord_retta[0] = frattura.Plane[idfrac1][1] * frattura.Plane[idfrac2][2] - frattura.Plane[idfrac1][2] * frattura.Plane[idfrac2][1];
+    coord_retta[1] = frattura.Plane[idfrac1][2] * frattura.Plane[idfrac2][0] - frattura.Plane[idfrac1][0] * frattura.Plane[idfrac2][2];
+    coord_retta[2] = frattura.Plane[idfrac1][0] * frattura.Plane[idfrac2][1] - frattura.Plane[idfrac1][1] * frattura.Plane[idfrac2][0];
     // Calcolo un punto che appartiene alla retta intersecante
     Matrix<double, 3, 3> A = {};
-    A << frattura.Plane[id1][0], frattura.Plane[id1][1], frattura.Plane[id1][2],
-         frattura.Plane[id2][0], frattura.Plane[id2][1], frattura.Plane[id2][2],
+    A << frattura.Plane[idfrac1][0], frattura.Plane[idfrac1][1], frattura.Plane[idfrac1][2],
+         frattura.Plane[idfrac2][0], frattura.Plane[idfrac2][1], frattura.Plane[idfrac2][2],
          coord_retta[0], coord_retta[1], coord_retta[2];
-    Vector3d b = {- frattura.Plane[id1][3], - frattura.Plane[id2][3], 0};
+    Vector3d b = {- frattura.Plane[idfrac1][3], - frattura.Plane[idfrac2][3], 0};
     Vector3d x = A.lu().solve(b);
     coord_retta[3] = x[0];
     coord_retta[4] = x[1];
@@ -156,23 +156,23 @@ array<double, 6> Retta_tra_piani(Fractures& frattura, unsigned int& id1, unsigne
     return coord_retta;
 }
 
-array<double, 6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& i,unsigned int& j)
+array<double, 6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& vert1,unsigned int& vert2)
 {
     // Data l'equazione parametrica X = a t + P sdella retta
     // t: (x2 - x1, y2 - y1, z2 - z1)
     // P: (x1, y1, z1)
     // Salviamo i relativi valori in un array
     array<double, 6> coord_retta_vertici = {};
-    coord_retta_vertici[0] = frattura.Vertices[id](0, j) - frattura.Vertices[id](0, i);
-    coord_retta_vertici[1] = frattura.Vertices[id](1, j) - frattura.Vertices[id](1, i);
-    coord_retta_vertici[2] = frattura.Vertices[id](2, j) - frattura.Vertices[id](2, i);
-    coord_retta_vertici[3] = frattura.Vertices[id](0, i);
-    coord_retta_vertici[4] = frattura.Vertices[id](1, i);
-    coord_retta_vertici[5] = frattura.Vertices[id](2, i);
+    coord_retta_vertici[0] = frattura.Vertices[id](0, vert2) - frattura.Vertices[id](0, vert1);
+    coord_retta_vertici[1] = frattura.Vertices[id](1, vert2) - frattura.Vertices[id](1, vert1);
+    coord_retta_vertici[2] = frattura.Vertices[id](2, vert2) - frattura.Vertices[id](2, vert1);
+    coord_retta_vertici[3] = frattura.Vertices[id](0, vert1);
+    coord_retta_vertici[4] = frattura.Vertices[id](1, vert1);
+    coord_retta_vertici[5] = frattura.Vertices[id](2, vert1);
     return coord_retta_vertici;
 }
 
-Vector2d alpha_di_intersezione(array<double, 6> r_intersez, array<double, 6> r_fratt)
+Vector2d alpha_di_intersezione(array<double, 6>& r_intersez, array<double, 6>& r_fratt)
 {
     // Imposto un sistema lineare per la ricerca dei parametri alpha e beta
     // Imposto i coefficienti della matrice
@@ -473,9 +473,9 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
     traccia.NumberTraces = NumberTrac;
 }
 
-bool compare(array<double, 2> a, array<double, 2> b)
+bool compare(array<double, 2> arr1, array<double, 2> arr2)
 {
-    return (a[1] > b[1]);
+    return (arr1[1] > arr2[1]);
 }
 
 void esportazione(Traces& traccia, Fractures& frattura)
@@ -553,32 +553,6 @@ void esportazione(Traces& traccia, Fractures& frattura)
             ofs << endl;
         }
     }
-}
-
-array<double, 6> coord_retta_tra2punti(Vector3d& V1, Vector3d& V2)
-{
-    array<double, 6> coord_retta = {};
-    coord_retta[0] = V2[0] - V1[0];
-    coord_retta[1] = V2[1] - V1[1];
-    coord_retta[2] = V2[2] - V1[2];
-    coord_retta[3] = V1[0];
-    coord_retta[4] = V1[1];
-    coord_retta[5] = V1[2];
-
-    return coord_retta;
-}
-
-Vector3d intersezione_rette(Vector3d& V1, Vector3d& V2, Vector3d& V3, Vector3d& V4)
-{
-    Vector3d punto_int = {};
-    array<double, 6> r1 = coord_retta_tra2punti(V1, V2);
-    array<double, 6> r2 = coord_retta_tra2punti(V3, V4);
-    Vector2d axc = alpha_di_intersezione(r1, r2);
-    punto_int[0] = r2[0] * axc[0] + r2[3];
-    punto_int[1] = r2[1] * axc[0] + r2[4];
-    punto_int[2] = r2[2] * axc[0] + r2[5];
-
-    return punto_int;
 }
 
 }
