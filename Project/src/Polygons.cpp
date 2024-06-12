@@ -16,17 +16,18 @@ using namespace DFNLibrary;
 
 namespace PolygonalLibrary{
 
-void caricamento_dati_2(Traces& traccia, Fractures& frattura)
+void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mesh)
 {
-    unsigned int conta_vertici = 0;
     double tol = 1e-10;
     vector<unsigned int> frattura_traccia = {};
     array<unsigned int , 2> aggiorna_1 = {};
     array<unsigned int , 2> aggiorna_2 = {};
+    unsigned int conta=0;
     frattura_traccia.reserve(traccia.NumberTraces);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         unsigned int conta_tracce_per_fratt = 0;
+        unsigned int conta_tracce = 0;
         for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
         {
             // se il primo o il secondo id è i allora incremento di 1 il numero delle tracce
@@ -37,13 +38,23 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
         }
         frattura_traccia.push_back(conta_tracce_per_fratt);
     }
+    unsigned int conta_0d=0;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
+
         cout<<"POLIGONO: "<<i<<endl;
         if(frattura_traccia[i] != 0)
         {
-            //Matrix<double, 3, Dynamic> CopiaMatrice = {};
-            //CopiaMatrice=frattura.Vertices[i];
+            for(unsigned int v = 0; v < 4; v++)
+            {
+            Vector3d vertice = frattura.Vertices[i].col(v);
+                cout<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
+                cout<<conta_0d<<endl;
+                mesh.Cell0DId.push_back(conta_0d);
+                mesh.Cell0DCoordinates.push_back(vertice);
+                conta_0d++;
+            }
+            array<MatrixXd,2> sottopoligoni;
             int contatore = 0;
             while(contatore < 2)
             {
@@ -65,6 +76,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                 // Condizioni per ordinamento vettore usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare);
                 // i sottopoligoni
+
                 for(unsigned int k = 0; k < conta_per_tipo; k++)
                 {
                     array<Vector3d, 2> punti_nuovi = {};
@@ -80,7 +92,6 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                         array<double, 6> r_piano = Retta_tra_piani(frattura, i, id_frattura2);
                         unsigned int h = 0; // Usato per accedere a tutti i vertici della frattura
                         unsigned int k = 1; // Usato per accedere a tutti i vertici della stessa frattura a partire dal secondo
-                        unsigned int contatore_interno=0;
                         while(h < frattura.Vertices[i].cols())
                         {
                             // Con l'if gestisco il caso dell'ultimo vertice con il primo del poligono
@@ -94,11 +105,15 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                             if (abs(parallelo) > tol)
                             {
                                 Vector2d x = alpha_di_intersezione(r_piano, r_tra_punti);
+                                cout<<x[1];
                                 Vector3d punto_intersezione = {};
                                 punto_intersezione[0] = r_tra_punti[0] * x[0] + r_tra_punti[3];
                                 punto_intersezione[1] = r_tra_punti[1] * x[0] + r_tra_punti[4];
                                 punto_intersezione[2] = r_tra_punti[2] * x[0] + r_tra_punti[5];
                                 punti_nuovi[posto] = punto_intersezione;
+                                cout<<"**"<<punto_intersezione[0]<<" "<<punto_intersezione[1]<<" "<<punto_intersezione[2]<<endl;
+                                cout<<conta_0d<<endl;
+                                conta_0d++;
                                 if(giro == 0)
                                 {
                                     posizione[0] = k;
@@ -107,7 +122,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                     posizione_bis[1] = k + 2;
                                     if(posizione_bis[1] == 4)
                                     {
-                                       posizione_bis[1] = 0;
+                                        posizione_bis[1] = 0;
                                     }
                                     if(posizione[1] == 4)
                                     {
@@ -116,66 +131,66 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                     giro++;
                                 }
                                 posto++;
-                                conta_vertici++;
-                                contatore_interno++;
                             }
                             h++;
                             k++;
-                        }// chiusura while
-
-                        cout<<"SOTTOPOLIGONO 1"<<endl;
+                        }
+                        //SOTTOPOLIGONO 1
                         for(unsigned int v = 0; v < 4; v++)
                         {
                             if(v != posizione[0] && v != posizione[1])
                             {
                                 Vector3d vertice = frattura.Vertices[i].col(v);
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
                             }
                             if(v == posizione[0])
                             {
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[0][0]<<" "<<punti_nuovi[0][1]<<" "<<punti_nuovi[0][2]<<endl;
                                 aggiorna_1[0] = v;
                             }
                             if(v == posizione[1])
                             {
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[1][0]<<" "<<punti_nuovi[1][1]<<" "<<punti_nuovi[1][2]<<endl;
                                 aggiorna_1[1] = v;
                             }
-                            conta_vertici++;
                         }
-                        cout<<"SOTTOPOLIGONO 2"<<endl;
+                        //SOTTOPOLIGONO 2
                         for(unsigned int v = 0; v < 4; v++)
                         {
                             if(v != posizione_bis[0] && v != posizione_bis[1])
                             {
                                 Vector3d vertice = frattura.Vertices[i].col(v);
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
                             }
                             if(v == posizione_bis[0])
                             {
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[0][0]<<" "<<punti_nuovi[0][1]<<" "<<punti_nuovi[0][2]<<endl;
                                 aggiorna_2[0] = v;
                             }
                             if(v == posizione_bis[1])
                             {
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[1][0]<<" "<<punti_nuovi[1][1]<<" "<<punti_nuovi[1][2]<<endl;
                                 aggiorna_2[1] = v;
                             }
-                            conta_vertici++;
                         }
                         //Quale poligono devo aggiornare per il taglio??
-                        frattura.Vertices[i].col(aggiorna_1[0]) = punti_nuovi[0];
-                        frattura.Vertices[i].col(aggiorna_1[1]) = punti_nuovi[1];
-
+                        MatrixXd copiafrattura_1=frattura.Vertices[i];
+                        MatrixXd copiafrattura_2=frattura.Vertices[i];
+                        copiafrattura_1.col(aggiorna_1[0]) = punti_nuovi[0];
+                        copiafrattura_1.col(aggiorna_1[1]) = punti_nuovi[1];
+                        copiafrattura_2.col(aggiorna_2[0]) = punti_nuovi[0];
+                        copiafrattura_2.col(aggiorna_2[1]) = punti_nuovi[1];
+                        sottopoligoni[0]=copiafrattura_1;
+                        sottopoligoni[1]=copiafrattura_2;
+                        frattura.Vertices[i]=sottopoligoni[0];
+                        if(conta!=frattura_traccia[i]-1){
+                            cout<<endl;
+                            cout<<sottopoligoni[1](0,0)<<" "<<sottopoligoni[1](1,0)<<" "<<sottopoligoni[1](2,0)<<" "<<endl;
+                            cout<<sottopoligoni[1](0,1)<<" "<<sottopoligoni[1](1,1)<<" "<<sottopoligoni[1](2,1)<<" "<<endl;
+                            cout<<sottopoligoni[1](0,2)<<" "<<sottopoligoni[1](1,2)<<" "<<sottopoligoni[1](2,2)<<" "<<endl;
+                            cout<<sottopoligoni[1](0,3)<<" "<<sottopoligoni[1](1,3)<<" "<<sottopoligoni[1](2,3)<<" "<<endl<<endl;
+                        }
                     }
-
 
                     if(i == id_frattura2)
                     {
                         array<double, 6> r_piano = Retta_tra_piani(frattura, i, id_frattura1);
                         unsigned int h = 0; // Usato per accedere a tutti i vertici della frattura
                         unsigned int k = 1; // Usato per accedere a tutti i vertici della stessa frattura a partire dal secondo
-                        unsigned int contatore_interno = 0;
                         while(h < frattura.Vertices[i].cols())
                         {
                             // Con l'if gestisco il caso dell'ultimo vertice con il primo del poligono
@@ -211,59 +226,67 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura)
                                     giro++;
                                 }
                                 posto++;
-                                conta_vertici++;
-                                contatore_interno++;
                             }
                             h++;
                             k++;
                         }
-                        cout<<"SOTTOPOLIGONO 1"<<endl;
+                        //SOTTOPOLIGONO 1
                         for(unsigned int v = 0; v < 4; v++)
                         {
                             if(v != posizione[0] && v != posizione[1])
                             {
                                 Vector3d vertice = frattura.Vertices[i].col(v);
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
                             }
                             if(v == posizione[0])
                             {
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[0][0]<<" "<<punti_nuovi[0][1]<<" "<<punti_nuovi[0][2]<<endl;
                                 aggiorna_1[0] = v;
                             }
                             if(v == posizione[1])
                             {
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[1][0]<<" "<<punti_nuovi[1][1]<<" "<<punti_nuovi[1][2]<<endl;
                                 aggiorna_1[1] = v;
                             }
-                            conta_vertici++;
                         }
-                        cout<<"SOTTOPOLIGONO 2"<<endl;
+                        //SOTTOPOLIGONO 2
                         for(unsigned int v = 0; v < 4; v++)
                         {
                             if(v != posizione_bis[0] && v != posizione_bis[1])
                             {
                                 Vector3d vertice = frattura.Vertices[i].col(v);
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<vertice[0]<<" "<<vertice[1]<<" "<<vertice[2]<<endl;
                             }
                             if(v == posizione_bis[0])
                             {
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[0][0]<<" "<<punti_nuovi[0][1]<<" "<<punti_nuovi[0][2]<<endl;
+                               aggiorna_2[0] = v;
                             }
                             if(v == posizione_bis[1])
                             {
-                                cout<<"Vertice "<<conta_vertici<<":"<<setprecision(16)<<scientific<<punti_nuovi[1][0]<<" "<<punti_nuovi[1][1]<<" "<<punti_nuovi[1][2]<<endl;
+                                aggiorna_2[1] = v;
                             }
-                            conta_vertici++;
                         }
                         //Quale poligono devo aggiornare per il taglio??
-                        frattura.Vertices[i].col(aggiorna_1[0]) = punti_nuovi[0];
-                        frattura.Vertices[i].col(aggiorna_1[1]) = punti_nuovi[1];
+                        MatrixXd copiafrattura_1=frattura.Vertices[i];
+                        MatrixXd copiafrattura_2=frattura.Vertices[i];
+                        copiafrattura_1.col(aggiorna_1[0]) = punti_nuovi[0];
+                        copiafrattura_1.col(aggiorna_1[1]) = punti_nuovi[1];
+                        copiafrattura_2.col(aggiorna_2[0]) = punti_nuovi[0];
+                        copiafrattura_2.col(aggiorna_2[1]) = punti_nuovi[1];
+                        sottopoligoni[0]=copiafrattura_1;
+                        sottopoligoni[1]=copiafrattura_2;
                     }
+                    conta++;
                 }
                 contatore++;
-            } //chiusura while
+            }
+            cout<<endl;
+            cout<<sottopoligoni[0](0,0)<<" "<<sottopoligoni[0](1,0)<<" "<<sottopoligoni[0](2,0)<<" "<<endl;
+            cout<<sottopoligoni[0](0,1)<<" "<<sottopoligoni[0](1,1)<<" "<<sottopoligoni[0](2,1)<<" "<<endl;
+            cout<<sottopoligoni[0](0,2)<<" "<<sottopoligoni[0](1,2)<<" "<<sottopoligoni[0](2,2)<<" "<<endl;
+            cout<<sottopoligoni[0](0,3)<<" "<<sottopoligoni[0](1,3)<<" "<<sottopoligoni[0](2,3)<<" "<<endl<<endl;
+            cout<<sottopoligoni[1](0,0)<<" "<<sottopoligoni[1](1,0)<<" "<<sottopoligoni[1](2,0)<<" "<<endl;
+            cout<<sottopoligoni[1](0,1)<<" "<<sottopoligoni[1](1,1)<<" "<<sottopoligoni[1](2,1)<<" "<<endl;
+            cout<<sottopoligoni[1](0,2)<<" "<<sottopoligoni[1](1,2)<<" "<<sottopoligoni[1](2,2)<<" "<<endl;
+            cout<<sottopoligoni[1](0,3)<<" "<<sottopoligoni[1](1,3)<<" "<<sottopoligoni[1](2,3)<<" "<<endl<<endl;
+
         }
-        cout<<endl;
     }
 }
 }

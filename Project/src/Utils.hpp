@@ -50,7 +50,7 @@ array<double, 6> coord_retta_tra2punti(Vector3d& V1, Vector3d& V2);
 using namespace DFNLibrary;
 
 namespace PolygonalLibrary{
-void caricamento_dati_2(Traces& traccia, Fractures& frattura);
+void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mesh);
 Vector3d intersezione_rette(array<double, 6>& r1, array<double, 6>& r2);
 array<double, 6> coord_retta_tra2punti(Vector3d& V1, Vector3d& V2);
 
