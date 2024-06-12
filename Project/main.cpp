@@ -20,7 +20,7 @@ int main()
     else
     {
         caricamento_dati(traccia, frattura);
-        caricamento_dati_2(traccia,frattura);
+        caricamento_dati_2(traccia,frattura,mesh);
         esportazione(traccia, frattura);
         return 0;
     }
