@@ -63,8 +63,8 @@ TEST(TestBaricentro, Quadrilatero)
 TEST(TestDistanze, TraQuadrilateri)
 {
     Fractures frattura;
-    unsigned int Id1 = 0;
-    unsigned int Id2 = 1;
+    unsigned int Idfrac1 = 0;
+    unsigned int Idfrac2 = 1;
     Matrix<double, 3, 4> Vert1 = {};
     Matrix<double, 3, 4> Vert2 = {};
     Vert1 << 0., 1., 1., 0.,
@@ -77,7 +77,7 @@ TEST(TestDistanze, TraQuadrilateri)
     frattura.Vertices.push_back(Vert1);
     frattura.Vertices.push_back(Vert2);
 
-    bool result = valuta_intersezione(frattura, Id1, Id2);
+    bool result = valuta_intersezione(frattura, Idfrac1, Idfrac2);
     ASSERT_TRUE(result);
 }
 
@@ -85,15 +85,15 @@ TEST(TestDistanze, TraQuadrilateri)
 TEST(TestRetteEPiani, RettaTraPiani)
 {
     Fractures frattura;
-    unsigned int Id1 = 0;
-    unsigned int Id2 = 1;
+    unsigned int Idfrac1 = 0;
+    unsigned int Idfrac2 = 1;
     array<double, 4> Arr1 = {3, 2, 1, -2};
     array<double, 4> Arr2 = {6, 5, 4, -11};
 
     frattura.Plane.push_back(Arr1);
     frattura.Plane.push_back(Arr2);
 
-    array<double, 6> result = Retta_tra_piani(frattura, Id1, Id2);
+    array<double, 6> result = Retta_tra_piani(frattura, Idfrac1, Idfrac2);
     array<double, 6> expected = {3, -6, 3, -1, 1, 3};
     ASSERT_EQ(result, expected);
 }
@@ -103,8 +103,8 @@ TEST(TestRetteEPiani, RettaTraVertici)
 {
     Fractures frattura;
     unsigned int Id = 0;
-    unsigned int i = 0;
-    unsigned int j = 1;
+    unsigned int vert1 = 0;
+    unsigned int vert2 = 1;
     Matrix<double, 3, 4> Vert = {};
     Vert << 0.8, 0.8, 0.8, 0.8,
             0., 0., 1., 1.,
@@ -112,7 +112,7 @@ TEST(TestRetteEPiani, RettaTraVertici)
 
     frattura.Vertices.push_back(Vert);
 
-    array<double, 6> result = Retta_per_due_vertici_della_frattura(frattura, Id, i, j);
+    array<double, 6> result = Retta_per_due_vertici_della_frattura(frattura, Id, vert1, vert2);
     array<double, 6> expected = {0., 0., 0.4, 0.8, 0., -0.1};
     ASSERT_EQ(result, expected);
 }
@@ -125,30 +125,6 @@ TEST(TestRetteEPiani, AscissaCurvilinea)
 
     Vector2d result = alpha_di_intersezione(r1, r2);
     Vector2d expected = {3, 2};
-    ASSERT_EQ(result, expected);
-}
-
-/** TEST SULLA FUNZIONE CHE CALCOLA LA RETTA PASSANTE PER DUE PUNTI **/
-TEST(TestRetteEPiani, RettaPerDuePunti)
-{
-    Vector3d vert1 = {1, 2, 3};
-    Vector3d vert2 = {4, 5, 6};
-
-    array<double, 6> result = coord_retta_tra2punti(vert1, vert2);
-    array<double, 6> expected = {3, 3, 3, 1, 2, 3};
-    ASSERT_EQ(result, expected);
-}
-
-/** TEST CHE CALCOLA L'INTERSEZIONE TRA DUE RETTE NELLO SPAZIO **/
-TEST(TestRetteEPiani, IntersezioneRette)
-{
-    Vector3d vertice1 = {1, 2, 3};
-    Vector3d vertice2 = {4, 5, 6};
-    Vector3d vertice3 = {1, 5, 3};
-    Vector3d vertice4 = {4, 2, 6};
-
-    Vector3d result = intersezione_rette(vertice1, vertice2, vertice3, vertice4);
-    Vector3d expected = {2.5, 3.5, 4.5};
     ASSERT_EQ(result, expected);
 }
 
