@@ -33,6 +33,7 @@ class TEST << (T, Yellow) >> #line:OrangeRed;line.dashed;back:Snow
 
 + TraDuePunti
 + TraQuadrilateri
++ DisuguaglianzaArray
 
 ..TestBaricentro..
 
