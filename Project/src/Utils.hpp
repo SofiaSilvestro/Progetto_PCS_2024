@@ -46,5 +46,5 @@ void esportazione(Traces& traccia, Fractures& frattura);
 using namespace DFNLibrary;
 
 namespace PolygonalLibrary{
-void caricamento_dati_2(Traces& traccia, Fractures& frattura);
+void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mesh);
 }

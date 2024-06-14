@@ -128,5 +128,15 @@ TEST(TestRetteEPiani, AscissaCurvilinea)
     ASSERT_EQ(result, expected);
 }
 
+/** TEST SULLA FUNZIONE CHE VALUTA IL VALORE ASSUNTO DAL SECONDO ELEMENTO DI DUE ARRAY **/
+TEST(TestDistanze, DisuguaglianzaArray)
+{
+    array<double, 2> arr1 = {15, 22};
+    array<double, 2> arr2 = {62, 51};
+
+    bool result = compare(arr1, arr2);
+    ASSERT_FALSE(result);
+}
+
 }
 #endif
