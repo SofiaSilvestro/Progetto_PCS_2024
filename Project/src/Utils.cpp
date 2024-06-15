@@ -67,7 +67,7 @@ array<double, 4> EqPiano(Fractures& frattura, unsigned int& Id)
     Vector3d point2 = frattura.Vertices[Id].col(2);
     Vector3d point3 = frattura.Vertices[Id].col(3);
     // Calcolo indiretto dei coefficienti mediante il determinante uguale a zero e relativo inserimento nel vettore di array
-    // (x-x1  y-y1  z-z1
+    // (  i     j     k
     //  x2-x1 y2-y1 z2-z1
     //  x3-x1 y3-y1 z3-z1)
     param_piano[0] = (point2[1] - point1[1]) * (point3[2] - point1[2]) - (point2[2] - point1[2]) * (point3[1] - point1[1]);
@@ -275,7 +275,7 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
                             Vector2d x = alpha_di_intersezione(r_piano, r_tra_punti);
                             if(x[0] >= -tol && x[0] <= 1 + tol)
                             {
-                                coeff[cont] = x[1];
+                                coeff[cont] = x[1]; // Memorizziamo in coeff l'ascissa curvilinea della retta tra i piani : beta
                                 cont++;
                             }
                         }
