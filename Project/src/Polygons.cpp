@@ -42,9 +42,10 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
     unsigned int conta_0d=0;
     unsigned int conta_1d=0;
     unsigned int conta_2d=0;
-
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
+        mesh.Cell0DId.reserve(frattura.Vertices[i].cols());
+        mesh.Cell0DCoordinates.reserve(frattura.Vertices[i].cols());
         cout<<"POLIGONO: "<< i <<endl;
         if(frattura_traccia[i] != 0)
         {
@@ -80,6 +81,8 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                 // Condizioni per ordinamento vettore usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare);
                 // I sottopoligoni
+                mesh.Cell0DId.reserve(2*conta_per_tipo);
+                mesh.Cell0DCoordinates.reserve(2*conta_per_tipo);
                 for(unsigned int k = 0; k < conta_per_tipo; k++)
                 {
 
