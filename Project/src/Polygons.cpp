@@ -39,7 +39,6 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
         }
         frattura_traccia.push_back(conta_tracce_per_fratt);
     }
-<<<<<<< HEAD
     unsigned int conta_0d=0;
     unsigned int conta_1d=0;
     unsigned int conta_2d=0;
@@ -48,15 +47,6 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
         mesh.Cell0DId.reserve(frattura.Vertices[i].cols());
         mesh.Cell0DCoordinates.reserve(frattura.Vertices[i].cols());
         cout<<"POLIGONO: "<< i <<endl;
-=======
-    unsigned int conta_0d = 0;
-    unsigned int conta_1d = 0;
-    unsigned int conta_2d = 0;
-
-    for(unsigned int i = 0; i < frattura.NumberFractures; i++)
-    {
-        cout << "POLIGONO: " << i <<endl;
->>>>>>> 19c08959880f73b7d34ca0eafe0635b131e0d6aa
         if(frattura_traccia[i] != 0)
         {
             // Celle 0d note
