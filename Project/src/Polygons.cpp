@@ -39,14 +39,14 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
         }
         frattura_traccia.push_back(conta_tracce_per_fratt);
     }
-    unsigned int conta_0d=0;
-    unsigned int conta_1d=0;
-    unsigned int conta_2d=0;
+    unsigned int conta_0d = 0;
+    unsigned int conta_1d = 0;
+    unsigned int conta_2d = 0;
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         mesh.Cell0DId.reserve(frattura.Vertices[i].cols());
         mesh.Cell0DCoordinates.reserve(frattura.Vertices[i].cols());
-        cout<<"POLIGONO: "<< i <<endl;
+        cout << "POLIGONO: " << i << endl;
         if(frattura_traccia[i] != 0)
         {
             // Celle 0d note
@@ -58,7 +58,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                 mesh.Cell0DCoordinates.push_back(vertice);
                 conta_0d++;
             }
-            array<MatrixXd, 2> sottopoligoni;
+            array<MatrixXd, 2> sottopoligoni = {};
             int contatore = 0;
             unsigned int conta = 0;
             while(contatore < 2)
@@ -78,7 +78,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                         ordinamento.push_back(ord);
                     }
                 }
-                // Condizioni per ordinamento vettore usare sort
+                // Condizioni per ordinamento vettore delle tracce: usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare);
                 // I sottopoligoni
                 mesh.Cell0DId.reserve(2*conta_per_tipo);
