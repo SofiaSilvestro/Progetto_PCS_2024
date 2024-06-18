@@ -318,6 +318,8 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
         }
     }
     cout << "Il numero di celle 0d e': " << conta_0d << endl;
-    cout << "Il numero di celle 2d e': " << conta_2d + 1 << endl;
+    mesh.NumberCell0D=conta_0d;
+    cout << "Il numero di celle 2d e': " << conta_2d << endl;
+    mesh.NumberCell2D=conta_2d;
 }
 }
