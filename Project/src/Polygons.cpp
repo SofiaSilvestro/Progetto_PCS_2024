@@ -103,7 +103,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                         if(max(traccia.Vertices[id_traccia][0][0], traccia.Vertices[id_traccia][1][0]) <= min(punti_nuovi[0][0], punti_nuovi[1][0]) - tol)
                         {
                             frattura.Vertices[i] = sottopoligoni[0];
-                            cout << endl << "Sottopoligono " <<conta_2d<< endl;
+                            cout << endl << "Sottopoligono " << conta_2d << endl;
                             cout << sottopoligoni[1](0, 0) << " " << sottopoligoni[1](1, 0) << " " << sottopoligoni[1](2, 0) << " " << endl;
                             cout << sottopoligoni[1](0, 1) << " " << sottopoligoni[1](1, 1) << " " << sottopoligoni[1](2, 1) << " " << endl;
                             cout << sottopoligoni[1](0, 2) << " " << sottopoligoni[1](1, 2) << " " << sottopoligoni[1](2, 2) << " " << endl;
@@ -114,7 +114,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                         else if(min(traccia.Vertices[id_traccia][0][0], traccia.Vertices[id_traccia][1][0]) >= min(punti_nuovi[0][0], punti_nuovi[1][0]) - tol)
                         {
                             frattura.Vertices[i] = sottopoligoni[1];
-                            cout << endl << "Sottopoligono "<<conta_2d << endl;
+                            cout << endl << "Sottopoligono " << conta_2d << endl;
                             conta_2d++;
                             cout << sottopoligoni[0](0, 0) << " " << sottopoligoni[0](1, 0) << " " << sottopoligoni[0](2, 0) << " " << endl;
                             cout << sottopoligoni[0](0, 1) << " " << sottopoligoni[0](1, 1) << " " << sottopoligoni[0](2, 1) << " " << endl;
@@ -301,14 +301,14 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                 }
                 contatore++;
             }
-            cout << endl << "Sottopoligono " <<conta_2d<< endl;
+            cout << endl << "Sottopoligono " << conta_2d << endl;
             conta_2d++;
             cout << sottopoligoni[0](0, 0) << " " << sottopoligoni[0](1, 0) << " " << sottopoligoni[0](2, 0) << " " << endl;
             cout << sottopoligoni[0](0, 1) << " " << sottopoligoni[0](1, 1) << " " << sottopoligoni[0](2, 1) << " " << endl;
             cout << sottopoligoni[0](0, 2) << " " << sottopoligoni[0](1, 2) << " " << sottopoligoni[0](2, 2) << " " << endl;
             cout << sottopoligoni[0](0, 3) << " " << sottopoligoni[0](1, 3) << " " << sottopoligoni[0](2, 3) << " " << endl;
 
-            cout << endl << "Sottopoligono " <<conta_2d<< endl;
+            cout << endl << "Sottopoligono " << conta_2d << endl;
             conta_2d++;
             cout << sottopoligoni[1](0, 0) << " " << sottopoligoni[1](1, 0) << " " << sottopoligoni[1](2, 0) << " " << endl;
             cout << sottopoligoni[1](0, 1) << " " << sottopoligoni[1](1, 1) << " " << sottopoligoni[1](2, 1) << " " << endl;
