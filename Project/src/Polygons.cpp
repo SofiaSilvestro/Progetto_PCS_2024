@@ -61,11 +61,12 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
             array<MatrixXd, 2> sottopoligoni = {};
             int contatore = 0;
             unsigned int conta = 0;
+            vector<array<double, 2>> ordinamento = {};
+            ordinamento.reserve(2*traccia.NumberTraces);
             while(contatore < 2)
             {
                 unsigned int conta_per_tipo = 0;
                 unsigned int giro = 0;
-                vector<array<double, 2>> ordinamento = {};
                 array<double, 2> ord = {};
                 for(unsigned int j = 0; j < traccia.FracturesId.size(); j++)
                 {
