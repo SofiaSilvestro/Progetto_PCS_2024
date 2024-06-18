@@ -29,12 +29,12 @@ array<double,6> Retta_tra_piani(Fractures& frattura, unsigned int& idfrac1, unsi
 array<double,6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsigned int& id, unsigned int& vert1,unsigned int& vert2);
 
 // Calcolo ascisse curvilinee rette che si intersecano per trovare punto di intersezione
-Vector2d alpha_di_intersezione(array<double, 6>& r_intersez, array<double, 6>& r_fratt);
+Vector2d alpha_di_intersezione(array<double, 6>& r_intersez,array<double, 6>& r_fratt);
 
 // Carico dati nella struttura
 void caricamento_dati(Traces& traccia, Fractures& frattura);
 
-// Ordinamento tracce
+// Ordinamento array<double, 6>& r_fratt
 bool compare(array<double, 2> arr1, array<double, 2> arr2);
 
 // Esportazione dei dati in un file di testo

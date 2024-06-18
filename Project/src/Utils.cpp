@@ -172,8 +172,7 @@ array<double, 6> Retta_per_due_vertici_della_frattura(Fractures& frattura, unsig
     return coord_retta_vertici;
 }
 
-Vector2d alpha_di_intersezione(array<double, 6>& r_intersez, array<double, 6>& r_fratt)
-{
+Vector2d alpha_di_intersezione(array<double, 6>& r_intersez,array<double, 6>& r_fratt){
     // Imposto un sistema lineare per la ricerca dei parametri alpha e beta
     // Imposto i coefficienti della matrice
     MatrixXd A = MatrixXd::Zero(3, 2);
