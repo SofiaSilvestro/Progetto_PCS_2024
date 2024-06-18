@@ -274,10 +274,6 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                         // SOTTOPOLIGONO 2
                         for(unsigned int v = 0; v < 4; v++)
                         {
-                            if(v != posizione_bis[0] && v != posizione_bis[1])
-                            {
-                                Vector3d vertice = frattura.Vertices[i].col(v);
-                            }
                             if(v == posizione_bis[0])
                             {
                                aggiorna_2[0] = v;
