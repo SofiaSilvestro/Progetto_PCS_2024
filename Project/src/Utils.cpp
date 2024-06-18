@@ -67,9 +67,9 @@ array<double, 4> EqPiano(Fractures& frattura, unsigned int& Id)
     Vector3d point2 = frattura.Vertices[Id].col(2);
     Vector3d point3 = frattura.Vertices[Id].col(3);
     // Calcolo indiretto dei coefficienti mediante il determinante uguale a zero e relativo inserimento nel vettore di array
-    // (  i     j     k
-    //  x2-x1 y2-y1 z2-z1
-    //  x3-x1 y3-y1 z3-z1)
+    // (   i           j           k
+    //  x2 - x1     y2 - y1     z2 - z1
+    //  x3 - x1     y3 - y1     z3 - z1)
     param_piano[0] = (point2[1] - point1[1]) * (point3[2] - point1[2]) - (point2[2] - point1[2]) * (point3[1] - point1[1]);
     param_piano[1] = - ((point2[0] - point1[0]) * (point3[2] - point1[2]) - (point3[0] - point1[0]) * (point2[2] - point1[2]));
     param_piano[2] = (point2[0] - point1[0]) * (point3[1] - point1[1]) - (point3[0] - point1[0]) * (point2[1] - point1[1]);
@@ -79,7 +79,7 @@ array<double, 4> EqPiano(Fractures& frattura, unsigned int& Id)
 
 double distanza_al_quadrato(Vector3d& vec1, Vector3d& vec2)
 {
-    return (vec1[0]-vec2[0])*(vec1[0]-vec2[0]) + (vec1[1]-vec2[1])*(vec1[1]-vec2[1]) + (vec1[2]-vec2[2])*(vec1[2]-vec2[2]);
+    return (vec1[0] - vec2[0]) * (vec1[0] - vec2[0]) + (vec1[1] - vec2[1]) * (vec1[1] - vec2[1]) + (vec1[2] - vec2[2]) * (vec1[2] - vec2[2]);
 }
 
 Vector3d baricentro (Fractures& frattura, unsigned int& Id)
@@ -207,9 +207,9 @@ void caricamento_dati(Traces& traccia, Fractures& frattura)
     array<unsigned int, 2> Id = {};
     array<Vector3d, 2> Vertici = {};
     array<bool, 2> Tipo = {};
-    traccia.Vertices.reserve(10*frattura.NumberFractures);
-    traccia.FracturesId.reserve(10*frattura.NumberFractures);
-    traccia.Tips.reserve(10*frattura.NumberFractures);
+    traccia.Vertices.reserve(10 * frattura.NumberFractures);
+    traccia.FracturesId.reserve(10 * frattura.NumberFractures);
+    traccia.Tips.reserve(10 * frattura.NumberFractures);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         unsigned int j = i + 1; // Valuta la frattura successiva
@@ -492,9 +492,9 @@ void esportazione(Traces& traccia, Fractures& frattura)
     ofs << "# TraceId; FracturesId1; FracturesId2; X1; Y1; Z1; X2; Y2; Z2" << endl;
     for(unsigned int i = 0; i < traccia.FracturesId.size(); i++)
     {
-        ofs << i << "; " << traccia.FracturesId[i][0] << "; " << traccia.FracturesId[i][1] << "; "
-            << setprecision(16) << scientific << traccia.Vertices[i][0][0] << "; " << traccia.Vertices[i][0][1] << "; " << traccia.Vertices[i][0][2]
-            << "; " << traccia.Vertices[i][1][0] << "; " << traccia.Vertices[i][1][1] << "; " << traccia.Vertices[i][1][2] << endl;
+        ofs << i << "; " << traccia.FracturesId[i][0] << "; " << traccia.FracturesId[i][1] << "; " << setprecision(16) << scientific
+            << traccia.Vertices[i][0][0] << "; " << traccia.Vertices[i][0][1] << "; " << traccia.Vertices[i][0][2] << "; "
+            << traccia.Vertices[i][1][0] << "; " << traccia.Vertices[i][1][1] << "; " << traccia.Vertices[i][1][2] << endl;
     }
     ofs << endl;
 

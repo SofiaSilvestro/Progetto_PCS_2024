@@ -66,7 +66,7 @@ struct PolygonalMesh
     vector<unsigned int> Cell1DId = {};
     /* Indice vertici, arrat 2 dim di interi
      * dim = 2 x Numero celle (da,per) */
-    vector<array<unsigned int,2>> Cell1DIdVertices = {};
+    vector<array<unsigned int, 2>> Cell1DIdVertices = {};
 
     //Cell2D
     // Numero celle, intero senza segno

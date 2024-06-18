@@ -9,6 +9,7 @@
 #include "Utils.hpp"
 // #include "UCDUtilities.hpp"
 #include "Polygons.hpp"
+#include <math.h>
 
 using namespace std;
 using namespace Eigen;
@@ -31,7 +32,6 @@ TEST(TestRetteEPiani, EqPiano3Punti)
     array<double, 4> expected = {9, 0, 9, -27};
     ASSERT_EQ(result, expected);
 }
-
 
 /** TEST SULLA FUNZIONE CHE CALCOLA LA DISTANZA (AL QUADRATO) TRA DUE PUNTI **/
 TEST(TestDistanze, TraDuePunti)

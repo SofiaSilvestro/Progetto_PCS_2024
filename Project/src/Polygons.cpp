@@ -19,11 +19,10 @@ namespace PolygonalLibrary{
 void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mesh)
 {
     double tol = 1e-10;
-    vector<unsigned int> frattura_traccia = {};
+    vector<unsigned int> frattura_traccia = {}; // Conta le tracce per ogni poligono
     array<unsigned int, 2> aggiorna_1 = {};
     array<unsigned int, 2> aggiorna_2 = {};
     array<Vector3d, 2> punti_nuovi = {};
-    // Conta le tracce per ogni poligono
     frattura_traccia.reserve(traccia.NumberTraces);
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
@@ -39,9 +38,11 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
         }
         frattura_traccia.push_back(conta_tracce_per_fratt);
     }
+    // Contatori per celleNdimensionali
     unsigned int conta_0d = 0;
-    unsigned int conta_1d = 0;
+    // unsigned int conta_1d = 0;
     unsigned int conta_2d = 0;
+    // Considerando una frattura per volta
     for(unsigned int i = 0; i < frattura.NumberFractures; i++)
     {
         mesh.Cell0DId.reserve(frattura.Vertices[i].cols());
@@ -52,19 +53,21 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
             // Celle 0d note
             for(unsigned int v = 0; v < frattura.Vertices[i].cols(); v++)
             {
-            Vector3d vertice = frattura.Vertices[i].col(v);
+                Vector3d vertice = frattura.Vertices[i].col(v);
                 cout << conta_0d << ";" << setprecision(16) << scientific << vertice[0] << ";" << vertice[1] << ";" << vertice[2] << endl;
                 mesh.Cell0DId.push_back(conta_0d);
                 mesh.Cell0DCoordinates.push_back(vertice);
                 conta_0d++;
             }
             array<MatrixXd, 2> sottopoligoni = {};
+            // Tracce per tipo: contatore = 0 passante, contatore = 1 NON passante
             int contatore = 0;
             unsigned int conta = 0;
             vector<array<double, 2>> ordinamento = {};
-            ordinamento.reserve(2*traccia.NumberTraces);
+            ordinamento.reserve(2 * traccia.NumberTraces);
             while(contatore < 2)
             {
+                // Conta le tracce divise per tipo
                 unsigned int conta_per_tipo = 0;
                 unsigned int giro = 0;
                 array<double, 2> ord = {};
@@ -82,16 +85,15 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                 // Condizioni per ordinamento vettore delle tracce: usare sort
                 sort(ordinamento.begin(), ordinamento.end(), compare);
                 // I sottopoligoni
-                mesh.Cell0DId.reserve(2*conta_per_tipo);
-                mesh.Cell0DCoordinates.reserve(2*conta_per_tipo);
+                mesh.Cell0DId.reserve(2 * conta_per_tipo);
+                mesh.Cell0DCoordinates.reserve(2 * conta_per_tipo);
                 for(unsigned int k = 0; k < conta_per_tipo; k++)
                 {
-
                     array<unsigned int, 2> posizione = {};
                     array<unsigned int, 2> posizione_bis = {};
                     unsigned int posto = 0;
                     int id_traccia = 0;
-                    id_traccia = int(ordinamento[k][0]);
+                    id_traccia = int(ordinamento[k][0]); // Individua la traccia su cui si sta lavorando
                     unsigned int id_frattura1 = traccia.FracturesId[id_traccia][0];
                     unsigned int id_frattura2 = traccia.FracturesId[id_traccia][1];
                     if (conta != 0 && conta != frattura_traccia[i])
@@ -158,6 +160,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                                     posizione[1] = k + 1;
                                     posizione_bis[0] = k - 1;
                                     posizione_bis[1] = k + 2;
+                                    // Gestione indici vertici
                                     if(posizione_bis[1] == 4)
                                     {
                                         posizione_bis[1] = 0;
@@ -197,7 +200,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                                 aggiorna_2[1] = v;
                             }
                         }
-                        // poligono da aggiornare per il taglio
+                        // Poligono da aggiornare per il taglio
                         MatrixXd copiafrattura_1 = frattura.Vertices[i];
                         MatrixXd copiafrattura_2 = frattura.Vertices[i];
                         copiafrattura_1.col(aggiorna_1[0]) = punti_nuovi[0];
@@ -244,6 +247,7 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
                                     posizione[1] = k + 1;
                                     posizione_bis[0] = k - 1;
                                     posizione_bis[1] = k + 2;
+                                    // Gestione indici vertici
                                     if(posizione_bis[1] == 4)
                                     {
                                         posizione_bis[1] = 0;
@@ -314,8 +318,8 @@ void caricamento_dati_2(Traces& traccia, Fractures& frattura, PolygonalMesh& mes
         }
     }
     cout << "Il numero di celle 0d e': " << conta_0d << endl;
-    mesh.NumberCell0D=conta_0d;
+    mesh.NumberCell0D = conta_0d;
     cout << "Il numero di celle 2d e': " << conta_2d << endl;
-    mesh.NumberCell2D=conta_2d;
+    mesh.NumberCell2D = conta_2d;
 }
 }
